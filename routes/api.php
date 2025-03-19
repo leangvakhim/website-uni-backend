@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TextController;
 use App\Http\Controllers\Api\ButtonController;
 use App\Http\Controllers\Api\ImageController;
+use App\Http\Controllers\Api\SlideshowController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);  
@@ -27,5 +28,14 @@ Route::prefix('images')->group(function () {
     Route::post('/update/{id}', [ImageController::class, 'update']); 
     Route::delete('/delete/{id}', [ImageController::class, 'delete']);
 });
+
+Route::prefix('slideshows')->group(function () {
+    Route::get('/', [SlideshowController::class, 'index']);
+    Route::get('/{id}', [SlideshowController::class, 'show']);
+    Route::post('/create', [SlideshowController::class, 'create']);
+    Route::post('/update/{id}', [SlideshowController::class, 'update']);
+    Route::put('/visibility/{id}', [SlideshowController::class, 'visibility']);
+});
+
 
 

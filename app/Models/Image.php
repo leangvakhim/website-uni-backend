@@ -15,4 +15,14 @@ class Image extends Model
     protected $fillable = [
         'img',
     ];
+
+    public function slideshows()
+    {
+        return $this->hasMany(Slideshow::class, 'img', 'image_id');
+    }
+
+    public function logoSlideshows()
+    {
+        return $this->hasMany(Slideshow::class, 'logo', 'image_id');
+    }
 }

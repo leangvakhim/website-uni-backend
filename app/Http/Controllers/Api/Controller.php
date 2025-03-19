@@ -22,9 +22,10 @@ class Controller extends BaseController
             'status' => $code,
             'status_code' => $statusCode,
             'message' => $msg,
-            'data' => $data,
-        ], $code); 
+            'data' => is_array($data) && count($data) === 1 ? $data[0] : $data,
+        ], $code);
     }
+    
 
     /**
      * Standard error response
@@ -34,7 +35,7 @@ class Controller extends BaseController
      * @param array|null $data
      * @return JsonResponse
      */
-    public function sendError(string $msg = 'Error', int $code = 400, array $data = null): JsonResponse
+    public function sendError(string $msg = 'Error', int $code = 400, ?array $data = null): JsonResponse
     {
         $response = [
             'status' => $code,

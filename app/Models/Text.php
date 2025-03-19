@@ -18,4 +18,10 @@ class Text extends Model
         'tag',
         'lang',
     ];
+
+    public function slideshows()
+{
+    return $this->hasMany(Slideshow::class, 'slider_text', 'text_id');
+}
+
 }

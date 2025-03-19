@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Button extends Model
 {
-    use hasFactory;
+    use HasFactory;
 
     protected $table = 'tbbutton';
     protected $primaryKey = 'button_id';
@@ -17,4 +17,15 @@ class Button extends Model
         'btn_url',
         'lang',
     ];
+
+    public function slideshowsAsBtn1()
+{
+    return $this->hasMany(Slideshow::class, 'btn1', 'button_id');
+}
+
+public function slideshowsAsBtn2()
+{
+    return $this->hasMany(Slideshow::class, 'btn2', 'button_id');
+}
+
 }
