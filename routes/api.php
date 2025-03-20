@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\TextController;
 use App\Http\Controllers\Api\ButtonController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\SlideshowController;
+use App\Http\Controllers\Api\SocialController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);  
@@ -37,5 +38,12 @@ Route::prefix('slideshows')->group(function () {
     Route::put('/visibility/{id}', [SlideshowController::class, 'visibility']);
 });
 
+Route::prefix('social')->group(function () {
+    Route::get('/', [SocialController::class, 'index']); 
+    Route::get('/{id}', [SocialController::class, 'show']); 
+    Route::post('/create', [SocialController::class, 'create']); 
+    Route::post('/update/{id}', [SocialController::class, 'update']);
+    Route::put('/visibility/{id}', [SocialController::class, 'visibility']); 
+});
 
 

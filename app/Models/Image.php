@@ -25,4 +25,9 @@ class Image extends Model
     {
         return $this->hasMany(Slideshow::class, 'logo', 'image_id');
     }
+
+    public function socials()
+    {
+        return $this->hasMany(Social::class, 'social_img', 'image_id');
+    }
 }
