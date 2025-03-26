@@ -5,13 +5,20 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Api\Controller;
 use Illuminate\Http\Request;
 use App\Models\Slideshow;
+use App\Services\SlideshowService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\SlideshowRequest;
 use Exception;
 
 class SlideshowController extends Controller
 {
-    // Get all slideshows with related data
+    protected $slideshowService;
+
+    public function __construct(SlideshowService $slideshowService)
+    {
+        $this->slideshowService = $slideshowService;
+    }
+
     public function index()
     {
         try {
@@ -54,19 +61,17 @@ class SlideshowController extends Controller
         }
     }
 
-    // Create a new slideshow
     public function create(SlideshowRequest $request)
     {
         try {
             $validatedData = $request->validated();
-            $slideshow = Slideshow::create($validatedData);
+            $slideshow = $this->slideshowService->createSlideshow($validatedData);
             return $this->sendResponse($slideshow, 201, 'Slideshow created successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to create slideshow', 500, ['error' => $e->getMessage()]);
         }
     }
-
-    // Update an existing slideshow
+    
     public function update(Request $request, $id)
     {
         try {
@@ -74,8 +79,9 @@ class SlideshowController extends Controller
             if (!$slideshow) {
                 return $this->sendError('Slideshow not found', 404);
             }
-            $slideshow->update($request->all());
-            return $this->sendResponse($slideshow, 200, 'Slideshow updated successfully');
+
+            $updated = $this->slideshowService->updateSlideshow($slideshow, $request->all());
+            return $this->sendResponse($updated, 200, 'Slideshow updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update slideshow', 500, ['error' => $e->getMessage()]);
         }
