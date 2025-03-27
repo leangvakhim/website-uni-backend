@@ -11,6 +11,10 @@ use App\Http\Controllers\Api\FacultyContactController;
 use App\Http\Controllers\Api\FacultyBgController;
 use App\Http\Controllers\Api\FacultyInfoController;
 use App\Http\Controllers\Api\FacultyController;
+use App\Http\Controllers\Api\SubtseController;
+use App\Http\Controllers\Api\RasonController;
+use App\Http\Controllers\Api\SubapdController;
+use App\Http\Controllers\Api\YearController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);  
@@ -82,5 +86,18 @@ Route::prefix('faculty')->group(function () {
     Route::put('/visibility/{id}', [FacultyController::class, 'visibility']);
 });
 
+Route::prefix('subtse')->group(function () {
+    Route::get('/', [SubtseController::class, 'index']);
+    Route::get('/{id}', [SubtseController::class, 'show']);
+    Route::post('/create', [SubtseController::class, 'create']);
+    Route::post('/update/{id}', [SubtseController::class, 'update']);
+    Route::put('/visibility/{id}', [SubtseController::class, 'visibility']);
+});
 
-
+Route::prefix('rason')->group(function () {
+    Route::get('/', [RasonController::class, 'index']);
+    Route::get('/{id}', [RasonController::class, 'show']);
+    Route::post('/create', [RasonController::class, 'create']);
+    Route::post('/update/{id}', [RasonController::class, 'update']);
+    Route::put('/visibility/{id}', [RasonController::class, 'visibility']);
+});
