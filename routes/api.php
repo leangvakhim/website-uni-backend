@@ -7,6 +7,10 @@ use App\Http\Controllers\Api\ButtonController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\SlideshowController;
 use App\Http\Controllers\Api\SocialController;
+use App\Http\Controllers\Api\FacultyContactController;
+use App\Http\Controllers\Api\FacultyBgController;
+use App\Http\Controllers\Api\FacultyInfoController;
+use App\Http\Controllers\Api\FacultyController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);  
@@ -45,5 +49,38 @@ Route::prefix('social')->group(function () {
     Route::post('/update/{id}', [SocialController::class, 'update']);
     Route::put('/visibility/{id}', [SocialController::class, 'visibility']); 
 });
+
+Route::prefix('faculty-contact')->group(function () {
+    Route::get('/', [FacultyContactController::class, 'index']);
+    Route::get('/{id}', [FacultyContactController::class, 'show']);
+    Route::post('/create', [FacultyContactController::class, 'create']);
+    Route::post('/update/{id}', [FacultyContactController::class, 'update']);
+    Route::put('/visibility/{id}', [FacultyContactController::class, 'visibility']);
+});
+
+Route::prefix('faculty-bg')->group(function () {
+    Route::get('/', [FacultyBgController::class, 'index']);
+    Route::get('/{id}', [FacultyBgController::class, 'show']);
+    Route::post('/create', [FacultyBgController::class, 'create']);
+    Route::post('/update/{id}', [FacultyBgController::class, 'update']);
+    Route::put('/visibility/{id}', [FacultyBgController::class, 'visibility']);
+});
+
+Route::prefix('faculty-info')->group(function () {
+    Route::get('/', [FacultyInfoController::class, 'index']);
+    Route::get('/{id}', [FacultyInfoController::class, 'show']);
+    Route::post('/create', [FacultyInfoController::class, 'create']);
+    Route::post('/update/{id}', [FacultyInfoController::class, 'update']);
+    Route::put('/visibility/{id}', [FacultyInfoController::class, 'visibility']);
+});
+
+Route::prefix('faculty')->group(function () {
+    Route::get('/', [FacultyController::class, 'index']);
+    Route::get('/{id}', [FacultyController::class, 'show']);
+    Route::post('/create', [FacultyController::class, 'create']);
+    Route::post('/update/{id}', [FacultyController::class, 'update']);
+    Route::put('/visibility/{id}', [FacultyController::class, 'visibility']);
+});
+
 
 
