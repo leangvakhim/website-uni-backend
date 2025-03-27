@@ -30,4 +30,9 @@ class Image extends Model
     {
         return $this->hasMany(Social::class, 'social_img', 'image_id');
     }
+
+    public function facultyBgs()
+    {
+        return $this->hasMany(FacultyBg::class, 'fbg_img', 'image_id');
+    }
 }
