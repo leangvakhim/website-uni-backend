@@ -23,4 +23,9 @@ class Social extends Model
     {
         return $this->belongsTo(Image::class, 'social_img', 'image_id');
     }
+
+    public function faculty()
+    {
+        return $this->belongsTo(Faculty::class, 'f_social', 'social_id');
+    }
 }

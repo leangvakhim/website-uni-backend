@@ -46,6 +46,9 @@ class SlideshowRequest extends FormRequest
             'btn2.btn_title' => 'nullable|string|max:255',
             'btn2.btn_url' => 'nullable|string',
             'btn2.lang' => 'nullable|integer',
+
+
+            
         ];
     }
 }

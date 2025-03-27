@@ -20,4 +20,9 @@ class FacultyInfo extends Model
         'display',
         'active',
     ];
+
+    public function faculty()
+    {
+        return $this->hasMany(Faculty::class, 'f_info', 'finfo_id');
+    }
 }

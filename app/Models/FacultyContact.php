@@ -18,4 +18,9 @@ class FacultyContact extends Model
         'display',
         'active',
     ];
+
+    public function faculty()
+    {
+        return $this->hasMany(Faculty::class, 'f_contact', 'fc_id');
+    }
 }

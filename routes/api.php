@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\SocialController;
 use App\Http\Controllers\Api\FacultyContactController;
 use App\Http\Controllers\Api\FacultyBgController;
 use App\Http\Controllers\Api\FacultyInfoController;
+use App\Http\Controllers\Api\FacultyController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);  
@@ -72,5 +73,14 @@ Route::prefix('faculty-info')->group(function () {
     Route::post('/update/{id}', [FacultyInfoController::class, 'update']);
     Route::put('/visibility/{id}', [FacultyInfoController::class, 'visibility']);
 });
+
+Route::prefix('faculty')->group(function () {
+    Route::get('/', [FacultyController::class, 'index']);
+    Route::get('/{id}', [FacultyController::class, 'show']);
+    Route::post('/create', [FacultyController::class, 'create']);
+    Route::post('/update/{id}', [FacultyController::class, 'update']);
+    Route::put('/visibility/{id}', [FacultyController::class, 'visibility']);
+});
+
 
 
