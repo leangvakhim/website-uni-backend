@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\RasonController;
 use App\Http\Controllers\Api\SubapdController;
 use App\Http\Controllers\Api\YearController;
 use App\Http\Controllers\Api\BtnssController;
+use App\Http\Controllers\Api\Slideshow2Controller;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);  
@@ -117,4 +118,12 @@ Route::prefix('btnss')->group(function () {
     Route::post('/create', [BtnssController::class, 'create']);
     Route::post('/update/{id}', [BtnssController::class, 'update']);
     Route::put('/visibility/{id}', [BtnssController::class, 'visibility']);
+});
+
+Route::prefix('slideshow')->group(function () {
+    Route::get('/', [Slideshow2Controller::class, 'index']);
+    Route::get('/{id}', [Slideshow2Controller::class, 'show']);
+    Route::post('/create', [Slideshow2Controller::class, 'create']);
+    Route::post('/update/{id}', [Slideshow2Controller::class, 'update']);
+    Route::put('/visibility/{id}', [Slideshow2Controller::class, 'visibility']);
 });

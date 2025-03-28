@@ -21,34 +21,34 @@ class SlideshowRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'slider_text' => 'nullable|exists:tbtext,text_id',
-            'btn1' => 'nullable|exists:tbbutton,button_id',
-            'btn2' => 'nullable|exists:tbbutton,button_id',
-            'img' => 'nullable|exists:tbimage,image_id',
-            'logo' => 'nullable|exists:tbimage,image_id',
-            'slider_order' => 'required|integer',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
+        // return [
+        //     'slider_text' => 'nullable|exists:tbtext,text_id',
+        //     'btn1' => 'nullable|exists:tbbutton,button_id',
+        //     'btn2' => 'nullable|exists:tbbutton,button_id',
+        //     'img' => 'nullable|exists:tbimage,image_id',
+        //     'logo' => 'nullable|exists:tbimage,image_id',
+        //     'slider_order' => 'required|integer',
+        //     'display' => 'required|boolean',
+        //     'active' => 'required|boolean',
 
-            'slider_text' => 'nullable|array',
-            'slider_text.title' => 'nullable|string|max:255',
-            'slider_text.desc' => 'nullable|string',
-            'slider_text.tag' => 'nullable|string|max:255',
-            'slider_text.lang' => 'nullable|integer', 
+        //     'slider_text' => 'nullable|array',
+        //     'slider_text.title' => 'nullable|string|max:255',
+        //     'slider_text.desc' => 'nullable|string',
+        //     'slider_text.tag' => 'nullable|string|max:255',
+        //     'slider_text.lang' => 'nullable|integer', 
 
-            'btn1' => 'nullable|array',
-            'btn1.btn_title' => 'nullable|string|max:255',
-            'btn1.btn_url' => 'nullable|string',
-            'btn1.lang' => 'nullable|integer',
+        //     'btn1' => 'nullable|array',
+        //     'btn1.btn_title' => 'nullable|string|max:255',
+        //     'btn1.btn_url' => 'nullable|string',
+        //     'btn1.lang' => 'nullable|integer',
 
-            'btn2' => 'nullable|array',
-            'btn2.btn_title' => 'nullable|string|max:255',
-            'btn2.btn_url' => 'nullable|string',
-            'btn2.lang' => 'nullable|integer',
+        //     'btn2' => 'nullable|array',
+        //     'btn2.btn_title' => 'nullable|string|max:255',
+        //     'btn2.btn_url' => 'nullable|string',
+        //     'btn2.lang' => 'nullable|integer',
 
 
             
-        ];
+  //      ];
     }
 }

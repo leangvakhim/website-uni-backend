@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Slideshow extends Model
+class Slideshow2 extends Model
 {
     use HasFactory;
 
-    protected $table = 'tbslideshow';
+    protected $table = 'tbslideshow2';
     protected $primaryKey = 'slider_id';
 
     protected $fillable = [
+        'slider_title',
         'slider_text',
         'btn1',
         'btn2',
@@ -35,16 +36,11 @@ class Slideshow extends Model
 
     public function btn1()
     {
-        return $this->belongsTo(Button::class, 'btn1', 'button_id')->select(['button_id', 'btn_title', 'btn_url']);
+        return $this->belongsTo(Btnss::class, 'btn1', 'bss_id')->select(['bss_id', 'bss_title', 'bss_routepage', 'display']);
     }
 
     public function btn2()
     {
-        return $this->belongsTo(Button::class, 'btn2', 'button_id')->select(['button_id', 'btn_title', 'btn_url']);
+        return $this->belongsTo(Btnss::class, 'btn2', 'bss_id')->select(['bss_id', 'bss_title', 'bss_routepage', 'display']);
     }
-
-    // public function slider_text()
-    // {
-    //     return $this->belongsTo(Text::class, 'slider_text', 'text_id')->select(['text_id', 'title', 'desc', 'tag', 'lang']);
-    // }
 }
