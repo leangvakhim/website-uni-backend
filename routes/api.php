@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\SubtseController;
 use App\Http\Controllers\Api\RasonController;
 use App\Http\Controllers\Api\SubapdController;
 use App\Http\Controllers\Api\YearController;
+use App\Http\Controllers\Api\BtnssController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);  
@@ -108,4 +109,12 @@ Route::prefix('year')->group(function () {
     Route::post('/create', [YearController::class, 'create']);
     Route::post('/update/{id}', [YearController::class, 'update']);
     Route::put('/visibility/{id}', [YearController::class, 'visibility']);
+});
+
+Route::prefix('btnss')->group(function () {
+    Route::get('/', [BtnssController::class, 'index']);
+    Route::get('/{id}', [BtnssController::class, 'show']);
+    Route::post('/create', [BtnssController::class, 'create']);
+    Route::post('/update/{id}', [BtnssController::class, 'update']);
+    Route::put('/visibility/{id}', [BtnssController::class, 'visibility']);
 });
