@@ -14,6 +14,7 @@ class Social extends Model
 
     protected $fillable = [
         'social_img',
+        'social_link',
         'social_order',
         'display',
         'active',

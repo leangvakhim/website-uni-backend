@@ -23,6 +23,7 @@ class SocialRequest extends FormRequest
     {
         return [
             'social_img' => 'nullable|integer|exists:tbimage,image_id',
+            'social_link' => 'nullable|string|max:255',
             'social_order' => 'required|integer',
             'display' => 'required|boolean',
             'active' => 'required|boolean',

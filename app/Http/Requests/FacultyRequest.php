@@ -37,6 +37,7 @@ class FacultyRequest extends FormRequest
 
             'f_social' => 'nullable|array',
             'f_social.social_img' => 'nullable|exists:tbimage,image_id',
+            'f_social.social_link' => 'nullable|string|max:255',
             'f_social.social_order' => 'nullable|integer',
             'f_social.display' => 'nullable|boolean',
             'f_social.active' => 'nullable|boolean',
