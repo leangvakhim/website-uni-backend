@@ -101,3 +101,11 @@ Route::prefix('rason')->group(function () {
     Route::post('/update/{id}', [RasonController::class, 'update']);
     Route::put('/visibility/{id}', [RasonController::class, 'visibility']);
 });
+
+Route::prefix('year')->group(function () {
+    Route::get('/', [YearController::class, 'index']);
+    Route::get('/{id}', [YearController::class, 'show']);
+    Route::post('/create', [YearController::class, 'create']);
+    Route::post('/update/{id}', [YearController::class, 'update']);
+    Route::put('/visibility/{id}', [YearController::class, 'visibility']);
+});
