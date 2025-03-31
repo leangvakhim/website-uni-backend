@@ -17,6 +17,9 @@ use App\Http\Controllers\Api\SubapdController;
 use App\Http\Controllers\Api\YearController;
 use App\Http\Controllers\Api\BtnssController;
 use App\Http\Controllers\Api\Slideshow2Controller;
+use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\NewsController;
+
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);  
@@ -127,3 +130,20 @@ Route::prefix('slideshow')->group(function () {
     Route::post('/update/{id}', [Slideshow2Controller::class, 'update']);
     Route::put('/visibility/{id}', [Slideshow2Controller::class, 'visibility']);
 });
+
+Route::prefix('event')->group(function () {
+    Route::get('/', [EventController::class, 'index']);
+    Route::get('/{id}', [EventController::class, 'show']);
+    Route::post('/create', [EventController::class, 'create']);
+    Route::post('/update/{id}', [EventController::class, 'update']);
+    Route::put('/visibility/{id}', [EventController::class, 'visibility']);
+});
+
+Route::prefix('news')->group(function () {
+    Route::get('/', [NewsController::class, 'index']);
+    Route::get('/{id}', [NewsController::class, 'show']);
+    Route::post('/create', [NewsController::class, 'create']);
+    Route::post('/update/{id}', [NewsController::class, 'update']);
+    Route::put('/visibility/{id}', [NewsController::class, 'visibility']);
+});
+

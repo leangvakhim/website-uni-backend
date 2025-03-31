@@ -40,4 +40,14 @@ class Image extends Model
     {
         return $this->hasMany(Faculty::class, 'f_img', 'image_id');
     }
+
+    public function news()
+    {
+        return $this->hasMany(News::class, 'n_img', 'image_id');
+    }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'e_img', 'image_id');
+    }
 }
