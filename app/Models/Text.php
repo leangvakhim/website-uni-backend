@@ -15,6 +15,7 @@ class Text extends Model
     protected $fillable = [
         'title',
         'desc',
+        'text_type',
         'tag',
         'lang',
     ];

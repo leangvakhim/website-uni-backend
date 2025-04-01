@@ -24,6 +24,7 @@ class TextRequest extends FormRequest
         return [
             'title' => 'nullable|string|max:255',
             'desc' => 'nullable|string',
+            'text_type' => 'nullable|integer',
             'tag' => 'nullable|string|max:255',
             'lang' => 'nullable|integer',
         ];
