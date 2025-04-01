@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\CareerController;
 use App\Http\Controllers\Api\RsdlController;
 use App\Http\Controllers\Api\ScholarshipController;
+use App\Http\Controllers\Api\RsdMeetController;
 
 
 Route::prefix('text')->group(function () {
@@ -172,5 +173,13 @@ Route::prefix('scholarship')->group(function () {
     Route::post('/create', [ScholarshipController::class, 'create']); 
     Route::post('/update/{id}', [ScholarshipController::class, 'update']);
     Route::put('/visibility/{id}', [ScholarshipController::class, 'visibility']);
+});
+
+Route::prefix('rsd-meet')->controller(RsdMeetController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
 });
 
