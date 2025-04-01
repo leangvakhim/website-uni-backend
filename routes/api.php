@@ -19,6 +19,9 @@ use App\Http\Controllers\Api\BtnssController;
 use App\Http\Controllers\Api\Slideshow2Controller;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\NewsController;
+use App\Http\Controllers\Api\CareerController;
+use App\Http\Controllers\Api\RsdlController;
+use App\Http\Controllers\Api\ScholarshipController;
 
 
 Route::prefix('text')->group(function () {
@@ -145,5 +148,29 @@ Route::prefix('news')->group(function () {
     Route::post('/create', [NewsController::class, 'create']);
     Route::post('/update/{id}', [NewsController::class, 'update']);
     Route::put('/visibility/{id}', [NewsController::class, 'visibility']);
+});
+
+Route::prefix('career')->group(function () {
+    Route::get('/', [CareerController::class, 'index']);
+    Route::get('/{id}', [CareerController::class, 'show']);
+    Route::post('/create', [CareerController::class, 'create']);
+    Route::post('/update/{id}', [CareerController::class, 'update']);
+    Route::put('/visibility/{id}', [CareerController::class, 'visibility']);
+});
+
+Route::prefix('rsdl')->group(function () {
+    Route::get('/', [RsdlController::class, 'index']);
+    Route::get('/{id}', [RsdlController::class, 'show']);
+    Route::post('/create', [RsdlController::class, 'create']);
+    Route::post('/update/{id}', [RsdlController::class, 'update']);
+    Route::put('/visibility/{id}', [RsdlController::class, 'visibility']);
+});
+
+Route::prefix('scholarship')->group(function () {
+    Route::get('/', [ScholarshipController::class, 'index']);
+    Route::get('/{id}', [ScholarshipController::class, 'show']);
+    Route::post('/create', [ScholarshipController::class, 'create']); 
+    Route::post('/update/{id}', [ScholarshipController::class, 'update']);
+    Route::put('/visibility/{id}', [ScholarshipController::class, 'visibility']);
 });
 

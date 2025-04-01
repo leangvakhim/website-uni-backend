@@ -50,4 +50,14 @@ class Image extends Model
     {
         return $this->hasMany(Event::class, 'e_img', 'image_id');
     }
+
+    public function scholarships()
+    {
+        return $this->hasMany(Scholarship::class, 'sc_img', 'image_id');
+    }
+
+    public function letterScholarships()
+    {
+        return $this->hasMany(Scholarship::class, 'scletter_img', 'image_id');
+    }
 }
