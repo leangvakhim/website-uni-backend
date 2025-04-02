@@ -27,6 +27,7 @@ use App\Http\Controllers\Api\RsdTitleController;
 use App\Http\Controllers\Api\RsdDescController;
 use App\Http\Controllers\Api\RsdProjectController;
 use App\Http\Controllers\Api\RsdController;
+use App\Http\Controllers\Api\RsdltagController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);  
@@ -218,4 +219,10 @@ Route::prefix('rsd')->controller(RsdController::class)->group(function () {
     Route::put('/visibility/{id}', 'visibility');
 });
 
+Route::prefix('rsdltag')->group(function () {
+    Route::get('/', [RsdltagController::class, 'index']);
+    Route::get('/{id}', [RsdltagController::class, 'show']);
+    Route::post('/create', [RsdltagController::class, 'create']);
+    Route::post('/update/{id}', [RsdltagController::class, 'update']);
+});
 

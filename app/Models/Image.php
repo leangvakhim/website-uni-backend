@@ -65,4 +65,9 @@ class Image extends Model
     {
         return $this->hasMany(Rsd::class, 'rsd_img', 'image_id');
     }
+
+    public function rsdl()
+    {
+        return $this->hasMany(Rsdl::class, 'rsdl_img', 'image_id');
+    }
 }

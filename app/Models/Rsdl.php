@@ -20,4 +20,11 @@ class Rsdl extends Model
         'active',
         'rsdl_img',
     ];
+
+    public function rsdltag()
+    {
+        return $this->hasMany(Rsdltag::class, 'rsdlt_rsdl', 'rsdl_id')->select(['rsdlt', 'rsdlt_title', 'rsdlt_img']);
+    }
+
+
 }
