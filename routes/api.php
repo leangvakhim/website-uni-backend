@@ -24,6 +24,8 @@ use App\Http\Controllers\Api\RsdlController;
 use App\Http\Controllers\Api\ScholarshipController;
 use App\Http\Controllers\Api\RsdMeetController;
 use App\Http\Controllers\Api\RsdTitleController;
+use App\Http\Controllers\Api\RsdDescController;
+use App\Http\Controllers\Api\RsdProjectController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);  
@@ -191,4 +193,21 @@ Route::prefix('rsd-title')->group(function () {
     Route::put('/visibility/{id}', [RsdTitleController::class, 'visibility']);
 });
 
+Route::prefix('rsd-desc')->group(function () {
+    Route::get('/', [RsdDescController::class, 'index']);
+    Route::get('/{id}', [RsdDescController::class, 'show']);
+    Route::post('/create', [RsdDescController::class, 'create']);
+    Route::post('/update/{id}', [RsdDescController::class, 'update']);
+    Route::put('/visibility/{id}', [RsdDescController::class, 'visibility']);
+});
+
+Route::prefix('rsd-project')->group(function () {
+    Route::get('/', [RsdProjectController::class, 'index']);
+    Route::get('/{id}', [RsdProjectController::class, 'show']);
+    Route::post('/create', [RsdProjectController::class, 'create']);
+    Route::post('/update/{id}', [RsdProjectController::class, 'update']);
+    Route::put('/visibility/{id}', [RsdProjectController::class, 'visibility']);
+});
+
+    
 
