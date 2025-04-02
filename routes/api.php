@@ -23,7 +23,7 @@ use App\Http\Controllers\Api\CareerController;
 use App\Http\Controllers\Api\RsdlController;
 use App\Http\Controllers\Api\ScholarshipController;
 use App\Http\Controllers\Api\RsdMeetController;
-
+use App\Http\Controllers\Api\RsdTitleController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);  
@@ -182,4 +182,13 @@ Route::prefix('rsd-meet')->controller(RsdMeetController::class)->group(function 
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
 });
+
+Route::prefix('rsd-title')->group(function () {
+    Route::get('/', [RsdTitleController::class, 'index']);
+    Route::get('/{id}', [RsdTitleController::class, 'show']);
+    Route::post('/create', [RsdTitleController::class, 'create']);
+    Route::post('/update/{id}', [RsdTitleController::class, 'update']);
+    Route::put('/visibility/{id}', [RsdTitleController::class, 'visibility']);
+});
+
 
