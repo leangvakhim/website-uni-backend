@@ -25,4 +25,5 @@ class Text extends Model
     return $this->hasMany(Slideshow::class, 'slider_text', 'text_id');
 }
 
+
 }

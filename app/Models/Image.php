@@ -60,4 +60,9 @@ class Image extends Model
     {
         return $this->hasMany(Scholarship::class, 'scletter_img', 'image_id');
     }
+
+    public function rsd()
+    {
+        return $this->hasMany(Rsd::class, 'rsd_img', 'image_id');
+    }
 }

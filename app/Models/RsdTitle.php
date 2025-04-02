@@ -26,4 +26,11 @@ class RsdTitle extends Model
     {
         return $this->hasMany(RsdProject::class, 'rsdp_rsdtile', 'rsdt_id')->select(['rsdp_id', 'rsdp_rsdtile', 'rsdp_detail']);
     }
+
+    public function rsd()
+    {
+        return $this->hasMany(Rsd::class, 'rsd_text', 'rsdt_id')->select(['rsd_id', 'rsd_text']);
+    }
+
+
 }

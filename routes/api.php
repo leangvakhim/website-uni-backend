@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\RsdMeetController;
 use App\Http\Controllers\Api\RsdTitleController;
 use App\Http\Controllers\Api\RsdDescController;
 use App\Http\Controllers\Api\RsdProjectController;
+use App\Http\Controllers\Api\RsdController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);  
@@ -209,5 +210,12 @@ Route::prefix('rsd-project')->group(function () {
     Route::put('/visibility/{id}', [RsdProjectController::class, 'visibility']);
 });
 
-    
+Route::prefix('rsd')->controller(RsdController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+});
+
 
