@@ -17,6 +17,7 @@ class Rsdl extends Model
         'lang',
         'rsdl_order',
         'display',
-        'active'
+        'active',
+        'rsdl_img',
     ];
 }

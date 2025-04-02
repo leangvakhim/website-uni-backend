@@ -29,6 +29,7 @@ class RsdlRequest extends FormRequest
             'rsdl_order' => 'required|integer',
             'display' => 'required|boolean',
             'active' => 'required|boolean',
+            'rsdl_img' => 'nullable|integer|exists:tbimage,image_id',
         ];
     }
 }
