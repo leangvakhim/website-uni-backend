@@ -28,6 +28,7 @@ use App\Http\Controllers\Api\RsdDescController;
 use App\Http\Controllers\Api\RsdProjectController;
 use App\Http\Controllers\Api\RsdController;
 use App\Http\Controllers\Api\RsdltagController;
+use App\Http\Controllers\Api\AsheadController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -228,3 +229,9 @@ Route::prefix('rsdltag')->group(function () {
     Route::post('/update/{id}', [RsdltagController::class, 'update']);
 });
 
+Route::prefix('ashead')->group(function () {
+    Route::get('/', [AsheadController::class, 'index']);
+    Route::get('/{id}', [AsheadController::class, 'show']);
+    Route::post('/create', [AsheadController::class, 'create']);
+    Route::post('/update/{id}', [AsheadController::class, 'update']);
+});
