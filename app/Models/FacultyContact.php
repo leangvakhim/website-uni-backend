@@ -17,10 +17,11 @@ class FacultyContact extends Model
         'fc_order',
         'display',
         'active',
+        'fc_f',
     ];
 
     public function faculty()
     {
-        return $this->hasMany(Faculty::class, 'f_contact', 'fc_id');
+        return $this->belongsTo(Faculty::class, 'fc_f', 'f_id');
     }
 }

@@ -19,10 +19,11 @@ class FacultyInfo extends Model
         'finfo_order',
         'display',
         'active',
+        'finfo_f',
     ];
 
     public function faculty()
     {
-        return $this->hasMany(Faculty::class, 'f_info', 'finfo_id');
+        return $this->belongsTo(Faculty::class, 'finfo_f', 'f_id');
     }
 }

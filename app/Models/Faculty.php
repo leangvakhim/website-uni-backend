@@ -17,10 +17,6 @@ class Faculty extends Model
         'f_position',
         'f_portfolio',
         'f_img',
-        'f_social',
-        'f_contact',
-        'f_info',
-        'f_bg',
         'f_order',
         'lang',
         'display',
@@ -36,18 +32,18 @@ class Faculty extends Model
         return $this->belongsTo(Social::class, 'f_social', 'social_id');
     }    
 
-    public function contact()
-{
-    return $this->belongsTo(FacultyContact::class, 'f_contact', 'fc_id');
-}
+    public function contacts()
+    {
+        return $this->hasMany(FacultyContact::class, 'fc_f', 'f_id');
+    }    
 
-public function info()
-{
-    return $this->belongsTo(FacultyInfo::class, 'f_info', 'finfo_id');
-}
+    public function infos()
+    {
+        return $this->hasMany(FacultyInfo::class, 'finfo_f', 'f_id');
+    }
 
-public function bg()
-{
-    return $this->belongsTo(FacultyBg::class, 'f_bg', 'fbg_id');
-}
+    public function backgrounds()
+    {
+        return $this->hasMany(FacultyBg::class, 'fbg_f', 'f_id');
+    }
 }
