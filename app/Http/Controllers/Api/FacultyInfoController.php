@@ -3,73 +3,78 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\Controller;
-use Illuminate\Http\Request;
 use App\Models\FacultyInfo;
+use App\Services\FacultyInfoService;
 use App\Http\Requests\FacultyInfoRequest;
+use Illuminate\Http\Request;
 use Exception;
 
 class FacultyInfoController extends Controller
 {
+    protected $facultyInfoService;
+
+    public function __construct(FacultyInfoService $facultyInfoService)
+    {
+        $this->facultyInfoService = $facultyInfoService;
+    }
+
     public function index()
     {
         try {
-            $items = FacultyInfo::where('active', 1)->get();
-            return $this->sendResponse($items->count() === 1 ? $items->first() : $items);
+            $infos = FacultyInfo::with('faculty')->where('active', 1)->get();
+            return $this->sendResponse($infos->count() === 1 ? $infos->first() : $infos);
         } catch (Exception $e) {
-            return $this->sendError('Failed to retrieve faculty info', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to retrieve faculty infos', 500, ['error' => $e->getMessage()]);
         }
     }
 
-    public function show(string $id)
+    public function show($id)
     {
         try {
-            $item = FacultyInfo::find($id);
-            if (!$item) {
-                return $this->sendError('Faculty info not found', 404);
-            }
-            return $this->sendResponse($item);
+            $info = FacultyInfo::with('faculty')->find($id);
+            if (!$info) return $this->sendError('Faculty info not found', 404);
+            return $this->sendResponse($info);
         } catch (Exception $e) {
-            return $this->sendError('Failed to retrieve info', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to retrieve faculty info', 500, ['error' => $e->getMessage()]);
         }
     }
 
     public function create(FacultyInfoRequest $request)
     {
         try {
-            $item = FacultyInfo::create($request->validated());
-            return $this->sendResponse($item, 201, 'Faculty info created successfully');
+            $created = $this->facultyInfoService->create($request->validated());
+            $created->load('faculty');
+            return $this->sendResponse($created, 201, 'Faculty info created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create info', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create faculty info', 500, ['error' => $e->getMessage()]);
         }
     }
 
-    public function update(FacultyInfoRequest $request, $id)
+    public function update(Request $request, $id)
     {
         try {
-            $item = FacultyInfo::find($id);
-            if (!$item) {
-                return $this->sendError('Faculty info not found', 404);
-            }
+            $info = FacultyInfo::find($id);
+            if (!$info) return $this->sendError('Faculty info not found', 404);
+    
+            $updated = $this->facultyInfoService->update($info, $request->all());
 
-            $item->update($request->all());
-            return $this->sendResponse($item, 200, 'Faculty info updated successfully');
+            $updated->load('faculty');
+    
+            return $this->sendResponse($updated, 200, 'Faculty info updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update info', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update faculty info', 500, ['error' => $e->getMessage()]);
         }
     }
+    
 
     public function visibility($id)
     {
         try {
-            $item = FacultyInfo::find($id);
-            if (!$item) {
-                return $this->sendError('Faculty info not found', 404);
-            }
-
-            $item->active = $item->active == 1 ? 0 : 1;
-            $item->save();
-
-            return $this->sendResponse([], 200, 'Faculty info visibility updated');
+            $info = FacultyInfo::find($id);
+            if (!$info) return $this->sendError('Faculty info not found', 404);
+            $info->active = $info->active ? 0 : 1;
+            $info->save();
+            return $this->sendResponse([], 200, 'Visibility updated');
         } catch (Exception $e) {
             return $this->sendError('Failed to update visibility', 500, ['error' => $e->getMessage()]);
         }

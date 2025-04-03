@@ -19,15 +19,15 @@ class FacultyBg extends Model
         'fbg_order',
         'display',
         'active',
+        'fbg_f',
     ];
 
     public function img()
     {
         return $this->belongsTo(Image::class, 'fbg_img', 'image_id');
     }
-    
     public function faculty()
     {
-        return $this->hasMany(Faculty::class, 'f_bg', 'fbg_id');
+        return $this->belongsTo(Faculty::class, 'fbg_f', 'f_id');
     }
 }

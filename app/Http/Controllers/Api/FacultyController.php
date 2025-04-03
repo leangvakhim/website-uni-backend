@@ -23,10 +23,6 @@ class FacultyController extends Controller
         try {
             $faculties = Faculty::with([
                 'img:image_id,img',
-                'social:social_id,social_img,social_link,social_order,display,active',
-                'contact:fc_id,fc_name',
-                'info:finfo_id,finfo_title,finfo_detail,finfo_side',
-                'bg:fbg_id,fbg_name,fbg_img'
             ])
             ->where('active', 1)
             ->get();
@@ -44,10 +40,6 @@ class FacultyController extends Controller
         try {
             $faculty = Faculty::with([
                 'img:image_id,img',
-                'social:social_id,social_img,social_link,social_order,display,active',
-                'contact:fc_id,fc_name',
-                'info:finfo_id,finfo_title,finfo_detail,finfo_side',
-                'bg:fbg_id,fbg_name,fbg_img'
             ])->find($id);
 
             if (!$faculty) {
