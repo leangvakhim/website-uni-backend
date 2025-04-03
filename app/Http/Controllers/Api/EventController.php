@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Api\Controller;
 use App\Models\Event;
 use App\Http\Requests\EventRequest;
+use Illuminate\Http\Request; // Added this line
 use Exception;
 
 class EventController extends Controller
@@ -63,5 +64,37 @@ class EventController extends Controller
         } catch (Exception $e) {
             return $this->sendError('Failed to toggle visibility', 500, ['error' => $e->getMessage()]);
         }
+    }
+
+    public function duplicate($id)
+    {
+        $event = Event::find($id);
+
+        if (!$event) {
+            return response()->json(['message' => 'Event not found'], 404);
+        }
+
+        $newEvent = $event->replicate();
+        $newEvent->e_title = $event->e_title . ' (Copy)';
+        $newEvent->e_order = Event::max('e_order') + 1;
+        $newEvent->save();
+
+        return response()->json(['message' => 'Event duplicated', 'data' => $newEvent], 200);
+    }
+
+    public function reorder(Request $request)
+    {
+        $data = $request->validate([
+            '*.e_id' => 'required|integer|exists:tbevent,e_id',
+            '*.e_order' => 'required|integer'
+        ]);
+
+        foreach ($data as $item) {
+            Event::where('e_id', $item['e_id'])->update(['e_order' => $item['e_order']]);
+        }
+
+        return response()->json([
+            'message' => 'Event order updated successfully',
+        ], 200);
     }
 }
