@@ -46,4 +46,8 @@ class Faculty extends Model
     {
         return $this->hasMany(FacultyBg::class, 'fbg_f', 'f_id');
     }
+    public function socials()
+    {
+        return $this->hasMany(Social::class, 'social_faculty', 'f_id');
+    }
 }
