@@ -34,7 +34,14 @@ class EventController extends Controller
     public function create(EventRequest $request)
     {
         try {
-            $event = Event::create($request->validated());
+            // $event = Event::create($request->validated());
+            $data = $request->validated();
+
+            if (!isset($data['e_order'])) {
+                $data['e_order'] = Event::max('e_order') + 1;
+            }
+
+            $event = Event::create($data);
             return $this->sendResponse($event, 201, 'Event created');
         } catch (Exception $e) {
             return $this->sendError('Failed to create event', 500, ['error' => $e->getMessage()]);
