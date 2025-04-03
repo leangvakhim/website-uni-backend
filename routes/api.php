@@ -30,24 +30,24 @@ use App\Http\Controllers\Api\RsdController;
 use App\Http\Controllers\Api\RsdltagController;
 
 Route::prefix('text')->group(function () {
-    Route::get('/', [TextController::class, 'index']);  
-    Route::get('/{id}', [TextController::class, 'show']); 
-    Route::post('/create', [TextController::class, 'create']); 
-    Route::post('/update/{id}', [TextController::class, 'update']); 
+    Route::get('/', [TextController::class, 'index']);
+    Route::get('/{id}', [TextController::class, 'show']);
+    Route::post('/create', [TextController::class, 'create']);
+    Route::post('/update/{id}', [TextController::class, 'update']);
 });
 
 Route::prefix('button')->group(function () {
-    Route::get('/', [ButtonController::class, 'index']); 
-    Route::get('/{id}', [ButtonController::class, 'show']); 
-    Route::post('/create', [ButtonController::class, 'create']); 
-    Route::post('/update/{id}', [ButtonController::class, 'update']); 
+    Route::get('/', [ButtonController::class, 'index']);
+    Route::get('/{id}', [ButtonController::class, 'show']);
+    Route::post('/create', [ButtonController::class, 'create']);
+    Route::post('/update/{id}', [ButtonController::class, 'update']);
 });
 
 Route::prefix('images')->group(function () {
-    Route::get('/', [ImageController::class, 'index']); 
-    Route::get('/{id}', [ImageController::class, 'show']); 
+    Route::get('/', [ImageController::class, 'index']);
+    Route::get('/{id}', [ImageController::class, 'show']);
     Route::post('/create', [ImageController::class, 'create']);
-    Route::post('/update/{id}', [ImageController::class, 'update']); 
+    Route::post('/update/{id}', [ImageController::class, 'update']);
     Route::delete('/delete/{id}', [ImageController::class, 'delete']);
 });
 
@@ -60,11 +60,11 @@ Route::prefix('slideshows')->group(function () {
 });
 
 Route::prefix('social')->group(function () {
-    Route::get('/', [SocialController::class, 'index']); 
-    Route::get('/{id}', [SocialController::class, 'show']); 
-    Route::post('/create', [SocialController::class, 'create']); 
+    Route::get('/', [SocialController::class, 'index']);
+    Route::get('/{id}', [SocialController::class, 'show']);
+    Route::post('/create', [SocialController::class, 'create']);
     Route::post('/update/{id}', [SocialController::class, 'update']);
-    Route::put('/visibility/{id}', [SocialController::class, 'visibility']); 
+    Route::put('/visibility/{id}', [SocialController::class, 'visibility']);
 });
 
 Route::prefix('faculty-contact')->group(function () {
@@ -145,6 +145,8 @@ Route::prefix('event')->group(function () {
     Route::post('/create', [EventController::class, 'create']);
     Route::post('/update/{id}', [EventController::class, 'update']);
     Route::put('/visibility/{id}', [EventController::class, 'visibility']);
+    Route::post('/duplicate/{id}', [EventController::class, 'duplicate']);
+    Route::put('/reorder', [EventController::class, 'reorder']);
 });
 
 Route::prefix('news')->group(function () {
@@ -174,7 +176,7 @@ Route::prefix('rsdl')->group(function () {
 Route::prefix('scholarship')->group(function () {
     Route::get('/', [ScholarshipController::class, 'index']);
     Route::get('/{id}', [ScholarshipController::class, 'show']);
-    Route::post('/create', [ScholarshipController::class, 'create']); 
+    Route::post('/create', [ScholarshipController::class, 'create']);
     Route::post('/update/{id}', [ScholarshipController::class, 'update']);
     Route::put('/visibility/{id}', [ScholarshipController::class, 'visibility']);
 });
