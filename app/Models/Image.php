@@ -92,4 +92,12 @@ class Image extends Model
     {
         return $this->hasMany(Intro::class, 'in_img', 'image_id');
     }
+    public function fee()
+    {
+        return $this->hasMany(Fee::class, 'fe_img', 'image_id');
+    }
+    public function ufcsd()
+    {
+        return $this->hasMany(Ufcsd::class, 'uf_img', 'image_id');
+    }
 }

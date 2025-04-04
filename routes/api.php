@@ -42,6 +42,8 @@ use App\Http\Controllers\Api\UmdController;
 use App\Http\Controllers\Api\StudyDegreeController;
 use App\Http\Controllers\Api\HaController;
 use App\Http\Controllers\Api\IntroController;
+use App\Http\Controllers\Api\FeeController;
+use App\Http\Controllers\Api\UfcsdController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -349,3 +351,16 @@ Route::prefix('intro')->controller(IntroController::class)->group(function () {
     Route::post('/update/{id}', 'update');
 });
 
+Route::prefix('fee')->controller(FeeController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('{id}', 'show');
+    Route::post('create', 'create');
+    Route::post('update/{id}', 'update');
+});
+
+Route::prefix('ufcsd')->controller(UfcsdController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('{id}', 'show');
+    Route::post('create', 'create');
+    Route::post('/update/{id}', 'update');
+});

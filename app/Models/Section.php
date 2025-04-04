@@ -64,4 +64,12 @@ class Section extends Model
     {
         return $this->hasMany(Intro::class, 'in_sec', 'sec_id');
     }
+    public function ufcsd()
+    {
+        return $this->hasMany(Ufcsd::class, 'uf_sec', 'sec_id');
+    }
+    public function fees()
+    {
+        return $this->hasMany(Fee::class, 'fee_sec', 'sec_id');
+    }
 }
