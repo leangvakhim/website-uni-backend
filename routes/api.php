@@ -33,6 +33,7 @@ use App\Http\Controllers\Api\PartnershipController;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\PageController;
 use App\Http\Controllers\Api\SectionController;
+use App\Http\Controllers\Api\FeedbackController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -270,5 +271,13 @@ Route::prefix('section')->controller(SectionController::class)->group(function (
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
+});
+
+Route::prefix('feedback')->group(function () {
+    Route::get('/', [FeedbackController::class, 'index']);
+    Route::get('/{id}', [FeedbackController::class, 'show']);
+    Route::post('/create', [FeedbackController::class, 'create']);
+    Route::post('/update/{id}', [FeedbackController::class, 'update']);
+    Route::put('/visibility/{id}', [FeedbackController::class, 'visibility']);
 });
 
