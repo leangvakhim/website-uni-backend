@@ -24,4 +24,14 @@ class Section extends Model
     {
         return $this->hasMany(Slideshow2::class, 'slider_sec', 'sec_id');
     }
+
+    public function headerSections()
+    {
+        return $this->hasMany(HeaderSection::class, 'hsec_sec', 'sec_id');
+    }
+
+    public function idds()
+    {
+        return $this->hasMany(Idd::class, 'idd_sec', 'sec_id');
+    }
 }

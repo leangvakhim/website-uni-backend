@@ -34,6 +34,8 @@ use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\PageController;
 use App\Http\Controllers\Api\SectionController;
 use App\Http\Controllers\Api\FeedbackController;
+use App\Http\Controllers\Api\IddController;
+use App\Http\Controllers\Api\HeaderSectionController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -280,4 +282,19 @@ Route::prefix('feedback')->group(function () {
     Route::post('/update/{id}', [FeedbackController::class, 'update']);
     Route::put('/visibility/{id}', [FeedbackController::class, 'visibility']);
 });
+
+Route::prefix('idd')->group(function () {
+    Route::get('/', [IddController::class, 'index']);
+    Route::get('/{id}', [IddController::class, 'show']);
+    Route::post('/create', [IddController::class, 'create']);
+    Route::post('/update/{id}', [IddController::class, 'update']);
+});
+
+Route::prefix('headersection')->group(function () {
+    Route::get('/', [HeadersectionController::class, 'index']);
+    Route::get('/{id}', [HeadersectionController::class, 'show']);
+    Route::post('/create', [HeadersectionController::class, 'create']);
+    Route::post('/update/{id}', [HeadersectionController::class, 'update']);
+});
+
 
