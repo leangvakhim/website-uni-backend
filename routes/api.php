@@ -179,6 +179,8 @@ Route::prefix('career')->group(function () {
     Route::post('/create', [CareerController::class, 'create']);
     Route::post('/update/{id}', [CareerController::class, 'update']);
     Route::put('/visibility/{id}', [CareerController::class, 'visibility']);
+    Route::post('/duplicate/{id}', [CareerController::class, 'duplicate']);
+    Route::put('/reorder', [CareerController::class, 'reorder']);
 });
 
 Route::prefix('rsdl')->group(function () {
