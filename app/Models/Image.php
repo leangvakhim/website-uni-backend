@@ -88,4 +88,8 @@ class Image extends Model
     {
         return $this->hasMany(Ha::class, 'ha_img', 'image_id');
     }
+    public function intro()
+    {
+        return $this->hasMany(Intro::class, 'in_img', 'image_id');
+    }
 }

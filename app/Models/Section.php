@@ -59,4 +59,9 @@ class Section extends Model
     {
         return $this->hasMany(Ha::class, 'ha_sec', 'sec_id');
     }
+
+    public function intro()
+    {
+        return $this->hasMany(Intro::class, 'in_sec', 'sec_id');
+    }
 }
