@@ -28,4 +28,8 @@ class Menu extends Model
     {
         return $this->hasMany(Menu::class, 'menup_id', 'menu_id');
     }
+    public function pages()
+    {
+        return $this->hasMany(Page::class, 'p_menu', 'menu_id');
+    }
 }

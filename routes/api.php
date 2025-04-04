@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\RsdltagController;
 use App\Http\Controllers\Api\AsheadController;
 use App\Http\Controllers\Api\PartnershipController;
 use App\Http\Controllers\Api\MenuController;
+use App\Http\Controllers\Api\PageController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -254,6 +255,12 @@ Route::prefix('menu')->group(function () {
     Route::put('/visibility/{id}', [MenuController::class, 'visibility']);
 });
 
-
+Route::prefix('page')->group(function () {
+    Route::get('/', [PageController::class, 'index']);
+    Route::get('/{id}', [PageController::class, 'show']);
+    Route::post('/create', [PageController::class, 'create']);
+    Route::post('/update/{id}', [PageController::class, 'update']);
+    Route::put('/visibility/{id}', [PageController::class, 'visibility']);
+});
 
 
