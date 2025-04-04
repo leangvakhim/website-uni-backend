@@ -30,6 +30,7 @@ use App\Http\Controllers\Api\RsdController;
 use App\Http\Controllers\Api\RsdltagController;
 use App\Http\Controllers\Api\AsheadController;
 use App\Http\Controllers\Api\PartnershipController;
+use App\Http\Controllers\Api\MenuController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -244,5 +245,15 @@ Route::prefix('partnership')->group(function () {
     Route::post('/update/{id}', [PartnershipController::class, 'update']);
     Route::put('/visibility/{id}', [PartnershipController::class, 'visibility']);
 });
+
+Route::prefix('menu')->group(function () {
+    Route::get('/', [MenuController::class, 'index']);
+    Route::get('/{id}', [MenuController::class, 'show']);
+    Route::post('/create', [MenuController::class, 'create']);
+    Route::post('/update/{id}', [MenuController::class, 'update']);
+    Route::put('/visibility/{id}', [MenuController::class, 'visibility']);
+});
+
+
 
 
