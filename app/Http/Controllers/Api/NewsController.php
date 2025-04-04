@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Controller;
 use App\Models\News;
 use App\Http\Requests\NewsRequest;
 use Exception;
+use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
@@ -69,5 +70,37 @@ class NewsController extends Controller
         } catch (Exception $e) {
             return $this->sendError('Failed to update visibility', 500, ['error' => $e->getMessage()]);
         }
+    }
+
+    public function duplicate($id)
+    {
+        $news = News::find($id);
+
+        if (!$news) {
+            return response()->json(['message' => 'News not found'], 404);
+        }
+
+        $newNews = $news->replicate();
+        $newNews->n_title = $news->n_title . ' (Copy)';
+        $newNews->n_order = News::max('n_order') + 1;
+        $newNews->save();
+
+        return response()->json(['message' => 'News duplicated', 'data' => $newNews], 200);
+    }
+
+    public function reorder(Request $request)
+    {
+        $data = $request->validate([
+            '*.n_id' => 'required|integer|exists:tbnew,n_id',
+            '*.n_order' => 'required|integer'
+        ]);
+
+        foreach ($data as $item) {
+            News::where('n_id', $item['n_id'])->update(['n_order' => $item['n_order']]);
+        }
+
+        return response()->json([
+            'message' => 'News order updated successfully',
+        ], 200);
     }
 }

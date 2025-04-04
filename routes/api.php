@@ -160,6 +160,8 @@ Route::prefix('news')->group(function () {
     Route::post('/create', [NewsController::class, 'create']);
     Route::post('/update/{id}', [NewsController::class, 'update']);
     Route::put('/visibility/{id}', [NewsController::class, 'visibility']);
+    Route::post('/duplicate/{id}', [NewsController::class, 'duplicate']);
+    Route::put('/reorder', [NewsController::class, 'reorder']);
 });
 
 Route::prefix('career')->group(function () {
