@@ -79,4 +79,13 @@ class Image extends Model
     {
         return $this->hasMany(Umd::class, 'umd_img', 'image_id');
     }
+
+    public function studyDegree()
+    {
+        return $this->hasMany(StudyDegree::class, 'std_img', 'image_id');
+    }
+    public function ha()
+    {
+        return $this->hasMany(Ha::class, 'ha_img', 'image_id');
+    }
 }

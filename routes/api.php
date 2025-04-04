@@ -40,6 +40,8 @@ use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\ApdController;
 use App\Http\Controllers\Api\UmdController;
 use App\Http\Controllers\Api\StudyDegreeController;
+use App\Http\Controllers\Api\HaController;
+use App\Http\Controllers\Api\IntroController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -330,3 +332,18 @@ Route::prefix('study-degree')->controller(StudyDegreeController::class)->group(f
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
 });
+
+Route::prefix('ha')->controller(HaController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('intro')->controller(IntroController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+

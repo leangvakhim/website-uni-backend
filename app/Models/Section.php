@@ -54,4 +54,9 @@ class Section extends Model
     {
         return $this->hasMany(StudyDegree::class, 'std_sec', 'sec_id');
     }
+
+    public function ha()
+    {
+        return $this->hasMany(Ha::class, 'ha_sec', 'sec_id');
+    }
 }
