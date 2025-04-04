@@ -18,15 +18,16 @@ class Social extends Model
         'social_order',
         'display',
         'active',
+        'social_link',
+        'social_faculty',
     ];
 
     public function img()
     {
         return $this->belongsTo(Image::class, 'social_img', 'image_id');
     }
-
     public function faculty()
     {
-        return $this->belongsTo(Faculty::class, 'f_social', 'social_id');
-    }
+        return $this->belongsTo(Faculty::class, 'social_faculty', 'f_id');
+    }   
 }

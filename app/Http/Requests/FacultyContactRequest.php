@@ -23,7 +23,7 @@ class FacultyContactRequest extends FormRequest
     {
         return [
             'fc_name' => 'nullable|string|max:255',
-            'fc_order' => 'required|integer',
+            'fc_order' => 'nullable|integer',
             'active' => 'required|boolean',
             'display' => 'required|boolean',
  

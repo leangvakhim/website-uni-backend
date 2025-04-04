@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RsdTitleRequest extends FormRequest
+class AsheadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,10 @@ class RsdTitleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'rsdt_title' => 'nullable|string|max:255',
-            'rsdt_order' => 'nullable|integer',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
+            'ash_title' => 'nullable|string',
+            'ash_subtitle' => 'nullable|string',
+            'ash_routetitle' => 'nullable|string|max:50',
+            'ash_routepage' => 'nullable|string',
         ];
     }
 }

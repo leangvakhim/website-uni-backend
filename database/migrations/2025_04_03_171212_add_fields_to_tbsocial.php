@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tbsocial', function (Blueprint $table) {
-            // $table->text('social_link')->nullable();
             if (!Schema::hasColumn('tbsocial', 'social_link')) {
                 $table->text('social_link')->nullable();
             }
@@ -30,7 +29,7 @@ return new class extends Migration
             $table->dropColumn('social_link');
             $table->dropForeign(['social_faculty']);
             $table->dropColumn('social_faculty');
-
         });
     }
 };
+

@@ -33,8 +33,14 @@ class NewsController extends Controller
     public function create(NewsRequest $request)
     {
         try {
-            $news = News::create($request->validated());
-            return $this->sendResponse($news, 201, 'News created');
+            $data = $request->validated();
+
+            if (!isset($data['n_order'])) {
+                $data['n_order'] = News::max('n_order') + 1;
+            }
+
+            $event = News::create($data);
+            return $this->sendResponse($event, 201, 'News created');
         } catch (Exception $e) {
             return $this->sendError('Failed to create news', 500, ['error' => $e->getMessage()]);
         }

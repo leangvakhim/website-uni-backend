@@ -70,4 +70,8 @@ class Image extends Model
     {
         return $this->hasMany(Rsdl::class, 'rsdl_img', 'image_id');
     }
+    public function partnership()
+    {
+        return $this->hasMany(Partnership::class, 'ps_img', 'image_id');
+    }
 }

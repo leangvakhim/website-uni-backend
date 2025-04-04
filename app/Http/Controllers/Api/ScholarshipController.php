@@ -43,10 +43,16 @@ class ScholarshipController extends Controller
     public function create(ScholarshipRequest $request)
     {
         try {
-            $scholarship = Scholarship::create($request->validated());
-            return $this->sendResponse($scholarship, 201, 'Scholarship created successfully');
+            $data = $request->validated();
+
+            if (!isset($data['sc_orders'])) {
+                $data['sc_orders'] = Scholarship::max('sc_orders') + 1;
+            }
+
+            $Scholarship = Scholarship::create($data);
+            return $this->sendResponse($Scholarship, 201, 'Scholarship created');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create scholarship', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create Scholarship', 500, ['error' => $e->getMessage()]);
         }
     }
 

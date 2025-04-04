@@ -30,7 +30,7 @@ class NewsRequest extends FormRequest
             'n_detail' => 'nullable|string',
             'n_fav' => 'required|boolean',
             'lang' => 'nullable|integer',
-            'n_order' => 'required|integer',
+            'n_order' => 'nullable|integer',
             'display' => 'required|boolean',
             'active' => 'required|boolean'
         ];

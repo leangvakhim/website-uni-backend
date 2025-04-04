@@ -25,7 +25,7 @@ class FacultyInfoRequest extends FormRequest
             'finfo_title' => 'nullable|string|max:255',
             'finfo_detail' => 'nullable|string',
             'finfo_side' => 'required||integer',
-            'finfo_order' => 'required|integer',
+            'finfo_order' => 'nullable|integer',
             'active' => 'required|boolean',
             'display' => 'required|boolean',
            // 'finfo_f' => 'nullable|integer|exists:tbfaculty,f_id',

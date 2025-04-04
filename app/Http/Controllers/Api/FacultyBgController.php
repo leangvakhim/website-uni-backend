@@ -42,13 +42,22 @@ class FacultyBgController extends Controller
     public function create(FacultyBgRequest $request)
     {
         try {
-            $created = $this->facultyBgService->create($request->validated());
-            $created->load(['faculty', 'img']);
-            return $this->sendResponse($created, 201, 'Faculty background created successfully');
+            $data = $request->validated();
+    
+            if (!isset($data['fbg_order'])) {
+                $data['fbg_order'] = FacultyBg::max('fbg_order') + 1;
+            }
+    
+            // Use the service to handle nested object creation
+            $bgs = app(FacultyBgService::class)->create($data);
+    
+            return $this->sendResponse($bgs, 201, 'FacultyBg created');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create faculty background', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create FacultyBg', 500, ['error' => $e->getMessage()]);
         }
     }
+    
+    
 
     public function update(Request $request, $id)
     {

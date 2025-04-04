@@ -34,10 +34,16 @@ class CareerController extends Controller
     public function create(CareerRequest $request)
     {
         try {
-            $career = Career::create($request->validated());
-            return response()->json(['status' => 201, 'message' => 'Created', 'data' => $career]);
+            $data = $request->validated();
+
+            if (!isset($data['c_order'])) {
+                $data['c_order'] = Career::max('c_order') + 1;
+            }
+
+            $event = Career::create($data);
+            return $this->sendResponse($event, 201, 'Career created');
         } catch (Exception $e) {
-            return response()->json(['status' => 500, 'error' => $e->getMessage()]);
+            return $this->sendError('Failed to create career', 500, ['error' => $e->getMessage()]);
         }
     }
 

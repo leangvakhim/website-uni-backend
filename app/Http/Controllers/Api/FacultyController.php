@@ -54,9 +54,14 @@ class FacultyController extends Controller
     public function create(FacultyRequest $request)
     {
         try {
-            $validatedData = $request->validated();
-            $faculty = $this->facultyService->createFaculty($validatedData);
-            return $this->sendResponse($faculty, 201, 'Faculty created successfully');
+            $data = $request->validated();
+
+            if (!isset($data['f_order'])) {
+                $data['f_order'] = Faculty::max('f_order') + 1;
+            }
+
+            $event = Faculty::create($data);
+            return $this->sendResponse($event, 201, 'Faculty created');
         } catch (Exception $e) {
             return $this->sendError('Failed to create faculty', 500, ['error' => $e->getMessage()]);
         }

@@ -24,7 +24,7 @@ class FacultyBgRequest extends FormRequest
         return [
             'fbg_name' => 'nullable|string|max:255',
             'fbg_img' => 'nullable|integer|exists:tbimage,image_id',
-            'fbg_order' => 'required|integer',
+            'fbg_order' => 'nullable|integer',
             'active' => 'required|boolean',
             'display' => 'required|boolean',
           //'fbg_f' => 'nullable|integer|exists:tbfaculty,f_id',

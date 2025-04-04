@@ -35,10 +35,16 @@ class RsdTitleController extends Controller
     public function create(RsdTitleRequest $request)
     {
         try {
-            $rsd = RsdTitle::create($request->validated());
-            return $this->sendResponse($rsd, 201, 'Record created successfully');
+            $data = $request->validated();
+
+            if (!isset($data['rsdt_order'])) {
+                $data['rsdt_order'] = RsdTitle::max('rsdt_order') + 1;
+            }
+
+            $event = RsdTitle::create($data);
+            return $this->sendResponse($event, 201, 'Rsdt created');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create record', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create Rsdt', 500, ['error' => $e->getMessage()]);
         }
     }
 

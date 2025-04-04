@@ -42,11 +42,17 @@ class FacultyInfoController extends Controller
     public function create(FacultyInfoRequest $request)
     {
         try {
-            $created = $this->facultyInfoService->create($request->validated());
-            $created->load('faculty');
-            return $this->sendResponse($created, 201, 'Faculty info created successfully');
+            $data = $request->validated();
+    
+            if (!isset($data['finfo_order'])) {
+                $data['finfo_order'] = FacultyInfo::max('finfo_order') + 1;
+            }
+    
+            $finfo = app(FacultyInfoService::class)->create($data);
+    
+            return $this->sendResponse($finfo, 201, 'FacultyInfo created');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create faculty info', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create FacultyInfo', 500, ['error' => $e->getMessage()]);
         }
     }
 

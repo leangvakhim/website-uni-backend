@@ -28,6 +28,11 @@ use App\Http\Controllers\Api\RsdDescController;
 use App\Http\Controllers\Api\RsdProjectController;
 use App\Http\Controllers\Api\RsdController;
 use App\Http\Controllers\Api\RsdltagController;
+use App\Http\Controllers\Api\AsheadController;
+use App\Http\Controllers\Api\PartnershipController;
+use App\Http\Controllers\Api\MenuController;
+use App\Http\Controllers\Api\PageController;
+use App\Http\Controllers\Api\SectionController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -226,5 +231,44 @@ Route::prefix('rsdltag')->group(function () {
     Route::get('/{id}', [RsdltagController::class, 'show']);
     Route::post('/create', [RsdltagController::class, 'create']);
     Route::post('/update/{id}', [RsdltagController::class, 'update']);
+});
+
+Route::prefix('ashead')->group(function () {
+    Route::get('/', [AsheadController::class, 'index']);
+    Route::get('/{id}', [AsheadController::class, 'show']);
+    Route::post('/create', [AsheadController::class, 'create']);
+    Route::post('/update/{id}', [AsheadController::class, 'update']);
+});
+
+Route::prefix('partnership')->group(function () {
+    Route::get('/', [PartnershipController::class, 'index']);
+    Route::get('/{id}', [PartnershipController::class, 'show']);
+    Route::post('/create', [PartnershipController::class, 'create']);
+    Route::post('/update/{id}', [PartnershipController::class, 'update']);
+    Route::put('/visibility/{id}', [PartnershipController::class, 'visibility']);
+});
+
+Route::prefix('menu')->group(function () {
+    Route::get('/', [MenuController::class, 'index']);
+    Route::get('/{id}', [MenuController::class, 'show']);
+    Route::post('/create', [MenuController::class, 'create']);
+    Route::post('/update/{id}', [MenuController::class, 'update']);
+    Route::put('/visibility/{id}', [MenuController::class, 'visibility']);
+});
+
+Route::prefix('page')->group(function () {
+    Route::get('/', [PageController::class, 'index']);
+    Route::get('/{id}', [PageController::class, 'show']);
+    Route::post('/create', [PageController::class, 'create']);
+    Route::post('/update/{id}', [PageController::class, 'update']);
+    Route::put('/visibility/{id}', [PageController::class, 'visibility']);
+});
+
+Route::prefix('section')->controller(SectionController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
 });
 

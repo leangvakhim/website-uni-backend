@@ -32,7 +32,7 @@ class ScholarshipRequest extends FormRequest
             'scletter_img' => 'nullable|integer',
             'sc_fav' => 'required|boolean',
             'lang' => 'nullable|integer',
-            'sc_orders' => 'required|integer',
+            'sc_orders' => 'nullable|integer',
             'display' => 'required|boolean',
             'active' => 'required|boolean',
         ];
