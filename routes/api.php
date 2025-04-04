@@ -29,6 +29,7 @@ use App\Http\Controllers\Api\RsdProjectController;
 use App\Http\Controllers\Api\RsdController;
 use App\Http\Controllers\Api\RsdltagController;
 use App\Http\Controllers\Api\AsheadController;
+use App\Http\Controllers\Api\PartnershipController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -235,3 +236,13 @@ Route::prefix('ashead')->group(function () {
     Route::post('/create', [AsheadController::class, 'create']);
     Route::post('/update/{id}', [AsheadController::class, 'update']);
 });
+
+Route::prefix('partnership')->group(function () {
+    Route::get('/', [PartnershipController::class, 'index']);
+    Route::get('/{id}', [PartnershipController::class, 'show']);
+    Route::post('/create', [PartnershipController::class, 'create']);
+    Route::post('/update/{id}', [PartnershipController::class, 'update']);
+    Route::put('/visibility/{id}', [PartnershipController::class, 'visibility']);
+});
+
+
