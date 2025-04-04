@@ -32,6 +32,7 @@ use App\Http\Controllers\Api\AsheadController;
 use App\Http\Controllers\Api\PartnershipController;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\PageController;
+use App\Http\Controllers\Api\SectionController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -263,4 +264,11 @@ Route::prefix('page')->group(function () {
     Route::put('/visibility/{id}', [PageController::class, 'visibility']);
 });
 
+Route::prefix('section')->controller(SectionController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+});
 

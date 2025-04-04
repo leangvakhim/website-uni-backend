@@ -24,4 +24,8 @@ class Page extends Model
     {
         return $this->belongsTo(Menu::class, 'p_menu', 'menu_id');
     }
+    public function sections()
+    {
+        return $this->hasMany(Section::class, 'sec_page', 'p_id');
+    }
 }
