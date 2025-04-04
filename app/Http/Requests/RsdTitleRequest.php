@@ -23,7 +23,7 @@ class RsdTitleRequest extends FormRequest
     {
         return [
             'rsdt_title' => 'nullable|string|max:255',
-            'rsdt_order' => 'required|integer',
+            'rsdt_order' => 'nullable|integer',
             'display' => 'required|boolean',
             'active' => 'required|boolean',
         ];

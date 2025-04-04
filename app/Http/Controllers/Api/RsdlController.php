@@ -34,10 +34,16 @@ class RsdlController extends Controller
     public function create(RsdlRequest $request)
     {
         try {
-            $rsdl = Rsdl::create($request->validated());
-            return response()->json(['status' => 201, 'message' => 'Created', 'data' => $rsdl]);
+            $data = $request->validated();
+
+            if (!isset($data['rsdl_order'])) {
+                $data['rsdl_order'] = Rsdl::max('rsdl_order') + 1;
+            }
+
+            $event = Rsdl::create($data);
+            return $this->sendResponse($event, 201, 'Rsdl created');
         } catch (Exception $e) {
-            return response()->json(['status' => 500, 'error' => $e->getMessage()]);
+            return $this->sendError('Failed to create Rsdl', 500, ['error' => $e->getMessage()]);
         }
     }
 

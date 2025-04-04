@@ -42,12 +42,17 @@ class FacultyContactController extends Controller
     public function create(FacultyContactRequest $request)
     {
         try {
-            $created = $this->facultyContactService->create($request->validated());
-            $created->load('faculty');
+            $data = $request->validated();
     
-            return $this->sendResponse($created, 201, 'Faculty contact created successfully');
+            if (!isset($data['fc_order'])) {
+                $data['fc_order'] = FacultyContact::max('fc_order') + 1;
+            }
+    
+            $fc = app(FacultyContactService::class)->create($data);
+    
+            return $this->sendResponse($fc, 201, 'FacultyContact created');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create contact', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create FacultyContact', 500, ['error' => $e->getMessage()]);
         }
     }
     

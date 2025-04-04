@@ -40,12 +40,20 @@ class RsdController extends Controller
     public function create(RsdRequest $request)
     {
         try {
-            $created = $this->rsdService->create($request->validated());
-            return $this->sendResponse($created, 201, 'RSD created successfully');
+            $data = $request->validated();
+    
+            if (!isset($data['rsd_order'])) {
+                $data['rsd_order'] = Rsd::max('rsd_order') + 1;
+            }
+    
+            $fc = app(RsdService::class)->create($data);
+    
+            return $this->sendResponse($fc, 201, 'Rsd created');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create RSD', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create Rsd', 500, ['error' => $e->getMessage()]);
         }
     }
+    
 
     public function update(RsdRequest $request, $id)
     {
