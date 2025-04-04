@@ -21,4 +21,8 @@ class Ha extends Model
     {
         return $this->belongsTo(Image::class, 'ha_img', 'image_id');
     }
+    public function subha()
+    {
+        return $this->hasMany(Subha::class, 'sha_ha', 'ha_id');
+    }
 }

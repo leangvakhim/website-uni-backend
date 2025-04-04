@@ -44,6 +44,8 @@ use App\Http\Controllers\Api\HaController;
 use App\Http\Controllers\Api\IntroController;
 use App\Http\Controllers\Api\FeeController;
 use App\Http\Controllers\Api\UfcsdController;
+use App\Http\Controllers\Api\SubhaController;
+
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -363,4 +365,12 @@ Route::prefix('ufcsd')->controller(UfcsdController::class)->group(function () {
     Route::get('{id}', 'show');
     Route::post('create', 'create');
     Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('subha')->group(function () {
+    Route::get('/', [SubhaController::class, 'index']);
+    Route::get('/{id}', [SubhaController::class, 'show']);
+    Route::post('/create', [SubhaController::class, 'create']);
+    Route::post('/update/{id}', [SubhaController::class, 'update']);
+    Route::put('/visibility/{id}', [SubhaController::class, 'visibility']);
 });
