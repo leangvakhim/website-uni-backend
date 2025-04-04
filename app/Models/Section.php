@@ -19,4 +19,9 @@ class Section extends Model
     {
         return $this->belongsTo(Page::class, 'sec_page', 'p_id');
     }
+
+    public function slideshows()
+    {
+        return $this->hasMany(Slideshow2::class, 'slider_sec', 'sec_id');
+    }
 }
