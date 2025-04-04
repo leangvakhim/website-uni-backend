@@ -34,4 +34,14 @@ class Section extends Model
     {
         return $this->hasMany(Idd::class, 'idd_sec', 'sec_id');
     }
+
+    public function faqs()
+    {
+        return $this->hasMany(Faq::class, 'faq_sec', 'sec_id');
+    }
+
+    public function apds()
+    {
+        return $this->hasMany(Apd::class, 'apd_sec', 'sec_id');
+    }
 }

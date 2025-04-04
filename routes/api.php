@@ -36,6 +36,8 @@ use App\Http\Controllers\Api\SectionController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\IddController;
 use App\Http\Controllers\Api\HeaderSectionController;
+use App\Http\Controllers\Api\FaqController;
+use App\Http\Controllers\Api\ApdController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -297,4 +299,16 @@ Route::prefix('headersection')->group(function () {
     Route::post('/update/{id}', [HeadersectionController::class, 'update']);
 });
 
+Route::prefix('faq')->controller(FaqController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
 
+Route::prefix('apd')->controller(ApdController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
