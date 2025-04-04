@@ -74,4 +74,9 @@ class Image extends Model
     {
         return $this->hasMany(Partnership::class, 'ps_img', 'image_id');
     }
+
+    public function umd()
+    {
+        return $this->hasMany(Umd::class, 'umd_img', 'image_id');
+    }
 }

@@ -44,4 +44,14 @@ class Section extends Model
     {
         return $this->hasMany(Apd::class, 'apd_sec', 'sec_id');
     }
+
+    public function umds()
+    {
+        return $this->hasMany(Umd::class, 'umd_sec', 'sec_id');
+    }
+    
+    public function studyDegrees()
+    {
+        return $this->hasMany(StudyDegree::class, 'std_sec', 'sec_id');
+    }
 }
