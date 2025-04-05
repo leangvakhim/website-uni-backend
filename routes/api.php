@@ -45,7 +45,7 @@ use App\Http\Controllers\Api\IntroController;
 use App\Http\Controllers\Api\FeeController;
 use App\Http\Controllers\Api\UfcsdController;
 use App\Http\Controllers\Api\SubhaController;
-
+use App\Http\Controllers\Api\ServiceController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -374,3 +374,11 @@ Route::prefix('subha')->group(function () {
     Route::post('/update/{id}', [SubhaController::class, 'update']);
     Route::put('/visibility/{id}', [SubhaController::class, 'visibility']);
 });
+
+Route::prefix('service')->group(function () {
+    Route::get('/', [ServiceController::class, 'index']);
+    Route::get('/{id}', [ServiceController::class, 'show']);
+    Route::post('/create', [ServiceController::class, 'create']);
+    Route::post('/update/{id}', [ServiceController::class, 'update']);
+});
+

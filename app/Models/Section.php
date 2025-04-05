@@ -72,4 +72,8 @@ class Section extends Model
     {
         return $this->hasMany(Fee::class, 'fee_sec', 'sec_id');
     }
+    public function services()
+    {
+        return $this->hasMany(Service::class, 's_sec', 'sec_id');
+    }
 }

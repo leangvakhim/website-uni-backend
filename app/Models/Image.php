@@ -100,4 +100,8 @@ class Image extends Model
     {
         return $this->hasMany(Ufcsd::class, 'uf_img', 'image_id');
     }
+    public function service()
+    {
+        return $this->hasMany(Service::class, 's_img', 'image_id');
+    }
 }
