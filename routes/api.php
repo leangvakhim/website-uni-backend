@@ -49,8 +49,7 @@ use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\TestimonialController;
 use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\AcadFacilityController;
-
-
+use App\Http\Controllers\Api\TseController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -408,3 +407,12 @@ Route::prefix('acad-facilities')->group(function () {
     Route::post('/create', [AcadFacilityController::class, 'store']);
     Route::post('/update/{id}', [AcadFacilityController::class, 'update']);
 });
+
+Route::prefix('tse')->group(function () {
+    Route::get('/', [TseController::class, 'index']);
+    Route::get('/{id}', [TseController::class, 'show']);
+    Route::post('/create', [TseController::class, 'store']);
+    Route::post('/update/{id}', [TseController::class, 'update']);
+});
+
+

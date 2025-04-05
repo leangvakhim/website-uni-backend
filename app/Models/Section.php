@@ -85,4 +85,9 @@ class Section extends Model
     {
         return $this->hasMany(Acadfacu::class, 'af_sec', 'sec_id');
     }
+
+    public function tse()
+    {
+        return $this->hasMany(Tse::class, 'tse_sec', 'sec_id');
+    }
 }
