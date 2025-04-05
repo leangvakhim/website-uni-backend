@@ -76,4 +76,8 @@ class Section extends Model
     {
         return $this->hasMany(Service::class, 's_sec', 'sec_id');
     }
+    public function testimonials()
+    {
+        return $this->hasMany(Testimonial::class, 't_sec', 'sec_id');
+    }
 }

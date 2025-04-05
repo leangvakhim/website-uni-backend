@@ -46,6 +46,8 @@ use App\Http\Controllers\Api\FeeController;
 use App\Http\Controllers\Api\UfcsdController;
 use App\Http\Controllers\Api\SubhaController;
 use App\Http\Controllers\Api\ServiceController;
+use App\Http\Controllers\Api\TestimonialController;
+
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -382,3 +384,9 @@ Route::prefix('service')->group(function () {
     Route::post('/update/{id}', [ServiceController::class, 'update']);
 });
 
+Route::prefix('testimonial')->group(function () {
+    Route::get('/', [TestimonialController::class, 'index']);
+    Route::get('/{id}', [TestimonialController::class, 'show']);
+    Route::post('/create', [TestimonialController::class, 'store']);
+    Route::post('/update/{id}', [TestimonialController::class, 'update']);
+});
