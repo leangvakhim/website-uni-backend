@@ -27,4 +27,9 @@ class Tse extends Model
     {
         return $this->belongsTo(Text::class, 'tse_text', 'text_id');
     }
+
+    public function subtse()
+    {
+        return $this->hasMany(Subtse::class, 'stse_tse', 'tse_id');
+    }
 }
