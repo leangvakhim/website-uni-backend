@@ -80,4 +80,9 @@ class Section extends Model
     {
         return $this->hasMany(Testimonial::class, 't_sec', 'sec_id');
     }
+
+    public function acadfaculties()
+    {
+        return $this->hasMany(Acadfacu::class, 'af_sec', 'sec_id');
+    }
 }

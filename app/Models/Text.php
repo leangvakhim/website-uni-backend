@@ -25,5 +25,9 @@ class Text extends Model
     return $this->hasMany(Slideshow::class, 'slider_text', 'text_id');
 }
 
+public function acadfaculties()
+{
+    return $this->hasMany(AcadFacility::class, 'af_text', 'text_id');
+}
 
 }

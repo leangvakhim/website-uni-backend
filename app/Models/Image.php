@@ -104,4 +104,18 @@ class Image extends Model
     {
         return $this->hasMany(Service::class, 's_img', 'image_id');
     }
+    public function tbacadfacility()
+    {
+        return $this->hasMany(Tbacadfacility::class, 'af_img', 'image_id');
+    }
+
+    public function banner()
+    {
+        return $this->hasMany(Banner::class, 'ban_img', 'image_id');
+    }
+    
+    public function acadfacility()
+    {
+        return $this->hasMany(AcadFacility::class, 'af_img', 'image_id');
+    }
 }

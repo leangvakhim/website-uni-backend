@@ -47,6 +47,9 @@ use App\Http\Controllers\Api\UfcsdController;
 use App\Http\Controllers\Api\SubhaController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\TestimonialController;
+use App\Http\Controllers\Api\BannerController;
+use App\Http\Controllers\Api\AcadFacilityController;
+
 
 
 Route::prefix('text')->group(function () {
@@ -389,4 +392,19 @@ Route::prefix('testimonial')->group(function () {
     Route::get('/{id}', [TestimonialController::class, 'show']);
     Route::post('/create', [TestimonialController::class, 'store']);
     Route::post('/update/{id}', [TestimonialController::class, 'update']);
+});
+
+
+Route::prefix('banner')->group(function () {
+    Route::get('/', [BannerController::class, 'index']);
+    Route::get('/{id}', [BannerController::class, 'show']);
+    Route::post('/create', [BannerController::class, 'store']);
+    Route::post('/update/{id}', [BannerController::class, 'update']);
+});
+
+Route::prefix('acad-facilities')->group(function () {
+    Route::get('/', [AcadFacilityController::class, 'index']);
+    Route::get('/{id}', [AcadFacilityController::class, 'show']);
+    Route::post('/create', [AcadFacilityController::class, 'store']);
+    Route::post('/update/{id}', [AcadFacilityController::class, 'update']);
 });
