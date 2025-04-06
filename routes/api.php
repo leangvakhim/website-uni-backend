@@ -50,6 +50,9 @@ use App\Http\Controllers\Api\TestimonialController;
 use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\AcadFacilityController;
 use App\Http\Controllers\Api\TseController;
+use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\SubcontactController;
+
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -415,4 +418,17 @@ Route::prefix('tse')->group(function () {
     Route::post('/update/{id}', [TseController::class, 'update']);
 });
 
+Route::prefix('contact')->group(function () {
+    Route::get('/', [ContactController::class, 'index']);
+    Route::get('/{id}', [ContactController::class, 'show']);
+    Route::post('/create', [ContactController::class, 'create']);
+    Route::post('/update/{id}', [ContactController::class, 'update']);
+});
 
+Route::prefix('subcontact')->group(function () {
+    Route::get('/', [SubcontactController::class, 'index']);
+    Route::get('/{id}', [SubcontactController::class, 'show']);
+    Route::post('/create', [SubcontactController::class, 'create']);
+    Route::post('/update/{id}', [SubcontactController::class, 'update']);
+    Route::put('/visibility/{id}', [SubcontactController::class, 'visibility']);
+});

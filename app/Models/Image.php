@@ -118,4 +118,8 @@ class Image extends Model
     {
         return $this->hasMany(AcadFacility::class, 'af_img', 'image_id');
     }
+    public function subcontact()
+    {
+        return $this->hasMany(Subcontact::class, 'scon_img', 'image_id');
+    }
 }
