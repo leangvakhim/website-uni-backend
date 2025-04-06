@@ -54,6 +54,7 @@ use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\SubcontactController;
 use App\Http\Controllers\Api\RasController;
 use App\Http\Controllers\Api\GcController;
+use App\Http\Controllers\Api\GcaddonController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -442,6 +443,13 @@ Route::prefix('ras')->controller(RasController::class)->group(function () {
 });
 
 Route::prefix('gc')->controller(GcController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('gcaddon')->controller(GcaddonController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
     Route::post('/create', 'create');

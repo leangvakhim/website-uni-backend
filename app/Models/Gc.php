@@ -30,4 +30,9 @@ class Gc extends Model
     {
         return $this->belongsTo(Image::class, 'gc_img2');
     }
+
+    public function gcAddons()
+    {
+        return $this->hasMany(Gcaddon::class, 'gca_gc');
+    }
 }
