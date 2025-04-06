@@ -18,7 +18,6 @@ class Social extends Model
         'social_order',
         'display',
         'active',
-        'social_link',
         'social_faculty',
     ];
 
@@ -29,5 +28,5 @@ class Social extends Model
     public function faculty()
     {
         return $this->belongsTo(Faculty::class, 'social_faculty', 'f_id');
-    }   
+    }
 }

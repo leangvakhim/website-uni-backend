@@ -67,9 +67,11 @@ Route::prefix('slideshows')->group(function () {
 Route::prefix('social')->group(function () {
     Route::get('/', [SocialController::class, 'index']);
     Route::get('/{id}', [SocialController::class, 'show']);
+    Route::get('/by-faculty/{f_id}', [SocialController::class, 'getByFaculty']);
     Route::post('/create', [SocialController::class, 'create']);
     Route::post('/update/{id}', [SocialController::class, 'update']);
     Route::put('/visibility/{id}', [SocialController::class, 'visibility']);
+    Route::post('/reorder', [SocialController::class, 'reorder']);
 });
 
 Route::prefix('faculty-contact')->group(function () {
@@ -102,6 +104,8 @@ Route::prefix('faculty')->group(function () {
     Route::post('/create', [FacultyController::class, 'create']);
     Route::post('/update/{id}', [FacultyController::class, 'update']);
     Route::put('/visibility/{id}', [FacultyController::class, 'visibility']);
+    Route::post('/duplicate/{id}', [FacultyController::class, 'duplicate']);
+    Route::put('/reorder', [FacultyController::class, 'reorder']);
 });
 
 Route::prefix('subtse')->group(function () {
