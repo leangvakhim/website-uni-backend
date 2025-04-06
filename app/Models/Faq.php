@@ -16,4 +16,9 @@ class Faq extends Model
     {
         return $this->belongsTo(Section::class, 'faq_sec', 'sec_id');
     }
+
+    public function addons()
+    {
+        return $this->hasMany(Faqaddon::class, 'fa_faq', 'faq_id');
+    }
 }

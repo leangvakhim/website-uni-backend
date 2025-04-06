@@ -55,6 +55,7 @@ use App\Http\Controllers\Api\SubcontactController;
 use App\Http\Controllers\Api\RasController;
 use App\Http\Controllers\Api\GcController;
 use App\Http\Controllers\Api\GcaddonController;
+use App\Http\Controllers\Api\FaqaddonController;
 
 
 Route::prefix('text')->group(function () {
@@ -460,6 +461,14 @@ Route::prefix('gcaddon')->controller(GcaddonController::class)->group(function (
 Route::prefix('subapd')->controller(SubapdController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+});
+
+Route::prefix('faqaddon')->controller(FaqaddonController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
