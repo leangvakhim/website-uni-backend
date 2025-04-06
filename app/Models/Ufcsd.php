@@ -24,5 +24,10 @@ class Ufcsd extends Model
     {
         return $this->belongsTo(Image::class, 'uf_img', 'image_id');
     }
+
+    public function addons()
+    {
+        return $this->hasMany(Ufaddon::class, 'ufa_uf', 'uf_id');
+    }
     
 }
