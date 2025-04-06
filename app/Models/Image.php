@@ -137,5 +137,9 @@ class Image extends Model
     {
         return $this->hasMany(Subservice::class, 'ss_img', 'image_id');
     }
+    public function setting()
+    {
+        return $this->hasMany(Setting::class, 'set_logo', 'image_id');
+    }
 
 }

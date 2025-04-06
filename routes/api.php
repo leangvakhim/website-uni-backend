@@ -59,6 +59,8 @@ use App\Http\Controllers\Api\FaqaddonController;
 use App\Http\Controllers\Api\UfaddonController;
 use App\Http\Controllers\Api\SubiddController;
 use App\Http\Controllers\Api\SubserviceController;
+use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\DepartmentController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -498,4 +500,18 @@ Route::prefix('subservice')->controller(SubserviceController::class)->group(func
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
+});
+
+Route::prefix('setting')->controller(SettingController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('department')->controller(DepartmentController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
 });
