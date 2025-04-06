@@ -18,4 +18,9 @@ class StudyDegree extends Model
     {
         return $this->belongsTo(Section::class, 'std_sec', 'sec_id');
     }
+
+    public function year()
+    {
+        return $this->hasMany(Year::class, 'y_std', 'std_id');
+    }
 }
