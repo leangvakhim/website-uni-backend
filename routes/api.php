@@ -56,6 +56,7 @@ use App\Http\Controllers\Api\RasController;
 use App\Http\Controllers\Api\GcController;
 use App\Http\Controllers\Api\GcaddonController;
 
+
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
     Route::get('/{id}', [TextController::class, 'show']);
@@ -454,4 +455,12 @@ Route::prefix('gcaddon')->controller(GcaddonController::class)->group(function (
     Route::get('/{id}', 'show');
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('subapd')->controller(SubapdController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
 });

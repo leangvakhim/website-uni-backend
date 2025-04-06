@@ -17,4 +17,9 @@ class Apd extends Model
     {
         return $this->belongsTo(Section::class, 'apd_sec', 'sec_id');
     }
+
+    public function subapd()
+    {
+        return $this->hasMany(Subapd::class, 'sapd_apd', 'apd_id');
+    }
 }
