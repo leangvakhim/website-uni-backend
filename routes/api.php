@@ -52,6 +52,7 @@ use App\Http\Controllers\Api\AcadFacilityController;
 use App\Http\Controllers\Api\TseController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\SubcontactController;
+use App\Http\Controllers\Api\RasController;
 
 
 Route::prefix('text')->group(function () {
@@ -431,4 +432,11 @@ Route::prefix('subcontact')->group(function () {
     Route::post('/create', [SubcontactController::class, 'create']);
     Route::post('/update/{id}', [SubcontactController::class, 'update']);
     Route::put('/visibility/{id}', [SubcontactController::class, 'visibility']);
+});
+
+Route::prefix('ras')->controller(RasController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
 });

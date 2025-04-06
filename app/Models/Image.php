@@ -122,4 +122,16 @@ class Image extends Model
     {
         return $this->hasMany(Subcontact::class, 'scon_img', 'image_id');
     }
+
+    public function rasAsImage1()
+    {
+        return $this->hasMany(Ras::class, 'ras_img1', 'image_id');
+    }
+
+    public function rasAsImage2()
+    {
+        return $this->hasMany(Ras::class, 'ras_img2', 'image_id');
+    }
+
+    
 }

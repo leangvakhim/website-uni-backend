@@ -36,4 +36,9 @@ public function tse()
 
 }
 
+public function ras()
+{
+    return $this->hasMany(Ras::class, 'ras_text', 'text_id');
+}
+
 }

@@ -90,4 +90,9 @@ class Section extends Model
     {
         return $this->hasMany(Tse::class, 'tse_sec', 'sec_id');
     }
+
+    public function ras()
+    {
+        return $this->hasMany(Ras::class, 'ras_sec', 'sec_id');
+    }
 }
