@@ -62,6 +62,7 @@ use App\Http\Controllers\Api\SubserviceController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\AcademicController;
+use App\Http\Controllers\Api\GalleryController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -522,4 +523,11 @@ Route::prefix('academic')->group(function () {
     Route::get('/{id}', [AcademicController::class, 'show']);
     Route::post('/create', [AcademicController::class, 'create']);
     Route::post('/update/{id}', [AcademicController::class, 'update']);
+});
+
+Route::prefix('gallery')->controller(GalleryController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
 });
