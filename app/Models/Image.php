@@ -133,5 +133,9 @@ class Image extends Model
         return $this->hasMany(Ras::class, 'ras_img2', 'image_id');
     }
 
-    
+    public function subservice()
+    {
+        return $this->hasMany(Subservice::class, 'ss_img', 'image_id');
+    }
+
 }

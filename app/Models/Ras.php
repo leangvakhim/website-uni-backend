@@ -36,4 +36,9 @@ class Ras extends Model
     {
         return $this->hasMany(Rason::class, 'rason_ras');
     }
+
+    public function subservices()
+    {
+        return $this->hasMany(Subservice::class, 'ss_ras');
+    }
 }

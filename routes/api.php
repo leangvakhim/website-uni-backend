@@ -58,6 +58,7 @@ use App\Http\Controllers\Api\GcaddonController;
 use App\Http\Controllers\Api\FaqaddonController;
 use App\Http\Controllers\Api\UfaddonController;
 use App\Http\Controllers\Api\SubiddController;
+use App\Http\Controllers\Api\SubserviceController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -486,7 +487,15 @@ Route::prefix('ufaddon')->controller(UfaddonController::class)->group(function (
 Route::prefix('subidd')->controller(SubiddController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('{id}', 'show');
-    Route::post('create', 'create');
-    Route::post('update/{id}', 'update');
-    Route::put('visibility/{id}', 'visibility');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+});
+
+Route::prefix('subservice')->controller(SubserviceController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
 });

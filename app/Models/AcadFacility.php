@@ -32,4 +32,9 @@ class AcadFacility extends Model
     {
         return $this->belongsTo(Image::class, 'af_img', 'image_id');
     }
+
+    public function subservices()
+    {
+        return $this->hasMany(Subservice::class, 'ss_af', 'af_id');
+    }
 }
