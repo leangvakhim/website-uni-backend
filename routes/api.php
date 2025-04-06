@@ -53,7 +53,7 @@ use App\Http\Controllers\Api\TseController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\SubcontactController;
 use App\Http\Controllers\Api\RasController;
-
+use App\Http\Controllers\Api\GcController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -435,6 +435,13 @@ Route::prefix('subcontact')->group(function () {
 });
 
 Route::prefix('ras')->controller(RasController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('gc')->controller(GcController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
     Route::post('/create', 'create');
