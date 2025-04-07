@@ -87,4 +87,46 @@ class ScholarshipController extends Controller
             return $this->sendError('Failed to update visibility', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    public function duplicate($id)
+{
+    try {
+        $scholarship = Scholarship::find($id);
+
+        if (!$scholarship) {
+            return $this->sendError('Scholarship not found', 404);
+        }
+
+        $newScholarship = $scholarship->replicate();
+        $newScholarship->sc_title = $scholarship->sc_title . ' (Copy)';
+        $newScholarship->sc_orders = Scholarship::max('sc_orders') + 1;
+        $newScholarship->save();
+
+        return $this->sendResponse($newScholarship, 200, 'Scholarship duplicated');
+    } catch (Exception $e) {
+        return $this->sendError('Failed to duplicate scholarship', 500, ['error' => $e->getMessage()]);
+    }
+}
+
+public function reorder(Request $request)
+{
+    try {
+        $data = $request->validate([
+            '*.sc_id' => 'required|integer|exists:scholarships,sc_id',
+            '*.sc_orders' => 'required|integer'
+        ]);
+
+        foreach ($data as $item) {
+            Scholarship::where('sc_id', $item['sc_id'])->update(['sc_orders' => $item['sc_orders']]);
+        }
+
+        return response()->json([
+            'message' => 'Scholarship order updated successfully',
+        ], 200);
+    } catch (Exception $e) {
+        return $this->sendError('Failed to update scholarship order', 500, ['error' => $e->getMessage()]);
+    }
+}
+
+
 }

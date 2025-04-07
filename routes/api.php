@@ -224,6 +224,8 @@ Route::prefix('scholarship')->group(function () {
     Route::post('/create', [ScholarshipController::class, 'create']);
     Route::post('/update/{id}', [ScholarshipController::class, 'update']);
     Route::put('/visibility/{id}', [ScholarshipController::class, 'visibility']);
+    Route::post('/duplicate/{id}', [ScholarshipController::class, 'duplicate']);
+    Route::put('/reorder', [ScholarshipController::class, 'reorder']);
 });
 
 Route::prefix('rsd-meet')->controller(RsdMeetController::class)->group(function () {
@@ -264,6 +266,8 @@ Route::prefix('rsd')->controller(RsdController::class)->group(function () {
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
+    Route::post('/duplicate/{id}', 'duplicate');
+    Route::put('/reorder', 'reorder');
 });
 
 Route::prefix('rsdltag')->group(function () {
