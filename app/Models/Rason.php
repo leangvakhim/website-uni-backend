@@ -15,6 +15,12 @@ class Rason extends Model
     protected $fillable = [
         'rason_title',
         'rason_amount',
-        'rason_subtitle'
+        'rason_subtitle',
+        'rason_ras',
     ];
+
+    public function ras()
+    {
+        return $this->belongsTo(Ras::class, 'rason_ras', 'ras_id');
+    }
 }

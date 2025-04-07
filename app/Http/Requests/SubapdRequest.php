@@ -11,7 +11,7 @@ class SubapdRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,16 @@ class SubapdRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'sapd_title' => 'nullable|string|max:50',
+            'sapd_img' => 'nullable|integer|exists:tbimage,image_id',
+            'sapd_routepage' => 'nullable|string',
+            'sapd_order' => 'nullable|integer',
+            'display' => 'required|boolean',
+            'active' => 'required|boolean',
+
+            'sapd_apd' => 'nullable|array',
+            'sapd_apd.apd_title' => 'nullable|string|max:100',
+            'sapd_apd.apd_sec' => 'nullable|integer|exists:tbsection,sec_id',
         ];
     }
 }

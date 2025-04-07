@@ -33,6 +33,36 @@ use App\Http\Controllers\Api\PartnershipController;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\PageController;
 use App\Http\Controllers\Api\SectionController;
+use App\Http\Controllers\Api\FeedbackController;
+use App\Http\Controllers\Api\IddController;
+use App\Http\Controllers\Api\HeaderSectionController;
+use App\Http\Controllers\Api\FaqController;
+use App\Http\Controllers\Api\ApdController;
+use App\Http\Controllers\Api\UmdController;
+use App\Http\Controllers\Api\StudyDegreeController;
+use App\Http\Controllers\Api\HaController;
+use App\Http\Controllers\Api\IntroController;
+use App\Http\Controllers\Api\FeeController;
+use App\Http\Controllers\Api\UfcsdController;
+use App\Http\Controllers\Api\SubhaController;
+use App\Http\Controllers\Api\ServiceController;
+use App\Http\Controllers\Api\TestimonialController;
+use App\Http\Controllers\Api\BannerController;
+use App\Http\Controllers\Api\AcadFacilityController;
+use App\Http\Controllers\Api\TseController;
+use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\SubcontactController;
+use App\Http\Controllers\Api\RasController;
+use App\Http\Controllers\Api\GcController;
+use App\Http\Controllers\Api\GcaddonController;
+use App\Http\Controllers\Api\FaqaddonController;
+use App\Http\Controllers\Api\UfaddonController;
+use App\Http\Controllers\Api\SubiddController;
+use App\Http\Controllers\Api\SubserviceController;
+use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\DepartmentController;
+use App\Http\Controllers\Api\AcademicController;
+use App\Http\Controllers\Api\GalleryController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -280,3 +310,228 @@ Route::prefix('section')->controller(SectionController::class)->group(function (
     Route::put('/visibility/{id}', 'visibility');
 });
 
+Route::prefix('feedback')->group(function () {
+    Route::get('/', [FeedbackController::class, 'index']);
+    Route::get('/{id}', [FeedbackController::class, 'show']);
+    Route::post('/create', [FeedbackController::class, 'create']);
+    Route::post('/update/{id}', [FeedbackController::class, 'update']);
+    Route::put('/visibility/{id}', [FeedbackController::class, 'visibility']);
+});
+
+Route::prefix('idd')->group(function () {
+    Route::get('/', [IddController::class, 'index']);
+    Route::get('/{id}', [IddController::class, 'show']);
+    Route::post('/create', [IddController::class, 'create']);
+    Route::post('/update/{id}', [IddController::class, 'update']);
+});
+
+Route::prefix('headersection')->group(function () {
+    Route::get('/', [HeadersectionController::class, 'index']);
+    Route::get('/{id}', [HeadersectionController::class, 'show']);
+    Route::post('/create', [HeadersectionController::class, 'create']);
+    Route::post('/update/{id}', [HeadersectionController::class, 'update']);
+});
+
+Route::prefix('faq')->controller(FaqController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('apd')->controller(ApdController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('umd')->controller(UmdController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('study-degree')->controller(StudyDegreeController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('ha')->controller(HaController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('intro')->controller(IntroController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('fee')->controller(FeeController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('{id}', 'show');
+    Route::post('create', 'create');
+    Route::post('update/{id}', 'update');
+});
+
+Route::prefix('ufcsd')->controller(UfcsdController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('{id}', 'show');
+    Route::post('create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('subha')->group(function () {
+    Route::get('/', [SubhaController::class, 'index']);
+    Route::get('/{id}', [SubhaController::class, 'show']);
+    Route::post('/create', [SubhaController::class, 'create']);
+    Route::post('/update/{id}', [SubhaController::class, 'update']);
+    Route::put('/visibility/{id}', [SubhaController::class, 'visibility']);
+});
+
+Route::prefix('service')->group(function () {
+    Route::get('/', [ServiceController::class, 'index']);
+    Route::get('/{id}', [ServiceController::class, 'show']);
+    Route::post('/create', [ServiceController::class, 'create']);
+    Route::post('/update/{id}', [ServiceController::class, 'update']);
+});
+
+Route::prefix('testimonial')->group(function () {
+    Route::get('/', [TestimonialController::class, 'index']);
+    Route::get('/{id}', [TestimonialController::class, 'show']);
+    Route::post('/create', [TestimonialController::class, 'store']);
+    Route::post('/update/{id}', [TestimonialController::class, 'update']);
+});
+
+
+Route::prefix('banner')->group(function () {
+    Route::get('/', [BannerController::class, 'index']);
+    Route::get('/{id}', [BannerController::class, 'show']);
+    Route::post('/create', [BannerController::class, 'store']);
+    Route::post('/update/{id}', [BannerController::class, 'update']);
+});
+
+Route::prefix('acad-facilities')->group(function () {
+    Route::get('/', [AcadFacilityController::class, 'index']);
+    Route::get('/{id}', [AcadFacilityController::class, 'show']);
+    Route::post('/create', [AcadFacilityController::class, 'store']);
+    Route::post('/update/{id}', [AcadFacilityController::class, 'update']);
+});
+
+Route::prefix('tse')->group(function () {
+    Route::get('/', [TseController::class, 'index']);
+    Route::get('/{id}', [TseController::class, 'show']);
+    Route::post('/create', [TseController::class, 'store']);
+    Route::post('/update/{id}', [TseController::class, 'update']);
+});
+
+Route::prefix('contact')->group(function () {
+    Route::get('/', [ContactController::class, 'index']);
+    Route::get('/{id}', [ContactController::class, 'show']);
+    Route::post('/create', [ContactController::class, 'create']);
+    Route::post('/update/{id}', [ContactController::class, 'update']);
+});
+
+Route::prefix('subcontact')->group(function () {
+    Route::get('/', [SubcontactController::class, 'index']);
+    Route::get('/{id}', [SubcontactController::class, 'show']);
+    Route::post('/create', [SubcontactController::class, 'create']);
+    Route::post('/update/{id}', [SubcontactController::class, 'update']);
+    Route::put('/visibility/{id}', [SubcontactController::class, 'visibility']);
+});
+
+Route::prefix('ras')->controller(RasController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('gc')->controller(GcController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('gcaddon')->controller(GcaddonController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('subapd')->controller(SubapdController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+});
+
+Route::prefix('faqaddon')->controller(FaqaddonController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+});
+
+Route::prefix('ufaddon')->controller(UfaddonController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+});
+
+Route::prefix('subidd')->controller(SubiddController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+});
+
+Route::prefix('subservice')->controller(SubserviceController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+});
+
+Route::prefix('setting')->controller(SettingController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('department')->controller(DepartmentController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});
+
+Route::prefix('academic')->group(function () {
+    Route::get('/', [AcademicController::class, 'index']);
+    Route::get('/{id}', [AcademicController::class, 'show']);
+    Route::post('/create', [AcademicController::class, 'create']);
+    Route::post('/update/{id}', [AcademicController::class, 'update']);
+});
+
+Route::prefix('gallery')->controller(GalleryController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+});

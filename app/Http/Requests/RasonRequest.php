@@ -24,7 +24,13 @@ class RasonRequest extends FormRequest
         return [
             'rason_title' => 'nullable|string',
             'rason_amount' => 'nullable|string',
-            'rason_subtitle' => 'nullable|string'
+            'rason_subtitle' => 'nullable|string',
+
+            'rason_ras' => 'nullable|array',
+            'rason_ras.ras_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'rason_ras.ras_img1' => 'nullable|integer|exists:tbimage,image_id',
+            'rason_ras.ras_img2' => 'nullable|integer|exists:tbimage,image_id',
+            'rason_ras.ras_text' => 'nullable|integer|exists:tbtext,text_id',
         ];
     }
 }

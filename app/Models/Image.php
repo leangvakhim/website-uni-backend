@@ -74,4 +74,72 @@ class Image extends Model
     {
         return $this->hasMany(Partnership::class, 'ps_img', 'image_id');
     }
+
+    public function umd()
+    {
+        return $this->hasMany(Umd::class, 'umd_img', 'image_id');
+    }
+
+    public function studyDegree()
+    {
+        return $this->hasMany(StudyDegree::class, 'std_img', 'image_id');
+    }
+    public function ha()
+    {
+        return $this->hasMany(Ha::class, 'ha_img', 'image_id');
+    }
+    public function intro()
+    {
+        return $this->hasMany(Intro::class, 'in_img', 'image_id');
+    }
+    public function fee()
+    {
+        return $this->hasMany(Fee::class, 'fe_img', 'image_id');
+    }
+    public function ufcsd()
+    {
+        return $this->hasMany(Ufcsd::class, 'uf_img', 'image_id');
+    }
+    public function service()
+    {
+        return $this->hasMany(Service::class, 's_img', 'image_id');
+    }
+    public function tbacadfacility()
+    {
+        return $this->hasMany(Tbacadfacility::class, 'af_img', 'image_id');
+    }
+
+    public function banner()
+    {
+        return $this->hasMany(Banner::class, 'ban_img', 'image_id');
+    }
+    
+    public function acadfacility()
+    {
+        return $this->hasMany(AcadFacility::class, 'af_img', 'image_id');
+    }
+    public function subcontact()
+    {
+        return $this->hasMany(Subcontact::class, 'scon_img', 'image_id');
+    }
+
+    public function rasAsImage1()
+    {
+        return $this->hasMany(Ras::class, 'ras_img1', 'image_id');
+    }
+
+    public function rasAsImage2()
+    {
+        return $this->hasMany(Ras::class, 'ras_img2', 'image_id');
+    }
+
+    public function subservice()
+    {
+        return $this->hasMany(Subservice::class, 'ss_img', 'image_id');
+    }
+    public function setting()
+    {
+        return $this->hasMany(Setting::class, 'set_logo', 'image_id');
+    }
+
 }

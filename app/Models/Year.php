@@ -19,5 +19,11 @@ class Year extends Model
         'y_order',
         'display',
         'active',
+        'y_std',
     ];
+
+    public function studyDegree()
+    {
+        return $this->belongsTo(StudyDegree::class, 'y_std', 'std_id');
+    }
 }
