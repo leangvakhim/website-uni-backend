@@ -292,6 +292,8 @@ Route::prefix('partnership')->group(function () {
     Route::post('/create', [PartnershipController::class, 'create']);
     Route::post('/update/{id}', [PartnershipController::class, 'update']);
     Route::put('/visibility/{id}', [PartnershipController::class, 'visibility']);
+    Route::post('/duplicate/{id}', [PartnershipController::class, 'duplicate']);
+    Route::put('/reorder', [PartnershipController::class, 'reorder']);
 });
 
 Route::prefix('menu')->group(function () {
