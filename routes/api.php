@@ -216,6 +216,8 @@ Route::prefix('rsdl')->group(function () {
     Route::post('/create', [RsdlController::class, 'create']);
     Route::post('/update/{id}', [RsdlController::class, 'update']);
     Route::put('/visibility/{id}', [RsdlController::class, 'visibility']);
+    Route::post('/duplicate/{id}', [RsdlController::class, 'duplicate']);
+    Route::put('/reorder', [RsdlController::class, 'reorder']);
 });
 
 Route::prefix('scholarship')->group(function () {

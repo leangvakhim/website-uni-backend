@@ -67,4 +67,49 @@ class RsdlController extends Controller
         $rsdl->save();
         return response()->json(['status' => 200, 'message' => 'Visibility toggled']);
     }
+
+    public function duplicate($id)
+{
+    try {
+        $rsdl = Rsdl::find($id);
+
+        if (!$rsdl) {
+            return $this->sendError('Rsdl not found', 404);
+        }
+
+        $newRsdl = $rsdl->replicate();
+        $newRsdl->rsdl_title = $rsdl->rsdl_title . ' (Copy)';
+        $newRsdl->rsdl_order = Rsdl::max('rsdl_order') + 1;
+        $newRsdl->save();
+
+        return $this->sendResponse($newRsdl, 200, 'Rsdl duplicated successfully');
+    } catch (Exception $e) {
+        return $this->sendError('Failed to duplicate Rsdl', 500, ['error' => $e->getMessage()]);
+    }
+}
+
+public function reorder(Request $request)
+{
+    try {
+        $data = $request->validate([
+            '*.rsdl_id' => 'required|integer|exists:trsdl,rsdl_id',
+            '*.rsdl_order' => 'required|integer'
+        ]);
+
+        foreach ($data as $item) {
+            Rsdl::where('rsdl_id', $item['rsdl_id'])->update([
+                'rsdl_order' => $item['rsdl_order']
+            ]);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Rsdl order updated successfully',
+        ]);
+    } catch (Exception $e) {
+        return $this->sendError('Failed to reorder Rsdl', 500, ['error' => $e->getMessage()]);
+    }
+}
+
+
 }
