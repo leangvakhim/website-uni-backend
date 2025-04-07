@@ -22,22 +22,18 @@ class SocialRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'social_img' => 'nullable|integer|exists:tbimage,image_id',
-            'social_link' => 'nullable|string|max:255',
-            'social_order' => 'nullable|integer',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
-            'social_link' => 'nullable|string|max:255',
+            'f_id' => 'required|integer|exists:tbfaculty,f_id',
+            'f_name' => 'nullable|string|max:255',
+            'f_position' => 'nullable|string|max:100',
+            'f_portfolio' => 'nullable|string',
+            'f_img' => 'nullable|integer|exists:tbimage,image_id',
+            'lang' => 'nullable|integer|in:1,2',
 
+            // Validate multiple social records
             'social_faculty' => 'nullable|array',
-            'social_faculty.f_name' => 'nullable|string|max:255',
-            'social_faculty.f_position' => 'nullable|string|max:100',
-            'social_faculty.f_portfolio' => 'nullable|string',
-            'social_faculty.f_img' => 'nullable|integer|exists:tbimage,image_id',
-            'social_faculty.f_order' => 'nullable|integer',
-            'social_faculty.lang' => 'nullable|integer|in:1,2',
-            'social_faculty.display' => 'nullable|boolean',
-            'social_faculty.active' => 'nullable|boolean',
+            'social_faculty.*.social_img' => 'nullable|integer|exists:tbimage,image_id',
+            'social_faculty.*.social_link' => 'nullable|string|max:255',
+            'social_faculty.*.social_order' => 'nullable|integer',
         ];
     }
 }

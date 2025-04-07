@@ -60,8 +60,9 @@ class FacultyController extends Controller
                 $data['f_order'] = Faculty::max('f_order') + 1;
             }
 
-            $event = Faculty::create($data);
-            return $this->sendResponse($event, 201, 'Faculty created');
+            $faculty = Faculty::create($data);
+
+            return $this->sendResponse($faculty, 201, 'Faculty created');
         } catch (Exception $e) {
             return $this->sendError('Failed to create faculty', 500, ['error' => $e->getMessage()]);
         }
@@ -97,5 +98,36 @@ class FacultyController extends Controller
         } catch (Exception $e) {
             return $this->sendError('Failed to update visibility', 500, ['error' => $e->getMessage()]);
         }
+    }
+    public function duplicate($id)
+    {
+        $faculty = Faculty::find($id);
+
+        if (!$faculty) {
+            return response()->json(['message' => 'Event not found'], 404);
+        }
+
+        $newFaculty = $faculty->replicate();
+        $newFaculty->f_name = $faculty->f_name . ' (Copy)';
+        $newFaculty->f_order = Faculty::max('f_order') + 1;
+        $newFaculty->save();
+
+        return response()->json(['message' => 'Faculty duplicated', 'data' => $newFaculty], 200);
+    }
+
+    public function reorder(Request $request)
+    {
+        $data = $request->validate([
+            '*.f_id' => 'required|integer|exists:tbfaculty,f_id',
+            '*.f_order' => 'required|integer'
+        ]);
+
+        foreach ($data as $item) {
+            Faculty::where('f_id', $item['f_id'])->update(['f_order' => $item['f_order']]);
+        }
+
+        return response()->json([
+            'message' => 'Faculty order updated successfully',
+        ], 200);
     }
 }
