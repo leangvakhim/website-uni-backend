@@ -22,21 +22,17 @@ class FacultyContactRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fc_name' => 'nullable|string|max:255',
-            'fc_order' => 'nullable|integer',
-            'active' => 'required|boolean',
-            'display' => 'required|boolean',
- 
             'fc_f' => 'nullable|array',
+            'fc_f.*.fc_name' => 'nullable|string|max:255',
+            'fc_f.*.fc_order' => 'nullable|integer',
 
-            'fc_f.f_name' => 'nullable|string|max:255',
-            'fc_f.f_position' => 'nullable|string|max:100',
-            'fc_f.f_portfolio' => 'nullable|string',
-            'fc_f.f_img' => 'nullable|integer|exists:tbimage,image_id',
-            'fc_f.f_order' => 'nullable|integer',
-            'fc_f.lang' => 'nullable|integer|in:1,2',
-            'fc_f.display' => 'nullable|boolean',
-            'fc_f.active' => 'nullable|boolean',
+
+            'f_name' => 'nullable|string|max:255',
+            'f_position' => 'nullable|string|max:100',
+            'f_portfolio' => 'nullable|string',
+            'f_img' => 'nullable|integer|exists:tbimage,image_id',
+            'f_order' => 'nullable|integer',
+            'lang' => 'nullable|integer|in:1,2',
         ];
     }
 }

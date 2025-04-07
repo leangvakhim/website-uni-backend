@@ -107,9 +107,11 @@ Route::prefix('social')->group(function () {
 Route::prefix('faculty-contact')->group(function () {
     Route::get('/', [FacultyContactController::class, 'index']);
     Route::get('/{id}', [FacultyContactController::class, 'show']);
+    Route::get('/by-faculty/{f_id}', [FacultyContactController::class, 'getByFaculty']);
     Route::post('/create', [FacultyContactController::class, 'create']);
     Route::post('/update/{id}', [FacultyContactController::class, 'update']);
     Route::put('/visibility/{id}', [FacultyContactController::class, 'visibility']);
+    Route::post('/reorder', [FacultyContactController::class, 'reorder']);
 });
 
 Route::prefix('faculty-bg')->group(function () {
