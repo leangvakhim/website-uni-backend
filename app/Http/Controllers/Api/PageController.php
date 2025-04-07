@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\PageRequest;
+use App\Models\Menu;
 use App\Models\Page;
 use App\Services\PageService;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class PageController extends Controller
 {
@@ -40,11 +42,26 @@ class PageController extends Controller
     public function create(PageRequest $request)
     {
         try {
-            $data = $request->validated();
+            $validated = $request->validated();
 
-            $page = app(PageService::class)->create($data);
+            $menu = null;
+            if (isset($validated['menu_id'])) {
+                $menu = Menu::find($validated['menu_id']);
+                if (!$menu) {
+                    return $this->sendError('Menu not found', 404);
+                }
+            }
 
-            return $this->sendResponse($page, 201, 'Page created');
+            $data = collect($validated)->except(['menu_id'])->toArray();
+            $page = new Page($data);
+            $page->p_title = $validated['p_title'] ?? null;
+            $page->p_alias = $validated['p_alias'] ?? null;
+            $page->p_busy = $validated['p_busy'] ?? 0;
+            $page->display = $validated['display'] ?? 0;
+            $page->active = $validated['active'] ?? 1;
+            $page->save();
+
+            return $this->sendResponse($page, 201, 'Page created successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to create page', 500, ['error' => $e->getMessage()]);
         }
@@ -56,8 +73,26 @@ class PageController extends Controller
             $page = Page::find($id);
             if (!$page) return $this->sendError('Page not found', 404);
 
-            $updated = $this->pageService->update($page, $request->validated());
-            return $this->sendResponse($updated, 200, 'Page updated successfully');
+            $validated = $request->validated();
+
+            unset($validated['p_menu']);
+
+            $page->p_title = $validated['p_title'] ?? $page->p_title;
+            $page->p_alias = $validated['p_alias'] ?? $page->p_alias;
+            $page->p_busy = $validated['p_busy'] ?? $page->p_busy;
+            $page->display = $validated['display'] ?? $page->display;
+            $page->active = $validated['active'] ?? $page->active;
+
+            if (isset($validated['menu_id'])) {
+                $page->menu_id = $validated['menu_id'];
+            }
+
+            if ($page->isDirty()) {
+                $page->save();
+                return $this->sendResponse($page, 200, 'Page updated successfully');
+            } else {
+                return $this->sendError('No changes detected', 422);
+            }
         } catch (Exception $e) {
             return $this->sendError('Failed to update page', 500, ['error' => $e->getMessage()]);
         }
