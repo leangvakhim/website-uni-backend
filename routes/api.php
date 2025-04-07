@@ -262,6 +262,8 @@ Route::prefix('menu')->group(function () {
     Route::post('/create', [MenuController::class, 'create']);
     Route::post('/update/{id}', [MenuController::class, 'update']);
     Route::put('/visibility/{id}', [MenuController::class, 'visibility']);
+    Route::post('/duplicate/{id}', [MenuController::class, 'duplicate']);
+    Route::put('/reorder', [MenuController::class, 'reorder']);
 });
 
 Route::prefix('page')->group(function () {
