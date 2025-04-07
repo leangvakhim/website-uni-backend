@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\Controller;
 use App\Models\Menu;
 use App\Http\Requests\MenuRequest;
 use Exception;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
@@ -72,5 +74,37 @@ class MenuController extends Controller
         } catch (Exception $e) {
             return $this->sendError('Failed to update visibility', 500, ['error' => $e->getMessage()]);
         }
+    }
+
+    public function duplicate($id)
+    {
+        $menu = Menu::find($id);
+
+        if (!$menu) {
+            return response()->json(['message' => 'Menu not found'], 404);
+        }
+
+        $newMenu = $menu->replicate();
+        $newMenu->title = $menu->title . ' (Copy)';
+        $newMenu->menu_order = Menu::max('menu_order') + 1;
+        $newMenu->save();
+
+        return response()->json(['message' => 'Menu duplicated', 'data' => $newMenu], 200);
+    }
+
+    public function reorder(Request $request)
+    {
+        $data = $request->validate([
+            '*.menu_id' => 'required|integer|exists:tbmenu,menu_id',
+            '*.menu_order' => 'required|integer'
+        ]);
+
+        foreach ($data as $item) {
+            Menu::where('menu_id', $item['menu_id'])->update(['menu_order' => $item['menu_order']]);
+        }
+
+        return response()->json([
+            'message' => 'Menu order updated successfully',
+        ], 200);
     }
 }
