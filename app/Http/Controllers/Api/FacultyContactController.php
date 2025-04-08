@@ -51,7 +51,7 @@ class FacultyContactController extends Controller
                 return $this->sendError('Faculty ID is required', 422);
             }
 
-            $faculty = FacultyContactRequest::find($validated['f_id']);
+            $faculty = Faculty::find($validated['f_id']);
             if (!$faculty) {
                 return $this->sendError('Faculty not found', 404);
             }
@@ -63,7 +63,7 @@ class FacultyContactController extends Controller
                     if (!isset($item['fc_order'])) {
                         $item['fc_order'] = (FacultyContact::where('fc_order', $faculty->f_id)->max('fc_order') ?? 0) + 1;
                     }
-
+                    $item['fc_name'] = $item['fc_name'] ?? null;
                     $item['display'] = $item['display'] ?? 1;
                     $item['active'] = $item['active'] ?? 1;
 
