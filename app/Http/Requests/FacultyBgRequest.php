@@ -35,8 +35,7 @@ class FacultyBgRequest extends FormRequest
             'fbg_f.*.fbg_img' => 'nullable|integer|exists:tbimage,image_id',
             'fbg_f.*.fbg_name' => 'nullable|string|max:255',
             'fbg_f.*.fbg_order' => 'nullable|integer',
-            'fbg_f.*.fbg_active' => 'nullable|boolean',
-            'fbg_f.*.fbg_display' => 'nullable|boolean',    
+             
         ];
     }
 }

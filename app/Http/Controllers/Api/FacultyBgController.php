@@ -63,12 +63,11 @@ class FacultyBgController extends Controller
                     if (isset($item['fbg_order'])) {
                         $item['fbg_order'] = (FacultyBg::where('fbg_f', $faculty->f_id)->max('fbg_order') ?? 0) +1;
                     }
-                    
-                    $item['fbg_img'] = $item['fbg_img'] ?? $data['fbg_img'];
+                   
                     $item['active'] = $item['active'] ?? 1;
                     $item['display'] = $item['display'] ?? 1;
                     
-                    $createdBgs [] = FacultyBg::create($item);
+                    $createdBgs[] = FacultyBg::create($item);
                 }
             }
             return $this->sendResponse($createdBgs, 201, 'Faculty Background created successfully');
