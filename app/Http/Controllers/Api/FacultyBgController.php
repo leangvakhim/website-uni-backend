@@ -120,9 +120,10 @@ class FacultyBgController extends Controller
     public function reorder(Request $request)
     {
         $data = $request->validate([
-            '*.fbg_id' => 'required|integer|exists:tbsocial,fbg_id',
+            '*.fbg_id' => 'required|integer|exists:tbfaculty_bg,fbg_id', // <-- fix table name
             '*.fbg_order' => 'required|integer'
         ]);
+        
 
         foreach ($data as $item) {
             FacultyBg::where('fbg_id', $item['fbg_id'])->update(['fbg_order' => $item['fbg_order']]);
