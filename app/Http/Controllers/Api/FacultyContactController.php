@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\FacultyContact;
 use App\Services\FacultyContactService;
 use App\Http\Requests\FacultyContactRequest;
+use App\Models\Faculty;
 use Exception;
 
 class FacultyContactController extends Controller

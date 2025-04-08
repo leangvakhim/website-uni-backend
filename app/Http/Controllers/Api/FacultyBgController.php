@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Controller;
 use App\Models\FacultyBg;
 use App\Services\FacultyBgService;
 use App\Http\Requests\FacultyBgRequest;
+use App\Models\Faculty;
 use Illuminate\Http\Request;
 use Exception;
 
@@ -43,15 +44,33 @@ class FacultyBgController extends Controller
     {
         try {
             $data = $request->validated();
+            $createdBgs = [];
     
-            if (!isset($data['fbg_order'])) {
-                $data['fbg_order'] = FacultyBg::max('fbg_order') + 1;
+            if(!isset($data['f_id'])) {
+                return $this->sendError('Faculty ID (fbg_f) is required', 422);
             }
-    
-            // Use the service to handle nested object creation
-            $bgs = app(FacultyBgService::class)->create($data);
-    
-            return $this->sendResponse($bgs, 201, 'FacultyBg created');
+            
+            $faculty = Faculty::find($data['f_id']);
+            if (!$faculty) {
+                return $this->sendError('Faculty not found', 404);
+            }
+            if (isset($data['fbg_f']) && is_array($data['fbg_f'])) {
+                foreach ($data['fbg_f'] as $item) {
+                    $item['fbg_f'] = $faculty->f_id;
+                    
+                    if (isset($item['fbg_order'])) {
+                        $item['fbg_order'] = (FacultyBg::where('fbg_f', $faculty->f_id)->max('fbg_order') ?? 0) +1;
+                    }
+                    
+                    $item['fbg_img'] = $item['fbg_img'] ?? $data['fbg_img'];
+                    $item['active'] = $item['active'] ?? 1;
+                    $item['display'] = $item['display'] ?? 1;
+                    
+                    $createdBgs [] = FacultyBg::create($item);
+                }
+            }
+            return $this->sendResponse($createdBgs, 201, 'Faculty Background created successfully');
+            
         } catch (Exception $e) {
             return $this->sendError('Failed to create FacultyBg', 500, ['error' => $e->getMessage()]);
         }
