@@ -43,31 +43,31 @@ class FacultyBgController extends Controller
     {
         try {
             $data = $request->validated();
-    
+
             if (!isset($data['fbg_order'])) {
                 $data['fbg_order'] = FacultyBg::max('fbg_order') + 1;
             }
-    
+
             // Use the service to handle nested object creation
             $bgs = app(FacultyBgService::class)->create($data);
-    
+
             return $this->sendResponse($bgs, 201, 'FacultyBg created');
         } catch (Exception $e) {
             return $this->sendError('Failed to create FacultyBg', 500, ['error' => $e->getMessage()]);
         }
     }
-    
-    
+
+
 
     public function update(Request $request, $id)
     {
         try {
             $info = FacultyBg::find($id);
             if (!$info) return $this->sendError('Faculty Background not found', 404);
-    
+
             $updated = $this->facultyBgService->update($info, $request->all());
             $updated->load(['faculty', 'img']);
-    
+
             return $this->sendResponse($updated, 200, 'Faculty Background updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update faculty Background', 500, ['error' => $e->getMessage()]);

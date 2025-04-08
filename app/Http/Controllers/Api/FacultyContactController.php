@@ -43,55 +43,54 @@ class FacultyContactController extends Controller
     {
         try {
             $validated = $request->validated();
-            $createdContacts = [];
-    
+            $createdFacultyContact = [];
+
+            // Ensure fc_id is provided
             if (!isset($validated['f_id'])) {
-                return $this->sendError('Faculty ID (fc_f) is required', 422);
+                return $this->sendError('Faculty ID is required', 422);
             }
-    
-            $faculty = Faculty::find($validated['f_id']);
+
+            $faculty = FacultyContactRequest::find($validated['f_id']);
             if (!$faculty) {
                 return $this->sendError('Faculty not found', 404);
             }
-    
-            if (isset($validated['faculty_contact']) && is_array($validated['faculty_contact'])) {
-                foreach ($validated['faculty_contact'] as $item) {
+
+            if (isset($validated['fc_f']) && is_array($validated['fc_f'])) {
+                foreach ($validated['fc_f'] as $item) {
                     $item['fc_f'] = $faculty->f_id;
-    
+
                     if (!isset($item['fc_order'])) {
-                        $item['fc_order'] = (FacultyContact::where('fc_f', $faculty->f_id)->max('fc_order') ?? 0) + 1;
+                        $item['fc_order'] = (FacultyContact::where('fc_order', $faculty->f_id)->max('fc_order') ?? 0) + 1;
                     }
-    
+
                     $item['display'] = $item['display'] ?? 1;
                     $item['active'] = $item['active'] ?? 1;
-    
-                    $createdContacts[] = FacultyContact::create($item);
+
+                    $createdFacultyContact[] = FacultyContact::create($item);
                 }
             }
-    
-            return $this->sendResponse($createdContacts, 201, 'Faculty contact records created successfully');
+
+            return $this->sendResponse($createdFacultyContact, 201, 'Faculty contact records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create faculty contacts', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create faculty contact', 500, ['error' => $e->getMessage()]);
         }
     }
-    
-    
 
     public function update(Request $request, $id)
     {
         try {
             $info = FacultyContact::find($id);
             if (!$info) return $this->sendError('Faculty contact not found', 404);
-    
+
             $updated = $this->facultyContactService->update($info, $request->all());
             $updated->load('faculty');
-    
+
             return $this->sendResponse($updated, 200, 'Faculty contact updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update faculty contact', 500, ['error' => $e->getMessage()]);
         }
     }
-    
+
 
     public function visibility($id)
     {
@@ -126,8 +125,9 @@ class FacultyContactController extends Controller
         foreach ($data as $item) {
             FacultyContact::where('fc_id', $item['fc_id'])->update(['fc_order' => $item['fc_order']]);
         }
+
         return response()->json([
-            'message' => 'FacultyContact order updated successfully',
+            'message' => 'Faculty contact order updated successfully',
         ], 200);
     }
 }

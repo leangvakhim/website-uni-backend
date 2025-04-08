@@ -22,17 +22,16 @@ class FacultyContactRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fc_f' => 'nullable|array',
-            'fc_f.*.fc_name' => 'nullable|string|max:255',
-            'fc_f.*.fc_order' => 'nullable|integer',
-
-
+            'f_id' => 'required|integer|exists:tbfaculty,f_id',
             'f_name' => 'nullable|string|max:255',
             'f_position' => 'nullable|string|max:100',
             'f_portfolio' => 'nullable|string',
             'f_img' => 'nullable|integer|exists:tbimage,image_id',
-            'f_order' => 'nullable|integer',
             'lang' => 'nullable|integer|in:1,2',
+
+            'fc_f' => 'nullable|array',
+            'fc_f.*.fc_name' => 'nullable|string|max:255',
+            'fc_f.*.fc_order' => 'nullable|integer',
         ];
     }
 }

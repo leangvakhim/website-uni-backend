@@ -111,6 +111,7 @@ Route::prefix('faculty-contact')->group(function () {
     Route::post('/create', [FacultyContactController::class, 'create']);
     Route::post('/update/{id}', [FacultyContactController::class, 'update']);
     Route::put('/visibility/{id}', [FacultyContactController::class, 'visibility']);
+    Route::get('/by-faculty/{f_id}', [FacultyContactController::class, 'getByFaculty']);
     Route::post('/reorder', [FacultyContactController::class, 'reorder']);
 });
 
