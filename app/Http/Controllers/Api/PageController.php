@@ -111,4 +111,42 @@ class PageController extends Controller
             return $this->sendError('Failed to toggle visibility', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    public function duplicate($id)
+    {
+        $page = Page::find($id);
+
+        if (!$page) {
+            return response()->json(['message' => 'Page not found'], 404);
+        }
+
+        $newPage = $page->replicate();
+        $newPage->p_title = $page->p_title . ' (Copy)';
+        $newPage->save();
+
+        return response()->json(['message' => 'Page duplicated', 'data' => $newPage], 200);
+    }
+
+    public function updatePageMenu(PageRequest $request, $id)
+    {
+        try {
+            $page = Page::find($id);
+            if (!$page) {
+                return $this->sendError('Page not found', 404);
+            }
+
+            $validated = $request->validated();
+
+            if (!isset($validated['p_menu'])) {
+                return $this->sendError('The p_menu field is required.', 422);
+            }
+
+            $page->p_menu = $validated['p_menu'];
+            $page->save();
+
+            return $this->sendResponse($page, 200, 'Page menu updated successfully');
+        } catch (Exception $e) {
+            return $this->sendError('Failed to update page menu', 500, ['error' => $e->getMessage()]);
+        }
+    }
 }

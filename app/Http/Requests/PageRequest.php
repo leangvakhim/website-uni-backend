@@ -23,6 +23,7 @@ class PageRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'p_menu' => 'nullable|integer|exists:tbmenu,menu_id',
             'p_title' => 'nullable|string|max:255',
             'p_alias' => 'nullable|string',
             'p_busy' => 'nullable|boolean',
