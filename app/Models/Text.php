@@ -25,5 +25,20 @@ class Text extends Model
     return $this->hasMany(Slideshow::class, 'slider_text', 'text_id');
 }
 
+public function acadfaculties()
+{
+    return $this->hasMany(AcadFacility::class, 'af_text', 'text_id');
+}
+
+public function tse()
+{
+    return $this->hasMany(Tse::class, 'tse_text', 'text_id');
+
+}
+
+public function ras()
+{
+    return $this->hasMany(Ras::class, 'ras_text', 'text_id');
+}
 
 }

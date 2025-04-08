@@ -72,4 +72,47 @@ class PartnershipController extends Controller
             return $this->sendError('Failed to update visibility', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    public function duplicate($id)
+    {
+        try {
+            $item = Partnership::find($id);
+
+            if (!$item) {
+                return $this->sendError('Partnership not found', 404);
+            }
+
+            $newItem = $item->replicate();
+            $newItem->ps_title = $item->ps_title . ' (Copy)';
+            $newItem->ps_order = Partnership::max('ps_order') + 1;
+            $newItem->save();
+
+            return $this->sendResponse($newItem, 200, 'Partnership duplicated successfully');
+        } catch (Exception $e) {
+            return $this->sendError('Failed to duplicate partnership', 500, ['error' => $e->getMessage()]);
+        }
+    }
+
+    public function reorder(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                '*.ps_id' => 'required|integer|exists:tbpartnership,ps_id',
+                '*.ps_order' => 'required|integer'
+            ]);
+
+            foreach ($data as $item) {
+                Partnership::where('ps_id', $item['ps_id'])->update([
+                    'ps_order' => $item['ps_order']
+                ]);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Partnership order updated successfully',
+            ]);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to reorder partnership', 500, ['error' => $e->getMessage()]);
+        }
+    }
 }

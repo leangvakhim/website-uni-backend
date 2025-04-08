@@ -17,6 +17,12 @@ class Subtse extends Model
         'stse_detail',
         'stse_order',
         'display',
-        'active'
+        'active',
+        'stse_tse',
     ];
+
+    public function tse()
+    {
+        return $this->belongsTo(Tse::class, 'stse_tse', 'tse_id');
+    }
 }

@@ -32,6 +32,13 @@ class Slideshow2Request extends FormRequest
             'btn2.bss_title' => 'nullable|string|max:50',
             'btn2.bss_routepage' => 'nullable|string',
 
+            'slider_sec' => 'nullable|array',
+            'slider_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'slider_sec.sec_order' => 'nullable|integer',
+            'slider_sec.lang' => 'nullable|integer|in:1,2',
+            'slider_sec.display' => 'nullable|boolean',
+            'slider_sec.active' => 'nullable|boolean',
+
             'img' => 'nullable|exists:tbimage,image_id',
             'logo' => 'nullable|exists:tbimage,image_id',
             'slider_order' => 'required|integer',

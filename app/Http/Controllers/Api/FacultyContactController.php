@@ -76,7 +76,6 @@ class FacultyContactController extends Controller
         }
     }
 
-
     public function update(Request $request, $id)
     {
         try {
@@ -108,12 +107,12 @@ class FacultyContactController extends Controller
 
     public function getByFaculty($f_id)
     {
-        $socials = FacultyContact::where('fc_f', $f_id)
+        $contact = FacultyContact::where('fc_f', $f_id)
             ->where('active', 1)
             ->orderBy('fc_order')
             ->get();
 
-        return response()->json(['data' => $socials]);
+        return response()->json(['data' => $contact]);
     }
 
     public function reorder(Request $request)

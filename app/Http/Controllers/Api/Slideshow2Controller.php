@@ -25,7 +25,8 @@ class Slideshow2Controller extends Controller
                 'btn1:bss_id,bss_title,bss_routepage',
                 'btn2:bss_id,bss_title,bss_routepage',
                 'img:image_id,img',
-                'logo:image_id,img'
+                'logo:image_id,img',
+                'section:sec_id,sec_page,sec_order,lang,display,active' ,
             ])->where('active', 1)->get();
 
             return $this->sendResponse(
@@ -43,7 +44,8 @@ class Slideshow2Controller extends Controller
                 'btn1:bss_id,bss_title,bss_routepage',
                 'btn2:bss_id,bss_title,bss_routepage',
                 'img:image_id,img',
-                'logo:image_id,img'
+                'logo:image_id,img',
+                'section:sec_id,sec_page,sec_order,lang,display,active' ,
             ])->find($id);
 
             if (!$slideshow) {

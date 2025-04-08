@@ -27,6 +27,11 @@ class SubtseRequest extends FormRequest
             'stse_order' => 'required|integer',
             'display' => 'required|boolean',
             'active' => 'required|boolean',
+
+            'stse_tse' => 'nullable|array',
+            'stse_tse.tse_type' => 'nullable|in:1,2',
+            'stse_tse.tse_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'stse_tse.tse_text' => 'nullable|integer|exists:tbtext,text_id'
         ];
     }
 }

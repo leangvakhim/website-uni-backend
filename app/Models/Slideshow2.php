@@ -22,6 +22,7 @@ class Slideshow2 extends Model
         'slider_order',
         'display',
         'active',
+        'slider_sec',
     ];
 
     public function img()
@@ -42,5 +43,10 @@ class Slideshow2 extends Model
     public function btn2()
     {
         return $this->belongsTo(Btnss::class, 'btn2', 'bss_id')->select(['bss_id', 'bss_title', 'bss_routepage', 'display']);
+    }
+
+    public function slider_sec()
+    {
+        return $this->belongsTo(Section::class, 'slider_sec', 'sec_id')->select(['sec_id', 'sec_title']);
     }
 }

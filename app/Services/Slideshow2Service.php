@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Btnss;
 use App\Models\Slideshow2;
+use App\Models\Section;
 use Illuminate\Support\Facades\DB;
 
 class Slideshow2Service
@@ -19,6 +20,11 @@ class Slideshow2Service
             if (!empty($data['btn2']) && is_array($data['btn2'])) {
                 $button2 = Btnss::create($data['btn2']);
                 $data['btn2'] = $button2->bss_id;
+            }
+
+            if (!empty($data['slider_sec']) && is_array($data['slider_sec'])) {
+                $section = Section::create($data['slider_sec']);
+                $data['slider_sec'] = $section->sec_id;
             }
 
             return Slideshow2::create($data);
@@ -51,6 +57,19 @@ class Slideshow2Service
                 } else {
                     $button2 = Btnss::create($data['btn2']);
                     $data['btn2'] = $button2->bss_id;
+                }
+            }
+
+            if (!empty($data['slider_sec']) && is_array($data['slider_sec'])) {
+                if ($slideshow->slider_sec) {
+                    $section = Section::find($slideshow->slider_sec);
+                    if ($section) {
+                        $section->update($data['slider_sec']);
+                        $data['slider_sec'] = $section->sec_id;
+                    }
+                } else {
+                    $section = Section::create($data['slider_sec']);
+                    $data['slider_sec'] = $section->sec_id;
                 }
             }
 

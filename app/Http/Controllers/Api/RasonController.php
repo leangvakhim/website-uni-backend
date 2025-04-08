@@ -3,53 +3,60 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\Controller;
-use Illuminate\Http\Request;
-use App\Models\Rason;
 use App\Http\Requests\RasonRequest;
+use App\Models\Rason;
+use App\Services\RasonService;
 use Exception;
 
 class RasonController extends Controller
 {
+    protected $service;
+
+    public function __construct(RasonService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
         try {
-            $texts =Rason::all();
-            return $this->sendResponse($texts);
+            $data = Rason::with('ras')->get();
+            return $this->sendResponse($data);
         } catch (Exception $e) {
-            return $this->sendError('Failed to retrieve texts', 500, $e->getMessage());
+            return $this->sendError('Failed to fetch rason data', 500, ['error' => $e->getMessage()]);
         }
     }
 
     public function show(string $id)
     {
         try {
-            $data = Rason::find($id);
-            if (!$data) return $this->sendError('Record not found', 404);
-            return $this->sendResponse($data);
+            $rason = Rason::with('ras')->find($id);
+            if (!$rason) return $this->sendError('Rason not found', 404);
+            return $this->sendResponse($rason);
         } catch (Exception $e) {
-            return $this->sendError('Failed to retrieve record', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to fetch rason', 500, ['error' => $e->getMessage()]);
         }
     }
 
     public function create(RasonRequest $request)
     {
         try {
-            $data = Rason::create($request->validated());
-            return $this->sendResponse($data, 201, 'Record created successfully');
+            $data = $this->service->create($request->validated());
+            return $this->sendResponse($data, 201, 'Rason created');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create record', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
         }
     }
 
     public function update(RasonRequest $request, $id)
     {
         try {
-            $data = Rason::find($id);
-            if (!$data) return $this->sendError('Record not found', 404);
-            $data->update($request->validated());
-            return $this->sendResponse($data, 200, 'Record updated successfully');
+            $rason = Rason::find($id);
+            if (!$rason) return $this->sendError('Rason not found', 404);
+            $updated = $this->service->update($rason, $request->validated());
+            return $this->sendResponse($updated, 200, 'Rason updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update record', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
         }
     }
 }

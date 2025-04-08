@@ -79,4 +79,44 @@ class RsdController extends Controller
             return $this->sendError('Failed to toggle visibility', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    public function duplicate($id)
+    {
+        try {
+            $rsd = Rsd::find($id);
+
+            if (!$rsd) {
+                return $this->sendError('RSD not found', 404);
+            }
+
+            $newRsd = $rsd->replicate();
+            $newRsd->rsd_title = $rsd->rsd_title . ' (Copy)';
+            $newRsd->rsd_order = Rsd::max('rsd_order') + 1;
+            $newRsd->save();
+
+            return $this->sendResponse($newRsd, 200, 'RSD duplicated successfully');
+        } catch (Exception $e) {
+            return $this->sendError('Failed to duplicate RSD', 500, ['error' => $e->getMessage()]);
+        }
+    }
+
+    public function reorder(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                '*.rsd_id' => 'required|integer|exists:tbrsd,rsd_id',
+                '*.rsd_order' => 'required|integer'
+            ]);
+
+            foreach ($data as $item) {
+                Rsd::where('rsd_id', $item['rsd_id'])->update(['rsd_order' => $item['rsd_order']]);
+            }
+
+            return response()->json([
+                'message' => 'RSD order updated successfully',
+            ], 200);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to reorder RSD', 500, ['error' => $e->getMessage()]);
+        }
+    }
 }
