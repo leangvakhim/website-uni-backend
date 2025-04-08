@@ -111,16 +111,17 @@ Route::prefix('faculty-contact')->group(function () {
     Route::post('/create', [FacultyContactController::class, 'create']);
     Route::post('/update/{id}', [FacultyContactController::class, 'update']);
     Route::put('/visibility/{id}', [FacultyContactController::class, 'visibility']);
-    Route::get('/by-faculty/{f_id}', [FacultyContactController::class, 'getByFaculty']);
     Route::post('/reorder', [FacultyContactController::class, 'reorder']);
 });
 
 Route::prefix('faculty-bg')->group(function () {
     Route::get('/', [FacultyBgController::class, 'index']);
     Route::get('/{id}', [FacultyBgController::class, 'show']);
+    Route::get('/by-faculty/{f_id}', [FacultyBgController::class, 'getByFaculty']);
     Route::post('/create', [FacultyBgController::class, 'create']);
     Route::post('/update/{id}', [FacultyBgController::class, 'update']);
     Route::put('/visibility/{id}', [FacultyBgController::class, 'visibility']);
+    Route::post('/reorder', [FacultyBgController::class, 'reorder']);
 });
 
 Route::prefix('faculty-info')->group(function () {

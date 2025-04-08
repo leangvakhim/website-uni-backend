@@ -46,14 +46,16 @@ class FacultyBgController extends Controller
             $data = $request->validated();
             $createdBgs = [];
     
-            if(!isset($data['f_id'])) {
-                return $this->sendError('Faculty ID (fbg_f) is required', 422);
+            // Ensure f_id is provided
+            if (!isset($data['f_id'])) {
+                return $this->sendError('Faculty ID is required', 422);
             }
-            
+
             $faculty = Faculty::find($data['f_id']);
             if (!$faculty) {
                 return $this->sendError('Faculty not found', 404);
             }
+            
             if (isset($data['fbg_f']) && is_array($data['fbg_f'])) {
                 foreach ($data['fbg_f'] as $item) {
                     $item['fbg_f'] = $faculty->f_id;
@@ -104,5 +106,31 @@ class FacultyBgController extends Controller
         } catch (Exception $e) {
             return $this->sendError('Failed to update visibility', 500, ['error' => $e->getMessage()]);
         }
+    }
+
+    public function getByFaculty($f_id)
+    {
+        $contact = FacultyBg::where('fbg_f', $f_id)
+            ->where('active', 1)
+            ->orderBy('fbg_order')
+            ->get();
+
+        return response()->json(['data' => $contact]);
+    }
+
+    public function reorder(Request $request)
+    {
+        $data = $request->validate([
+            '*.fbg_id' => 'required|integer|exists:tbsocial,fbg_id',
+            '*.fbg_order' => 'required|integer'
+        ]);
+
+        foreach ($data as $item) {
+            FacultyBg::where('fbg_id', $item['fbg_id'])->update(['fbg_order' => $item['fbg_order']]);
+        }
+
+        return response()->json([
+            'message' => 'fbg order updated successfully',
+        ], 200);
     }
 }
