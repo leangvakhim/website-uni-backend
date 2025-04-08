@@ -75,18 +75,18 @@ class FacultyBgController extends Controller
             return $this->sendError('Failed to create FacultyBg', 500, ['error' => $e->getMessage()]);
         }
     }
-    
-    
+
+
 
     public function update(Request $request, $id)
     {
         try {
             $info = FacultyBg::find($id);
             if (!$info) return $this->sendError('Faculty Background not found', 404);
-    
+
             $updated = $this->facultyBgService->update($info, $request->all());
             $updated->load(['faculty', 'img']);
-    
+
             return $this->sendResponse($updated, 200, 'Faculty Background updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update faculty Background', 500, ['error' => $e->getMessage()]);

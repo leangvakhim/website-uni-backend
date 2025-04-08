@@ -22,7 +22,6 @@ class FacultyContactRequest extends FormRequest
     public function rules(): array
     {
         return [
-
             'f_id' => 'required|integer|exists:tbfaculty,f_id',
             'f_name' => 'nullable|string|max:255',
             'f_position' => 'nullable|string|max:100',
@@ -30,7 +29,6 @@ class FacultyContactRequest extends FormRequest
             'f_img' => 'nullable|integer|exists:tbimage,image_id',
             'lang' => 'nullable|integer|in:1,2',
 
-            // Validate multiple contact records
             'fc_f' => 'nullable|array',
             'fc_f.*.fc_name' => 'nullable|string|max:255',
             'fc_f.*.fc_order' => 'nullable|integer',

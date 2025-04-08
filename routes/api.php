@@ -111,6 +111,7 @@ Route::prefix('faculty-contact')->group(function () {
     Route::post('/create', [FacultyContactController::class, 'create']);
     Route::post('/update/{id}', [FacultyContactController::class, 'update']);
     Route::put('/visibility/{id}', [FacultyContactController::class, 'visibility']);
+    Route::get('/by-faculty/{f_id}', [FacultyContactController::class, 'getByFaculty']);
     Route::post('/reorder', [FacultyContactController::class, 'reorder']);
 });
 
@@ -157,11 +158,11 @@ Route::prefix('rason')->group(function () {
 });
 
 // Route::prefix('year')->group(function () {
-//     Route::get('/', [YearController::class, 'index']);
-//     Route::get('/{id}', [YearController::class, 'show']);
-//     Route::post('/create', [YearController::class, 'create']);
-//     Route::post('/update/{id}', [YearController::class, 'update']);
-//     Route::put('/visibility/{id}', [YearController::class, 'visibility']);
+    // Route::get('/', [YearController::class, 'index']);
+    // Route::get('/{id}', [YearController::class, 'show']);
+    // Route::post('/create', [YearController::class, 'create']);
+    // Route::post('/update/{id}', [YearController::class, 'update']);
+    // Route::put('/visibility/{id}', [YearController::class, 'visibility']);
 // });
 
 Route::prefix('btnss')->group(function () {
@@ -312,6 +313,8 @@ Route::prefix('page')->group(function () {
     Route::post('/create', [PageController::class, 'create']);
     Route::post('/update/{id}', [PageController::class, 'update']);
     Route::put('/visibility/{id}', [PageController::class, 'visibility']);
+    Route::post('/duplicate/{id}', [PageController::class, 'duplicate']);
+    Route::put('/updatepagemenu/{id}', [PageController::class, 'updatePageMenu']);
 });
 
 Route::prefix('section')->controller(SectionController::class)->group(function () {
