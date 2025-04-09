@@ -79,4 +79,27 @@ class FeedbackController extends Controller
         $feedback->save();
         return response()->json(['status' => 200, 'message' => 'Visibility toggled']);
     }
+
+    public function reorder(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                '*.fb_id' => 'required|integer|exists:tbfeedback,fb_id',
+                '*.fb_order' => 'required|integer'
+            ]);
+
+            foreach ($data as $item) {
+                Feedback::where('fb_id', $item['fb_id'])->update([
+                    'fb_order' => $item['fb_order']
+                ]);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Feedback order updated successfully',
+            ]);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to reorder feedback', 500, ['error' => $e->getMessage()]);
+        }
+    }
 }
