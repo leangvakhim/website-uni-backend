@@ -43,10 +43,22 @@ class BannerController extends Controller
     public function store(BannerRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'Banner created');
+            $validated = $request->validated();
+            $createdBanners = [];
+
+            if (isset($validated['banners']) && is_array($validated['banners'])) {
+                foreach ($validated['banners'] as $item) {
+
+                    $item['title'] = $item['title'] ?? null;
+                    $item['subtitle'] = $item['title'] ?? null;
+
+                    $createdBanners[] = Banner::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdBanners, 201, 'Banner records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create banner', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -62,4 +74,13 @@ class BannerController extends Controller
             return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    // public function bannerGetBySection($sec_id)
+    // {
+    //     $banners = Banner::where('ban_sec', $sec_id)
+    //         ->where('active', 1)
+    //         ->get();
+
+    //     return response()->json(['data' => $banners]);
+    // }
 }

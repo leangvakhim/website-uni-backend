@@ -7,6 +7,7 @@ use App\Models\Section;
 use App\Http\Requests\SectionRequest;
 use App\Services\SectionService;
 use Exception;
+use Illuminate\Http\Request;
 
 class SectionController extends Controller
 {
@@ -40,14 +41,24 @@ class SectionController extends Controller
     public function create(SectionRequest $request)
     {
         try {
-            $data = $request->validated();
+            $validated = $request->validated();
+            $createdSections = [];
 
-            if (!isset($data['sec_order'])) {
-                $data['sec_order'] = Section::max('sec_order') + 1;
+            if (isset($validated['sections']) && is_array($validated['sections'])) {
+                foreach ($validated['sections'] as $item) {
+                    if (!isset($item['sec_order'])) {
+                        $item['sec_order'] = (Section::where('sec_page', $item['sec_page'])->max('sec_order') ?? 0) + 1;
+                    }
+
+                    $item['lang'] = $item['lang'] ?? 1;
+                    $item['display'] = $item['display'] ?? 1;
+                    $item['active'] = $item['active'] ?? 1;
+
+                    $createdSections[] = Section::create($item);
+                }
             }
 
-            $section = $this->service->create($data);
-            return $this->sendResponse($section, 201, 'Section created');
+            return $this->sendResponse($createdSections, 201, 'Section records created successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to create section', 500, ['error' => $e->getMessage()]);
         }
@@ -78,5 +89,31 @@ class SectionController extends Controller
         } catch (Exception $e) {
             return $this->sendError('Failed to toggle visibility', 500, ['error' => $e->getMessage()]);
         }
+    }
+
+    public function getByPage($p_id)
+    {
+        $sections = Section::where('sec_page', $p_id)
+            ->where('active', 1)
+            ->orderBy('sec_order')
+            ->get();
+
+        return response()->json(['data' => $sections]);
+    }
+
+    public function reorder(Request $request)
+    {
+        $data = $request->validate([
+            '*.sec_id' => 'required|integer|exists:tbsection,sec_id',
+            '*.sec_order' => 'required|integer'
+        ]);
+
+        foreach ($data as $item) {
+            Section::where('sec_id', $item['sec_id'])->update(['sec_order' => $item['sec_order']]);
+        }
+
+        return response()->json([
+            'message' => 'Section order updated successfully',
+        ], 200);
     }
 }

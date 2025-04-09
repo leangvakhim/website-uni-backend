@@ -27,6 +27,7 @@ class PageRequest extends FormRequest
             'p_title' => 'nullable|string|max:255',
             'p_alias' => 'nullable|string',
             'p_busy' => 'nullable|boolean',
+            'display' => 'required|boolean',
         ];
     }
 }
