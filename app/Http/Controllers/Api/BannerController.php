@@ -50,7 +50,7 @@ class BannerController extends Controller
                 foreach ($validated['banners'] as $item) {
 
                     $item['title'] = $item['title'] ?? null;
-                    $item['subtitle'] = $item['title'] ?? null;
+                    $item['subtitle'] = $item['subtitle'] ?? null;
 
                     $createdBanners[] = Banner::create($item);
                 }
