@@ -127,9 +127,12 @@ Route::prefix('faculty-bg')->group(function () {
 Route::prefix('faculty-info')->group(function () {
     Route::get('/', [FacultyInfoController::class, 'index']);
     Route::get('/{id}', [FacultyInfoController::class, 'show']);
+    Route::get('/by-faculty/{f_id}', [FacultyInfoController::class, 'getByFaculty']);
     Route::post('/create', [FacultyInfoController::class, 'create']);
     Route::post('/update/{id}', [FacultyInfoController::class, 'update']);
     Route::put('/visibility/{id}', [FacultyInfoController::class, 'visibility']);
+    Route::post('/reorder', [FacultyInfoController::class, 'reorder']);
+    
 });
 
 Route::prefix('faculty')->group(function () {

@@ -60,7 +60,7 @@ class FacultyBgController extends Controller
                 foreach ($data['fbg_f'] as $item) {
                     $item['fbg_f'] = $faculty->f_id;
                     
-                    if (isset($item['fbg_order'])) {
+                    if (!isset($item['fbg_order'])) {
                         $item['fbg_order'] = (FacultyBg::where('fbg_f', $faculty->f_id)->max('fbg_order') ?? 0) +1;
                     }
                    
