@@ -62,4 +62,27 @@ class ServiceController extends Controller
             return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    public function reorder(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                '*.s_id' => 'required|integer|exists:tbservice,s_id',
+                '*.s_order' => 'required|integer'
+            ]);
+
+            foreach ($data as $item) {
+                Service::where('s_id', $item['s_id'])->update([
+                    's_order' => $item['s_order']
+                ]);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Service order updated successfully',
+            ]);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to reorder service', 500, ['error' => $e->getMessage()]);
+        }
+    }
 }

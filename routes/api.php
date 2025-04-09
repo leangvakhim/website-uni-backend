@@ -182,6 +182,7 @@ Route::prefix('slideshow')->group(function () {
     Route::post('/create', [Slideshow2Controller::class, 'create']);
     Route::post('/update/{id}', [Slideshow2Controller::class, 'update']);
     Route::put('/visibility/{id}', [Slideshow2Controller::class, 'visibility']);
+    Route::post('/reorder', [Slideshow2Controller::class, 'reorder']);
 });
 
 Route::prefix('event')->group(function () {
@@ -336,6 +337,7 @@ Route::prefix('feedback')->group(function () {
     Route::post('/create', [FeedbackController::class, 'create']);
     Route::post('/update/{id}', [FeedbackController::class, 'update']);
     Route::put('/visibility/{id}', [FeedbackController::class, 'visibility']);
+    Route::put('/reorder', [FeedbackController::class, 'reorder']);
 });
 
 Route::prefix('idd')->group(function () {
@@ -422,6 +424,7 @@ Route::prefix('service')->group(function () {
     Route::get('/{id}', [ServiceController::class, 'show']);
     Route::post('/create', [ServiceController::class, 'create']);
     Route::post('/update/{id}', [ServiceController::class, 'update']);
+    Route::post('/reorder', [ServiceController::class, 'reorder']);
 });
 
 Route::prefix('testimonial')->group(function () {

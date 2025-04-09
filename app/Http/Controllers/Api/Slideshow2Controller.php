@@ -99,4 +99,27 @@ class Slideshow2Controller extends Controller
             return $this->sendError('Failed to update visibility', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    public function reorder(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                '*.slider_id' => 'required|integer|exists:tbslideshow2,slider_id',
+                '*.slider_order' => 'required|integer'
+            ]);
+
+            foreach ($data as $item) {
+                Slideshow2::where('slider_id', $item['slider_id'])->update([
+                    'slider_order' => $item['slider_order']
+                ]);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Slideshow order updated successfully',
+            ]);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to reorder slideshow', 500, ['error' => $e->getMessage()]);
+        }
+    }
 }
