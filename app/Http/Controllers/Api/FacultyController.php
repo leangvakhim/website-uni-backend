@@ -25,6 +25,7 @@ class FacultyController extends Controller
                 'img:image_id,img',
             ])
             ->where('active', 1)
+            ->orderBy('f_order', 'asc')
             ->get();
 
             return $this->sendResponse(
