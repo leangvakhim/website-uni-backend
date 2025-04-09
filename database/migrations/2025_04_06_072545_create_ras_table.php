@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tbras', function (Blueprint $table) {
-            $table->id('ras_id');
-            $table->foreignId('ras_sec')->nullable()->constrained('tbsection', 'sec_id')->onDelete('set null');
-            $table->foreignId('ras_text')->nullable()->constrained('tbtext', 'text_id')->onDelete('set null');
-            $table->foreignId('ras_img1')->nullable()->constrained('tbimage', 'image_id')->onDelete('set null');
-            $table->foreignId('ras_img2')->nullable()->constrained('tbimage', 'image_id')->onDelete('set null');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('tbras')) {
+            Schema::create('tbras', function (Blueprint $table) {
+                $table->id('ras_id');
+                $table->foreignId('ras_sec')->nullable()->constrained('tbsection', 'sec_id')->onDelete('set null');
+                $table->foreignId('ras_text')->nullable()->constrained('tbtext', 'text_id')->onDelete('set null');
+                $table->foreignId('ras_img1')->nullable()->constrained('tbimage', 'image_id')->onDelete('set null');
+                $table->foreignId('ras_img2')->nullable()->constrained('tbimage', 'image_id')->onDelete('set null');
+                $table->timestamps();
+            });
+        }
     }
 
     /**
