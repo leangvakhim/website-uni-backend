@@ -83,4 +83,27 @@ class SubhaController extends Controller
             return $this->sendError('Failed to update visibility', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    public function reorder(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                '*.sha_id' => 'required|integer|exists:tbsubha,sha_id',
+                '*.sha_order' => 'required|integer'
+            ]);
+
+            foreach ($data as $item) {
+                Subha::where('sha_id', $item['sha_id'])->update([
+                    'sha_order' => $item['sha_order']
+                ]);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Subha order updated successfully',
+            ]);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to reorder Subha', 500, ['error' => $e->getMessage()]);
+        }
+    }
 }

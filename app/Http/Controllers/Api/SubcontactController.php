@@ -62,4 +62,27 @@ class SubcontactController extends Controller
             return $this->sendError('Subcontact to update visibility', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    public function reorder(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                '*.scon_id' => 'required|integer|exists:tbsubcontact,scon_id',
+                '*.scon_order' => 'required|integer'
+            ]);
+
+            foreach ($data as $item) {
+                Subcontact::where('scon_id', $item['scon_id'])->update([
+                    'scon_order' => $item['scon_order']
+                ]);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Subcontact order updated successfully',
+            ]);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to reorder Subcontact', 500, ['error' => $e->getMessage()]);
+        }
+    }
 }
