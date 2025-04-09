@@ -81,4 +81,27 @@ class SubtseController extends Controller
             return $this->sendError('Failed to toggle visibility', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    public function reorder(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                '*.stse_id' => 'required|integer|exists:tbsubstse,stse_id',
+                '*.stse_order' => 'required|integer'
+            ]);
+
+            foreach ($data as $item) {
+                Subtse::where('stse_id', $item['stse_id'])->update([
+                    'stse_order' => $item['stse_order']
+                ]);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Subtse order updated successfully',
+            ]);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to reorder Subtse', 500, ['error' => $e->getMessage()]);
+        }
+    }
 }

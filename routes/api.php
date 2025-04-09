@@ -148,6 +148,7 @@ Route::prefix('subtse')->group(function () {
     Route::post('/create', [SubtseController::class, 'create']);
     Route::post('/update/{id}', [SubtseController::class, 'update']);
     Route::put('/visibility/{id}', [SubtseController::class, 'visibility']);
+    Route::post('/reorder', [SubtseController::class, 'reorder']);
 });
 
 Route::prefix('rason')->group(function () {
@@ -158,13 +159,14 @@ Route::prefix('rason')->group(function () {
     Route::put('/visibility/{id}', [RasonController::class, 'visibility']);
 });
 
-// Route::prefix('year')->group(function () {
-    // Route::get('/', [YearController::class, 'index']);
-    // Route::get('/{id}', [YearController::class, 'show']);
-    // Route::post('/create', [YearController::class, 'create']);
-    // Route::post('/update/{id}', [YearController::class, 'update']);
-    // Route::put('/visibility/{id}', [YearController::class, 'visibility']);
-// });
+Route::prefix('year')->group(function () {
+    Route::get('/', [YearController::class, 'index']);
+    Route::get('/{id}', [YearController::class, 'show']);
+    Route::post('/create', [YearController::class, 'create']);
+    Route::post('/update/{id}', [YearController::class, 'update']);
+    Route::put('/visibility/{id}', [YearController::class, 'visibility']);
+    Route::post('/reorder', [YearController::class, 'reorder']);
+});
 
 Route::prefix('btnss')->group(function () {
     Route::get('/', [BtnssController::class, 'index']);
@@ -412,6 +414,7 @@ Route::prefix('subha')->group(function () {
     Route::post('/create', [SubhaController::class, 'create']);
     Route::post('/update/{id}', [SubhaController::class, 'update']);
     Route::put('/visibility/{id}', [SubhaController::class, 'visibility']);
+    Route::post('/reorder', [SubhaController::class, 'reorder']);
 });
 
 Route::prefix('service')->group(function () {
@@ -463,6 +466,7 @@ Route::prefix('subcontact')->group(function () {
     Route::post('/create', [SubcontactController::class, 'create']);
     Route::post('/update/{id}', [SubcontactController::class, 'update']);
     Route::put('/visibility/{id}', [SubcontactController::class, 'visibility']);
+    Route::post('/reorder', [SubcontactController::class, 'reorder']);
 });
 
 Route::prefix('ras')->controller(RasController::class)->group(function () {
@@ -492,6 +496,7 @@ Route::prefix('subapd')->controller(SubapdController::class)->group(function () 
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
+    Route::post('/reorder', 'reorder');
 });
 
 Route::prefix('faqaddon')->controller(FaqaddonController::class)->group(function () {
@@ -500,6 +505,7 @@ Route::prefix('faqaddon')->controller(FaqaddonController::class)->group(function
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
+    Route::post('/reorder', 'reorder');
 });
 
 Route::prefix('ufaddon')->controller(UfaddonController::class)->group(function () {
@@ -508,6 +514,7 @@ Route::prefix('ufaddon')->controller(UfaddonController::class)->group(function (
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
+    Route::post('/reorder', 'reorder');
 });
 
 Route::prefix('subidd')->controller(SubiddController::class)->group(function () {
@@ -516,6 +523,7 @@ Route::prefix('subidd')->controller(SubiddController::class)->group(function () 
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
+    Route::post('/reorder', 'reorder');
 });
 
 Route::prefix('subservice')->controller(SubserviceController::class)->group(function () {
@@ -524,6 +532,7 @@ Route::prefix('subservice')->controller(SubserviceController::class)->group(func
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
+    Route::post('/reorder', 'reorder');
 });
 
 Route::prefix('setting')->controller(SettingController::class)->group(function () {
