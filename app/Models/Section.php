@@ -12,7 +12,7 @@ class Section extends Model
     protected $primaryKey = 'sec_id';
 
     protected $fillable = [
-        'sec_page', 'sec_order', 'lang', 'display', 'active'
+        'sec_page', 'sec_order', 'lang', 'display', 'active', 'sec_type'
     ];
 
     public function page()
@@ -49,7 +49,7 @@ class Section extends Model
     {
         return $this->hasMany(Umd::class, 'umd_sec', 'sec_id');
     }
-    
+
     public function studyDegrees()
     {
         return $this->hasMany(StudyDegree::class, 'std_sec', 'sec_id');

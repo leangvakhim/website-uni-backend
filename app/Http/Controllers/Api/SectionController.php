@@ -51,6 +51,7 @@ class SectionController extends Controller
                     }
 
                     $item['lang'] = $item['lang'] ?? 1;
+                    $item['sec_type'] = $item['sec_type'] ?? null;
                     $item['display'] = $item['display'] ?? 1;
                     $item['active'] = $item['active'] ?? 1;
 
