@@ -324,6 +324,8 @@ Route::prefix('section')->controller(SectionController::class)->group(function (
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
+    Route::get('/by-page/{p_id}', 'getByPage');
+    Route::post('/reorder', 'reorder');
 });
 
 Route::prefix('feedback')->group(function () {

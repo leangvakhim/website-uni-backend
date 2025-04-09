@@ -20,6 +20,10 @@ class Page extends Model
         'active',
     ];
 
+    protected $casts = [
+        'display' => 'boolean',
+    ];
+
     public function menu()
     {
         return $this->belongsTo(Menu::class, 'p_menu', 'menu_id');

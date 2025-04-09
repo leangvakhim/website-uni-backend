@@ -22,16 +22,16 @@ class BannerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ban_title' => 'nullable|string|max:255',
-            'ban_subtitle' => 'nullable|string|max:255',
-            'ban_img' => 'nullable|integer|exists:tbimage,image_id',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'ban_sec' => 'nullable|array',
-            'ban_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'ban_sec.sec_order' => 'nullable|integer',
-            'ban_sec.lang' => 'nullable|in:1,2',
-            'ban_sec.display' => 'required_with:ban_sec|boolean',
-            'ban_sec.active' => 'required_with:ban_sec|boolean',
+            // Validate multiple social records
+            'banners' => 'nullable|array',
+            'banners.*.ban_img' => 'nullable|integer|exists:tbimage,image_id',
+            'banners.*.ban_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'banners.*.ban_subtitle' => 'nullable|string|max:255',
+            'banners.*.ban_title' => 'nullable|string|max:255'
         ];
     }
 }

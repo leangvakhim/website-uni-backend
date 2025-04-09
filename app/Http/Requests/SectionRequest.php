@@ -22,18 +22,17 @@ class SectionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'sec_order' => 'nullable|integer',
-            'lang' => 'required|integer|in:1,2',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
+            'p_title' => 'nullable|string|max:50',
+            'p_alias' => 'nullable|string',
+            'p_busy' => 'nullable|integer',
+            'p_menu' => 'nullable|integer|exists:tbmenu,menu_id',
+            'lang' => 'nullable|integer|in:1,2',
 
-            'sec_page' => 'nullable|array',
-            'sec_page.p_title' => 'nullable|string|max:50',
-            'sec_page.p_menu' => 'nullable|integer|exists:tbmenu,menu_id',
-            'sec_page.p_alias' => 'nullable|string',
-            'sec_page.p_busy' => 'nullable|boolean',
-            'sec_page.display' => 'nullable|boolean',
-            'sec_page.active' => 'nullable|boolean'
+            // Validate multiple social records
+            'sections' => 'nullable|array',
+            'sections.*.sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sections.*.display' => 'nullable|boolean',
+            'sections.*.sec_order' => 'nullable|integer'
         ];
     }
 }
