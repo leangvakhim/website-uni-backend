@@ -12,12 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tbbanner', function (Blueprint $table) {
-            $table->unsignedBigInteger('ban_sec')->nullable()->after('ban_id');
+            if (!Schema::hasColumn('tbbanner', 'ban_sec')) {
+                $table->unsignedBigInteger('ban_sec')->nullable()->after('ban_id');
 
-            $table->foreign('ban_sec')
-                ->references('sec_id')
-                ->on('tbsection')
-                ->onDelete('cascade');
+                $table->foreign('ban_sec')
+                    ->references('sec_id')
+                    ->on('tbsection')
+                    ->onDelete('cascade');
+            }
         });
     }
 
