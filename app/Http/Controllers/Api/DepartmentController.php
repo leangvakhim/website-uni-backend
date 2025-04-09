@@ -40,8 +40,22 @@ class DepartmentController extends Controller
     public function create(DepartmentRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'Department created');
+            $validated = $request->validated();
+            $createdDepartments = [];
+
+            if (isset($validated['programs']) && is_array($validated['programs'])) {
+                foreach ($validated['programs'] as $item) {
+
+                    $item['dep_title'] = $item['dep_title'] ?? null;
+                    $item['dep_detail'] = $item['dep_detail'] ?? null;
+                    $item['dep_img1'] = $item['dep_img1'] ?? null;
+                    $item['dep_img2'] = $item['dep_img2'] ?? null;
+
+                    $createdDepartments[] = Department::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdDepartments, 201, 'Department records created successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to create department', 500, ['error' => $e->getMessage()]);
         }

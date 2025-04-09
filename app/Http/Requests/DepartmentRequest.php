@@ -22,17 +22,17 @@ class DepartmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'dep_sec' => 'nullable|array',
-            'dep_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'dep_sec.sec_order' => 'nullable|integer',
-            'dep_sec.lang' => 'nullable|in:1,2',
-            'dep_sec.display' => 'required|boolean',
-            'dep_sec.active' => 'required|boolean',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'dep_title' => 'nullable|string|max:100',
-            'dep_detail' => 'nullable|string',
-            'dep_img1' => 'nullable|integer|exists:tbimage,image_id',
-            'dep_img2' => 'nullable|integer|exists:tbimage,image_id',
+            // Validate multiple social records
+            'programs' => 'nullable|array',
+            'programs.*.dep_img1' => 'nullable|integer|exists:tbimage,image_id',
+            'programs.*.dep_img2' => 'nullable|integer|exists:tbimage,image_id',
+            'programs.*.dep_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'programs.*.dep_detail' => 'nullable|string',
+            'programs.*.dep_title' => 'nullable|string|max:255'
         ];
     }
 }
