@@ -12,7 +12,8 @@ class Feedback extends Model
     protected $primaryKey = 'fb_id';
 
     protected $fillable = [
-        'fb_sec', 'fb_title', 'fb_subtitle', 'fb_writer',
+       // 'fb_sec', 
+        'fb_title', 'fb_subtitle', 'fb_writer',
         'fb_img', 'fb_order', 'lang', 'display', 'active'
     ];
 
