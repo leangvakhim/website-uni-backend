@@ -36,12 +36,28 @@ class GalleryController extends Controller
             return $this->sendError('Failed to load gallery', 500, ['error' => $e->getMessage()]);
         }
     }
-
     public function create(GalleryRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'Gallery created');
+            $validated = $request->validated();
+            $createdGallery = [];
+
+            if (isset($validated['gallery']) && is_array($validated['gallery'])) {
+                foreach ($validated['gallery'] as $item) {
+
+                    $item['gal_text'] = $item['gal_text'] ?? null;
+                    $item['gal_sec'] = $item['gal_sec'] ?? null;
+                    $item['gal_img1'] = $item['gal_img1'] ?? null;
+                    $item['gal_img2'] = $item['gal_img2'] ?? null;
+                    $item['gal_img3'] = $item['gal_img3'] ?? null;
+                    $item['gal_img4'] = $item['gal_img4'] ?? null;
+                    $item['gal_img5'] = $item['gal_img5'] ?? null;
+
+                    $createdGallery[] = Gallery::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdGallery, 201, 'Gallery records created successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to create gallery', 500, ['error' => $e->getMessage()]);
         }

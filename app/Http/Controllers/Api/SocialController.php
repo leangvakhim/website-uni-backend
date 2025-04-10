@@ -55,7 +55,6 @@ class SocialController extends Controller
             $validated = $request->validated();
             $createdSocials = [];
 
-            // Ensure f_id is provided
             if (!isset($validated['f_id'])) {
                 return $this->sendError('Faculty ID is required', 422);
             }

@@ -448,7 +448,7 @@ Route::prefix('banner')->group(function () {
 Route::prefix('acad-facilities')->group(function () {
     Route::get('/', [AcadFacilityController::class, 'index']);
     Route::get('/{id}', [AcadFacilityController::class, 'show']);
-    Route::post('/create', [AcadFacilityController::class, 'store']);
+    Route::post('/create', [AcadFacilityController::class, 'create']);
     Route::post('/update/{id}', [AcadFacilityController::class, 'update']);
 });
 

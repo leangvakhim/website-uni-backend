@@ -37,11 +37,25 @@ class TextController extends Controller
     public function create(TextRequest $request)
     {
         try {
-            $validatedData = $request->validated();
-            $text = Text::create($validatedData);
-            return $this->sendResponse($text, 201, 'Text created successfully');
+            $validated = $request->validated();
+            $createdTexts = [];
+
+            if (isset($validated['texts']) && is_array($validated['texts'])) {
+                foreach ($validated['texts'] as $item) {
+
+                    $item['title'] = $item['title'] ?? null;
+                    $item['desc'] = $item['desc'] ?? null;
+                    $item['type'] = $item['type'] ?? null;
+                    $item['tag'] = $item['tag'] ?? null;
+                    $item['lang'] = $item['lang'] ?? null;
+
+                    $createdTexts[] = Text::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdTexts, 201, 'Text records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create text', 500, $e->getMessage());
+            return $this->sendError('Failed to create text', 500, ['error' => $e->getMessage()]);
         }
     }
 
