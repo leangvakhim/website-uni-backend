@@ -162,6 +162,9 @@ class SectionController extends Controller
             }
         }
 
-        return response()->json(['message' => 'Section Synced Successfully'], 200);
+        return response()->json([
+            'message' => 'Section Synced Successfully',
+            'data' => $sections,
+        ], 200);
     }
 }
