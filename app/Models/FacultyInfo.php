@@ -11,7 +11,6 @@ class FacultyInfo extends Model
 
     protected $table = 'tbfaculty_info';
     protected $primaryKey = 'finfo_id';
-
     protected $fillable = [
         'finfo_title',
         'finfo_detail',
