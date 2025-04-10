@@ -96,7 +96,7 @@ class SectionController extends Controller
     {
         $sections = Section::where('sec_page', $p_id)
             ->where('active', 1)
-            ->orderBy('sec_order')
+            ->orderBy('sec_order', 'asc')
             ->get();
 
         return response()->json(['data' => $sections]);
@@ -116,5 +116,52 @@ class SectionController extends Controller
         return response()->json([
             'message' => 'Section order updated successfully',
         ], 200);
+    }
+
+    public function syncSection(Request $request)
+    {
+        $page_id = $request->input('sec_page');
+
+        if (!$page_id) {
+            return response()->json(['message' => 'Missing page_id'], 400);
+        }
+
+        $sections = $request->input('sections', []);
+
+        $existingSectionIds = collect($sections)->pluck('sec_id')->filter()->toArray();
+
+        // Delete sections in this page that are not included in the request
+        Section::where('sec_page', $page_id)
+            ->whereNotIn('sec_id', $existingSectionIds)
+            ->delete();
+
+        foreach ($sections as $section) {
+            $existingSection = Section::where('sec_id', $section['sec_id'] ?? 0)
+                ->where('sec_page', $page_id)
+                ->first();
+
+            if ($existingSection) {
+                // Update existing section
+                $existingSection->update([
+                    'sec_order' => $section['sec_order'],
+                    'sec_type' => $section['sec_type'],
+                    'lang' => $section['lang'],
+                    'display' => $section['display'] ?? 0,
+                    'active' => $section['active'] ?? 1,
+                ]);
+            } else {
+                // Create new section
+                Section::create([
+                    'sec_page' => $page_id,
+                    'sec_order' => $section['sec_order'],
+                    'sec_type' => $section['sec_type'],
+                    'lang' => $section['lang'],
+                    'display' => $section['display'] ?? 0,
+                    'active' => $section['active'] ?? 1,
+                ]);
+            }
+        }
+
+        return response()->json(['message' => 'Section Synced Successfully'], 200);
     }
 }
