@@ -22,14 +22,13 @@ class ApdRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'apd_sec' => 'nullable|array',
-            'apd_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'apd_sec.sec_order' => 'nullable|integer',
-            'apd_sec.lang' => 'nullable|in:1,2',
-            'apd_sec.display' => 'required|boolean',
-            'apd_sec.active' => 'required|boolean',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'apd_title' => 'nullable|string|max:100',
+            'available' => 'nullable|array',
+            'available.*.apd_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'available.*.apd_title' => 'nullable|string|max:100',
         ];
     }
 }

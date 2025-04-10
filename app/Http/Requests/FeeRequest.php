@@ -22,17 +22,16 @@ class FeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fe_sec' => 'nullable|array',
-            'fe_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'fe_sec.sec_order' => 'nullable|integer',
-            'fe_sec.lang' => 'nullable|in:1,2',
-            'fe_sec.display' => 'required|boolean',
-            'fe_sec.active' => 'required|boolean',
-    
-            'fe_title' => 'nullable|string|max:255',
-            'fe_desc' => 'nullable|string',
-            'fe_img' => 'nullable|integer|exists:tbimage,image_id',
-            'fe_price' => 'nullable|string|max:10',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
+
+            'fee' => 'nullable|array',
+            'fee.*.fe_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'fee.*.fe_title' => 'nullable|string|max:255',
+            'fee.*.fe_desc' => 'nullable|string',
+            'fee.*.fe_img' => 'nullable|integer|exists:tbimage,image_id',
+            'fee.*.fe_price' => 'nullable|string|max:10',
         ];
     }
 }

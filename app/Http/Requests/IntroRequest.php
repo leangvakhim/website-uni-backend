@@ -22,18 +22,17 @@ class IntroRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'in_title' => 'nullable|string|max:255',
-            'in_detail' => 'nullable|string',
-            'in_img' => 'nullable|integer|exists:tbimage,image_id',
-            'inadd_title' => 'nullable|string|max:50',
-            'in_addsubtitle' => 'nullable|string|max:50',
-    
-            'in_sec' => 'nullable|array',
-            'in_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'in_sec.sec_order' => 'nullable|integer',
-            'in_sec.lang' => 'nullable|in:1,2',
-            'in_sec.display' => 'required|boolean',
-            'in_sec.active' => 'required|boolean',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
+
+            'introduction' => 'nullable|array',
+            'introduction.*.in_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'introduction.*.in_title' => 'nullable|string|max:255',
+            'introduction.*.in_detail' => 'nullable|string',
+            'introduction.*.in_img' => 'nullable|integer|exists:tbimage,image_id',
+            'introduction.*.inadd_title' => 'nullable|string|max:50',
+            'introduction.*.in_addsubtitle' => 'nullable|string|max:50',
         ];
     }
 }

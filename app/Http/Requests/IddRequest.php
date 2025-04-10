@@ -22,15 +22,14 @@ class IddRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'idd_sec' => 'nullable|array',
-            'idd_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'idd_sec.sec_order' => 'nullable|integer',
-            'idd_sec.lang' => 'nullable|in:1,2',
-            'idd_sec.display' => 'required|boolean',
-            'idd_sec.active' => 'required|boolean',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'idd_title' => 'nullable|string|max:255',
-            'idd_subtitle' => 'nullable|string|max:255'
+            'important' => 'nullable|array',
+            'important.*.idd_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'important.*.idd_title' => 'nullable|string|max:255',
+            'important.*.idd_subtitle' => 'nullable|string|max:255'
         ];
     }
 }

@@ -43,10 +43,23 @@ class FaqController extends Controller
     public function create(FaqRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'FAQ created');
+            $validated = $request->validated();
+            $createdFaq = [];
+
+            if (isset($validated['faq']) && is_array($validated['faq'])) {
+                foreach ($validated['faq'] as $item) {
+
+                    $item['faq_sec'] = $item['faq_sec'] ?? null;
+                    $item['faq_title'] = $item['faq_title'] ?? null;
+                    $item['faq_subtitle'] = $item['faq_subtitle'] ?? null;
+
+                    $createdFaq[] = Faq::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdFaq, 201, 'Faq records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create faq', 500, ['error' => $e->getMessage()]);
         }
     }
 
