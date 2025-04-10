@@ -41,10 +41,24 @@ class RasController extends Controller
     public function create(RasRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'Ras created');
+            $validated = $request->validated();
+            $createdRas = [];
+
+            if (isset($validated['specialization']) && is_array($validated['specialization'])) {
+                foreach ($validated['specialization'] as $item) {
+
+                    $item['ras_sec'] = $item['ras_sec'] ?? null;
+                    $item['ras_text'] = $item['ras_text'] ?? null;
+                    $item['ras_img1'] = $item['ras_img1'] ?? null;
+                    $item['ras_img2'] = $item['ras_img2'] ?? null;
+
+                    $createdRas[] = Ras::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdRas, 201, 'Ras records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create ras', 500, ['error' => $e->getMessage()]);
         }
     }
 
