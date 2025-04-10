@@ -40,13 +40,25 @@ class TestimonialController extends Controller
         }
     }
 
-    public function store(TestimonialRequest $request)
+    public function create(TestimonialRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'Testimonial created');
+            $validated = $request->validated();
+            $createdTestimonials = [];
+
+            if (isset($validated['testimonials']) && is_array($validated['testimonials'])) {
+                foreach ($validated['testimonials'] as $item) {
+
+                    $item['t_title'] = $item['t_title'] ?? null;
+                    $item['t_sec'] = $item['t_sec'] ?? null;
+
+                    $createdTestimonials[] = Testimonial::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdTestimonials, 201, 'Testimonials records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create testimonials', 500, ['error' => $e->getMessage()]);
         }
     }
 

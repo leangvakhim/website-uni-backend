@@ -22,20 +22,18 @@ class AcademicRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'acad_sec' => 'nullable|array',
-            'acad_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'acad_sec.sec_order' => 'nullable|integer',
-            'acad_sec.lang' => 'nullable|in:1,2',
-            'acad_sec.display' => 'required|boolean',
-            'acad_sec.active' => 'required|boolean',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'acad_title' => 'nullable|string|max:100',
-            'acad_detail' => 'nullable|string',
-            'acad_img' => 'nullable|integer|exists:tbimage,image_id',
-            'acad_btntext1' => 'nullable|string|max:30',
-            'acad_btntext2' => 'nullable|string|max:30',
-            'acad_routepage' => 'nullable|string|max:100',
-            'acad_routetext' => 'nullable|string|max:100',
+            'academics' => 'nullable|array',
+            'academics.*.acad_title' => 'nullable|string|max:100',
+            'academics.*.acad_detail' => 'nullable|string',
+            'academics.*.acad_img' => 'nullable|integer|exists:tbimage,image_id',
+            'academics.*.acad_btntext1' => 'nullable|string|max:30',
+            'academics.*.acad_btntext2' => 'nullable|string|max:30',
+            'academics.*.acad_routepage' => 'nullable|string|max:100',
+            'academics.*.acad_routetext' => 'nullable|string|max:100',
         ];
     }
 }

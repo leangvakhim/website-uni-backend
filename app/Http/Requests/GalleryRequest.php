@@ -22,25 +22,18 @@ class GalleryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'gal_sec' => 'nullable|array',
-            'gal_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'gal_sec.sec_order' => 'nullable|integer',
-            'gal_sec.lang' => 'nullable|in:1,2',
-            'gal_sec.display' => 'required|boolean',
-            'gal_sec.active' => 'required|boolean',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'gal_text' => 'nullable|array',
-            'gal_text.title' => 'nullable|string|max:255',
-            'gal_text.desc' => 'nullable|string',
-            'gal_text.text_type' => 'nullable|integer|in:1,2',
-            'gal_text.tag' => 'nullable|string|max:255',
-            'gal_text.lang' => 'nullable|integer|in:1,2',
-        
-            'gal_img1' => 'nullable|integer|exists:tbimage,image_id',
-            'gal_img2' => 'nullable|integer|exists:tbimage,image_id',
-            'gal_img3' => 'nullable|integer|exists:tbimage,image_id',
-            'gal_img4' => 'nullable|integer|exists:tbimage,image_id',
-            'gal_img5' => 'nullable|integer|exists:tbimage,image_id',
+            'gallery' => 'nullable|array',
+            'gallery.*.gal_text' => 'nullable|integer|exists:tbtext,text_id',
+            'gallery.*.gal_sec' => 'nullable|integer|exists:tbsection,sec_id',        
+            'gallery.*.gal_img1' => 'nullable|integer|exists:tbimage,image_id',
+            'gallery.*.gal_img2' => 'nullable|integer|exists:tbimage,image_id',
+            'gallery.*.gal_img3' => 'nullable|integer|exists:tbimage,image_id',
+            'gallery.*.gal_img4' => 'nullable|integer|exists:tbimage,image_id',
+            'gallery.*.gal_img5' => 'nullable|integer|exists:tbimage,image_id',
         ];
     }
 }

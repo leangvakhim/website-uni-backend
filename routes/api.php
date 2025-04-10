@@ -433,7 +433,7 @@ Route::prefix('service')->group(function () {
 Route::prefix('testimonial')->group(function () {
     Route::get('/', [TestimonialController::class, 'index']);
     Route::get('/{id}', [TestimonialController::class, 'show']);
-    Route::post('/create', [TestimonialController::class, 'store']);
+    Route::post('/create', [TestimonialController::class, 'create']);
     Route::post('/update/{id}', [TestimonialController::class, 'update']);
 });
 
@@ -448,14 +448,14 @@ Route::prefix('banner')->group(function () {
 Route::prefix('acad-facilities')->group(function () {
     Route::get('/', [AcadFacilityController::class, 'index']);
     Route::get('/{id}', [AcadFacilityController::class, 'show']);
-    Route::post('/create', [AcadFacilityController::class, 'store']);
+    Route::post('/create', [AcadFacilityController::class, 'create']);
     Route::post('/update/{id}', [AcadFacilityController::class, 'update']);
 });
 
 Route::prefix('tse')->group(function () {
     Route::get('/', [TseController::class, 'index']);
     Route::get('/{id}', [TseController::class, 'show']);
-    Route::post('/create', [TseController::class, 'store']);
+    Route::post('/create', [TseController::class, 'create']);
     Route::post('/update/{id}', [TseController::class, 'update']);
 });
 

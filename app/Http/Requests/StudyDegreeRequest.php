@@ -22,16 +22,16 @@ class StudyDegreeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'std_sec' => 'nullable|array',
-            'std_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'std_sec.sec_order' => 'nullable|integer',
-            'std_sec.lang' => 'nullable|integer|in:1,2',
-            'std_sec.display' => 'required|boolean',
-            'std_sec.active' => 'required|boolean',
-    
-            'std_title' => 'nullable|string|max:255',
-            'std_subtitle' => 'nullable|string',
-            'std_type' => 'nullable|integer|in:1,2',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
+
+
+            'study' => 'nullable|array',
+            'study.*.std_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'study.*.std_title' => 'nullable|string|max:255',
+            'study.*.std_subtitle' => 'nullable|string',
+            'study.*.std_type' => 'nullable|integer|in:1,2',
         ];
     }
 }

@@ -41,10 +41,26 @@ class UmdController extends Controller
     public function create(UmdRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'UMD created');
+            $validated = $request->validated();
+            $createdUmd = [];
+
+            if (isset($validated['unlock']) && is_array($validated['unlock'])) {
+                foreach ($validated['unlock'] as $item) {
+
+                    $item['umd_sec'] = $item['umd_sec'] ?? null;
+                    $item['umd_title'] = $item['umd_title'] ?? null;
+                    $item['umd_detail'] = $item['umd_detail'] ?? null;
+                    $item['umd_routepage'] = $item['umd_routepage'] ?? null;
+                    $item['umd_btntext'] = $item['umd_btntext'] ?? null;
+                    $item['umd_img'] = $item['umd_img'] ?? null;
+
+                    $createdUmd[] = Umd::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdUmd, 201, 'Umd records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create umd', 500, ['error' => $e->getMessage()]);
         }
     }
 

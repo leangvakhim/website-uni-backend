@@ -22,14 +22,14 @@ class TestimonialRequest extends FormRequest
     public function rules(): array
     {
         return [
-            't_title' => 'nullable|string|max:255',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            't_sec' => 'nullable|array',
-            't_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            't_sec.sec_order' => 'nullable|integer',
-            't_sec.lang' => 'nullable|in:1,2',
-            't_sec.display' => 'required_with:t_sec|boolean',
-            't_sec.active' => 'required_with:t_sec|boolean',
+            'testimonials' => 'nullable|array',
+            'testimonials.*.t_title' => 'nullable|string|max:255',
+            'testimonials.*.t_sec' => 'nullable|integer|exists:tbsection,sec_id',
+
         ];
     }
 }
