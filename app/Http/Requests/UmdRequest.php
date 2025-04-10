@@ -22,18 +22,18 @@ class UmdRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'umd_sec' => 'nullable|array',
-            'umd_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'umd_sec.sec_order' => 'nullable|integer',
-            'umd_sec.lang' => 'nullable|integer|in:1,2',
-            'umd_sec.display' => 'required|boolean',
-            'umd_sec.active' => 'required|boolean',
-    
-            'umd_title' => 'nullable|string|max:100',
-            'umd_detail' => 'nullable|string',
-            'umd_routepage' => 'nullable|string|max:100',
-            'umd_btntext' => 'nullable|string|max:20',
-            'umd_img' => 'nullable|integer|exists:tbimage,image_id',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
+
+
+            'unlock' => 'nullable|array',
+            'unlock.*.umd_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'unlock.*.umd_title' => 'nullable|string|max:100',
+            'unlock.*.umd_detail' => 'nullable|string',
+            'unlock.*.umd_routepage' => 'nullable|string|max:100',
+            'unlock.*.umd_btntext' => 'nullable|string|max:20',
+            'unlock.*.umd_img' => 'nullable|integer|exists:tbimage,image_id',
         ];
     }
 }

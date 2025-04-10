@@ -22,20 +22,19 @@ class GcRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'gc_title' => 'nullable|string|max:255',
-            'gc_tag' => 'nullable|string|max:100',
-            'gc_type' => 'nullable|in:1,2',
-            'gc_detail' => 'nullable|string',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'gc_sec' => 'nullable|array',
-            'gc_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'gc_sec.sec_order' => 'nullable|integer',
-            'gc_sec.lang' => 'nullable|in:1,2',
-            'gc_sec.display' => 'required|boolean',
-            'gc_sec.active' => 'required|boolean',
 
-            'gc_img1' => 'nullable|integer|exists:tbimage,image_id',
-            'gc_img2' => 'nullable|integer|exists:tbimage,image_id',
+            'criteria' => 'nullable|array',
+            'criteria.*.gc_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'criteria.*.gc_title' => 'nullable|string|max:255',
+            'criteria.*.gc_tag' => 'nullable|string|max:255',
+            'criteria.*.gc_type' => 'nullable|integer',
+            'criteria.*.gc_detail' => 'nullable|string',
+            'criteria.*.gc_img1' => 'nullable|integer|exists:tbimage,image_id',
+            'criteria.*.gc_img2' => 'nullable|integer|exists:tbimage,image_id',
         ];
     }
 }

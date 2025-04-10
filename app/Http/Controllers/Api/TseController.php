@@ -40,13 +40,26 @@ class TseController extends Controller
         }
     }
 
-    public function store(TseRequest $request)
+    public function create(TseRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'TSE created');
+            $validated = $request->validated();
+            $createdTse = [];
+
+            if (isset($validated['type']) && is_array($validated['type'])) {
+                foreach ($validated['type'] as $item) {
+
+                    $item['tse_sec'] = $item['tse_sec'] ?? null;
+                    $item['tse_type'] = $item['tse_type'] ?? null;
+                    $item['tse_text'] = $item['tse_text'] ?? null;
+
+                    $createdTse[] = Tse::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdTse, 201, 'Tse records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create tse', 500, ['error' => $e->getMessage()]);
         }
     }
 
