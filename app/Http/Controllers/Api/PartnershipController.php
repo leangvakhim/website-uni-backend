@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Controller;
 use App\Models\Partnership;
 use App\Http\Requests\PartnershipRequest;
 use Exception;
+use Illuminate\Http\Request;
 
 class PartnershipController extends Controller
 {
