@@ -41,10 +41,24 @@ class UfcsdController extends Controller
     public function create(UfcsdRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'Ufcsd created');
+            $validated = $request->validated();
+            $createdUfcsd = [];
+
+            if (isset($validated['future']) && is_array($validated['future'])) {
+                foreach ($validated['future'] as $item) {
+
+                    $item['uf_sec'] = $item['uf_sec'] ?? null;
+                    $item['uf_title'] = $item['uf_title'] ?? null;
+                    $item['uf_subtitle'] = $item['uf_subtitle'] ?? null;
+                    $item['uf_img'] = $item['uf_img'] ?? null;
+
+                    $createdUfcsd[] = Ufcsd::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdUfcsd, 201, 'Ufcsd records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create ufcsd', 500, ['error' => $e->getMessage()]);
         }
     }
 

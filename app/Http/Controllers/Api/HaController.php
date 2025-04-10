@@ -43,10 +43,26 @@ class HaController extends Controller
     public function create(HaRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'HA created');
+            $validated = $request->validated();
+            $createdHa = [];
+
+            if (isset($validated['apply']) && is_array($validated['apply'])) {
+                foreach ($validated['apply'] as $item) {
+
+                    $item['ha_sec'] = $item['ha_sec'] ?? null;
+                    $item['ha_title'] = $item['ha_title'] ?? null;
+                    $item['ha_img'] = $item['ha_img'] ?? null;
+                    $item['ha_tagtitle'] = $item['ha_tagtitle'] ?? null;
+                    $item['ha_subtitletag'] = $item['ha_subtitletag'] ?? null;
+                    $item['ha_date'] = $item['ha_date'] ?? null;
+
+                    $createdHa[] = Ha::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdHa, 201, 'Ha records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create ha', 500, ['error' => $e->getMessage()]);
         }
     }
 

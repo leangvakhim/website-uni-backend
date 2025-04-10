@@ -41,10 +41,25 @@ class FeeController extends Controller
     public function create(FeeRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'Fee created');
+            $validated = $request->validated();
+            $createdFee = [];
+
+            if (isset($validated['fee']) && is_array($validated['fee'])) {
+                foreach ($validated['fee'] as $item) {
+
+                    $item['fe_sec'] = $item['fe_sec'] ?? null;
+                    $item['fe_title'] = $item['fe_title'] ?? null;
+                    $item['fe_desc'] = $item['fe_desc'] ?? null;
+                    $item['fe_img'] = $item['fe_img'] ?? null;
+                    $item['fe_price'] = $item['fe_price'] ?? null;
+
+                    $createdFee[] = Fee::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdFee, 201, 'Department records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create department', 500, ['error' => $e->getMessage()]);
         }
     }
 

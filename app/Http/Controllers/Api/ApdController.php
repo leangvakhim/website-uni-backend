@@ -39,14 +39,25 @@ class ApdController extends Controller
             return $this->sendError('Failed to retrieve APD', 500, ['error' => $e->getMessage()]);
         }
     }
-
     public function create(ApdRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'APD created');
+            $validated = $request->validated();
+            $createdApd = [];
+
+            if (isset($validated['available']) && is_array($validated['available'])) {
+                foreach ($validated['available'] as $item) {
+
+                    $item['apd_sec'] = $item['apd_sec'] ?? null;
+                    $item['apd_title'] = $item['apd_title'] ?? null;
+
+                    $createdApd[] = Apd::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdApd, 201, 'Apd records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create apd', 500, ['error' => $e->getMessage()]);
         }
     }
 

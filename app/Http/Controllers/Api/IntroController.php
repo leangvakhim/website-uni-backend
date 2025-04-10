@@ -43,10 +43,26 @@ class IntroController extends Controller
     public function create(IntroRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'Intro created');
+            $validated = $request->validated();
+            $createdIntro = [];
+
+            if (isset($validated['introduction']) && is_array($validated['introduction'])) {
+                foreach ($validated['introduction'] as $item) {
+
+                    $item['in_sec'] = $item['in_sec'] ?? null;
+                    $item['in_title'] = $item['in_title'] ?? null;
+                    $item['in_detail'] = $item['in_detail'] ?? null;
+                    $item['in_img'] = $item['in_img'] ?? null;
+                    $item['inadd_title'] = $item['inadd_title'] ?? null;
+                    $item['in_addsubtitle'] = $item['in_addsubtitle'] ?? null;
+
+                    $createdIntro[] = Intro::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdIntro, 201, 'Introduction records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create Introduction', 500, ['error' => $e->getMessage()]);
         }
     }
 
