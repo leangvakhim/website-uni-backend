@@ -22,20 +22,17 @@ class RsdltagRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'rsdlt_rsdl' => 'nullable|array',
+            'rsdl_id' => 'required|integer|exists:tbrsdl,rsdl_id',
+            'rsdl_title' => 'nullable|string|max:255',
+            'rsdl_detail' => 'nullable|string',
+            'rsdl_fav' => 'nullable|boolean',
+            'rsdl_img' => 'nullable|integer|exists:tbimage,image_id',
+            'lang' => 'nullable|integer',
 
-            'rsdlt_rsdl.rsdl_title' => 'nullable|string|max:255',
-            'rsdlt_rsdl.rsdl_detail' => 'nullable|string',
-            'rsdlt_rsdl.rsdl_fav' => 'nullable|boolean',
-            'rsdlt_rsdl.rsdl_img' => 'nullable|integer|exists:tbimage,image_id',
-            'rsdlt_rsdl.lang' => 'nullable|integer|in:1,2',
-        
-            'rsdlt_rsdl.rsdl_order' => 'required|integer',
-            'rsdlt_rsdl.display' => 'required|boolean',
-            'rsdlt_rsdl.active' => 'required|boolean',
-        
-            'rsdlt_title' => 'required|string|max:100',
-            'rsdlt_img' => 'nullable|integer|exists:tbimage,image_id',
+            // Validate multiple social records
+            'rsdl' => 'nullable|array',
+            'rsdl.*.rsdlt_title' => 'nullable|string|max:255',
+            'rsdl.*.rsdlt_img' => 'nullable|integer|exists:tbimage,image_id',
         ];
     }
 }

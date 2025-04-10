@@ -48,14 +48,47 @@ class RsdltagController extends Controller
         }
     }
 
+    // public function create(RsdltagRequest $request)
+    // {
+    //     try {
+    //         $validated = $request->validated();
+    //         $created = $this->rsdltagService->create($validated);
+    //         return $this->sendResponse($created, 201, 'RSDL Tag created successfully');
+    //     } catch (Exception $e) {
+    //         return $this->sendError('Failed to create RSDL Tag', 500, ['error' => $e->getMessage()]);
+    //     }
+    // }
+
     public function create(RsdltagRequest $request)
     {
         try {
             $validated = $request->validated();
-            $created = $this->rsdltagService->create($validated);
-            return $this->sendResponse($created, 201, 'RSDL Tag created successfully');
+            $createdRsdltag = [];
+
+            // Ensure f_id is provided
+            if (!isset($validated['rsdl_id'])) {
+                return $this->sendError('Researchlab ID is required', 422);
+            }
+
+            $rsdl = Rsdltag::find($validated['rsdl_id']);
+            if (!$rsdl) {
+                return $this->sendError('Researchlab not found', 404);
+            }
+
+            if (isset($validated['rsdl']) && is_array($validated['rsdl'])) {
+                foreach ($validated['rsdl'] as $item) {
+                    $item['rsdl'] = $rsdl->rsdl_id;
+
+                    $item['display'] = $item['display'] ?? 1;
+                    $item['active'] = $item['active'] ?? 1;
+
+                    $createdRsdltag[] = Rsdltag::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdRsdltag, 201, 'Researchlab tag records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create RSDL Tag', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create researchlab tag', 500, ['error' => $e->getMessage()]);
         }
     }
 
