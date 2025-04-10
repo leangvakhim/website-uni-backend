@@ -63,7 +63,6 @@ class FacultyContactController extends Controller
                     if (!isset($item['fc_order'])) {
                         $item['fc_order'] = (FacultyContact::where('fc_f', $faculty->f_id)->max('fc_order') ?? 0) + 1;
                     }
-                    $item['fc_name'] = $item['fc_name'] ?? null;
                     $item['display'] = $item['display'] ?? 1;
                     $item['active'] = $item['active'] ?? 1;
 

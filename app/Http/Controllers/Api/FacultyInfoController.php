@@ -64,8 +64,7 @@ class FacultyInfoController extends Controller
                         $item['finfo_order'] = (FacultyInfo::where('finfo_f', $faculty->f_id)->max('finfo_order') ?? 0) +1;
                     }
                     
-                    $item['finfo_title'] = $item['finfo_title'] || null;
-                    $item['finfo_detail'] = $item['finfo_detail'] || null;
+                    
                     $item['active'] = $item['active'] ?? 1;
                     $item['display'] = $item['display'] ?? 1;
                     
