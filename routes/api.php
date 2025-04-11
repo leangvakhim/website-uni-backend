@@ -86,13 +86,13 @@ Route::prefix('images')->group(function () {
     Route::delete('/delete/{id}', [ImageController::class, 'delete']);
 });
 
-Route::prefix('slideshows')->group(function () {
-    Route::get('/', [SlideshowController::class, 'index']);
-    Route::get('/{id}', [SlideshowController::class, 'show']);
-    Route::post('/create', [SlideshowController::class, 'create']);
-    Route::post('/update/{id}', [SlideshowController::class, 'update']);
-    Route::put('/visibility/{id}', [SlideshowController::class, 'visibility']);
-});
+// Route::prefix('slideshows')->group(function () {
+//     Route::get('/', [SlideshowController::class, 'index']);
+//     Route::get('/{id}', [SlideshowController::class, 'show']);
+//     Route::post('/create', [SlideshowController::class, 'create']);
+//     Route::post('/update/{id}', [SlideshowController::class, 'update']);
+//     Route::put('/visibility/{id}', [SlideshowController::class, 'visibility']);
+// });
 
 Route::prefix('social')->group(function () {
     Route::get('/', [SocialController::class, 'index']);

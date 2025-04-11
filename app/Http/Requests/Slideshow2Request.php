@@ -22,28 +22,21 @@ class Slideshow2Request extends FormRequest
     public function rules(): array
     {
         return [
-            'slider_title' => 'nullable|string|max:100',
-            'slider_text' => 'nullable|string',
-            'btn1' => 'nullable|array',
-            'btn1.bss_title' => 'nullable|string|max:50',
-            'btn1.bss_routepage' => 'nullable|string',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'btn2' => 'nullable|array',
-            'btn2.bss_title' => 'nullable|string|max:50',
-            'btn2.bss_routepage' => 'nullable|string',
-
-            'slider_sec' => 'nullable|array',
-            'slider_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'slider_sec.sec_order' => 'nullable|integer',
-            'slider_sec.lang' => 'nullable|integer|in:1,2',
-            'slider_sec.display' => 'nullable|boolean',
-            'slider_sec.active' => 'nullable|boolean',
-
-            'img' => 'nullable|exists:tbimage,image_id',
-            'logo' => 'nullable|exists:tbimage,image_id',
-            'slider_order' => 'required|integer',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
+            // Validate multiple social records
+            'Slideshow' => 'nullable|array',
+            'Slideshow.*.slider_title' => 'nullable|string|max:255',
+            'Slideshow.*.slider_text' => 'nullable|string',
+            'Slideshow.*.btn1' => 'nullable|integer|exists:tbbtnss,bss_id',
+            'Slideshow.*.btn2' => 'nullable|integer|exists:tbbtnss,bss_id',
+            'Slideshow.*.img' => 'nullable|integer|exists:tbimage,image_id',
+            'Slideshow.*.logo' => 'nullable|integer|exists:tbimage,image_id',
+            'Slideshow.*.slider_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'Slideshow.*.display' => 'nullable|boolean',
+            'Slideshow.*.active' => 'nullable|boolean',
         ];
     }
 }
