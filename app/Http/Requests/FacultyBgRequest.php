@@ -22,22 +22,20 @@ class FacultyBgRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fbg_name' => 'nullable|string|max:255',
-            'fbg_img' => 'nullable|integer|exists:tbimage,image_id',
-            'fbg_order' => 'nullable|integer',
-            'active' => 'required|boolean',
-            'display' => 'required|boolean',
-          //'fbg_f' => 'nullable|integer|exists:tbfaculty,f_id',
+            
+            'f_id' => 'required|integer|exists:tbfaculty,f_id',
+            'f_name' => 'nullable|string|max:255',
+            'f_position' => 'nullable|string|max:100',
+            'f_portfolio' => 'nullable|string',
+            'f_img' => 'nullable|integer|exists:tbimage,image_id',
+            'lang' => 'nullable|integer|in:1,2',
 
+            // Validate multiple contact records
             'fbg_f' => 'nullable|array',
-            'fbg_f.f_name' => 'nullable|string|max:255',
-            'fbg_f.f_position' => 'nullable|string|max:100',
-            'fbg_f.f_portfolio' => 'nullable|string',
-            'fbg_f.f_img' => 'nullable|integer|exists:tbimage,image_id',
-            'fbg_f.f_order' => 'nullable|integer',
-            'fbg_f.lang' => 'nullable|integer|in:1,2',
-            'fbg_f.display' => 'nullable|boolean',
-            'fbg_f.active' => 'nullable|boolean',
+            'fbg_f.*.fbg_img' => 'nullable|integer|exists:tbimage,image_id',
+            'fbg_f.*.fbg_name' => 'nullable|string|max:255',
+            'fbg_f.*.fbg_order' => 'nullable|integer',
+             
         ];
     }
 }

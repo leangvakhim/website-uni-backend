@@ -40,13 +40,26 @@ class AcadFacilityController extends Controller
         }
     }
 
-    public function store(AcadFacilityRequest $request)
+    public function create(AcadFacilityRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'Facility created');
+            $validated = $request->validated();
+            $createdFacilities = [];
+
+            if (isset($validated['facilities']) && is_array($validated['facilities'])) {
+                foreach ($validated['facilities'] as $item) {
+
+                    $item['af_text'] = $item['af_text'] ?? null;
+                    $item['af_sec'] = $item['af_sec'] ?? null;
+                    $item['af_img'] = $item['af_img'] ?? null;
+
+                    $createdFacilities[] = AcadFacility::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdFacilities, 201, 'Facilities records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create facilities', 500, ['error' => $e->getMessage()]);
         }
     }
 

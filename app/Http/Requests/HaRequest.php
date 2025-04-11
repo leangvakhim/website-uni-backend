@@ -22,18 +22,18 @@ class HaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ha_title' => 'nullable|string|max:255',
-            'ha_img' => 'nullable|integer|exists:tbimage,image_id',
-            'ha_tagtitle' => 'nullable|string|max:255',
-            'ha_subtitletag' => 'nullable|string|max:255',
-            'ha_date' => 'nullable|date',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
+
+            'apply' => 'nullable|array',
+            'apply.*.ha_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'apply.*.ha_title' => 'nullable|string|max:255',
+            'apply.*.ha_img' => 'nullable|integer|exists:tbimage,image_id',
+            'apply.*.ha_tagtitle' => 'nullable|string|max:255',
+            'apply.*.ha_subtitletag' => 'nullable|string|max:255',
+            'apply.*.ha_date' => 'nullable|date',
     
-            'ha_sec' => 'nullable|array',
-            'ha_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'ha_sec.sec_order' => 'nullable|integer',
-            'ha_sec.lang' => 'nullable|in:1,2',
-            'ha_sec.display' => 'required|boolean',
-            'ha_sec.active' => 'required|boolean',
         ];
     }
 }

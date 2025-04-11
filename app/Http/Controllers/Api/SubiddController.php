@@ -77,4 +77,27 @@ class SubiddController extends Controller
             return $this->sendError('Failed to toggle visibility', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    public function reorder(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                '*.sidd_id' => 'required|integer|exists:tbsubidd,sidd_id',
+                '*.sidd_order' => 'required|integer'
+            ]);
+
+            foreach ($data as $item) {
+                Subidd::where('sidd_id', $item['sidd_id'])->update([
+                    'sidd_order' => $item['sidd_order']
+                ]);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Subidd order updated successfully',
+            ]);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to reorder subidd', 500, ['error' => $e->getMessage()]);
+        }
+    }
 }

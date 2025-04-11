@@ -78,5 +78,28 @@ class SubapdController extends Controller
             return $this->sendError('Failed to toggle visibility', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    public function reorder(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                '*.sapd_id' => 'required|integer|exists:tbsubapd,sapd_id',
+                '*.sapd_order' => 'required|integer'
+            ]);
+
+            foreach ($data as $item) {
+                Subapd::where('sapd_id', $item['sapd_id'])->update([
+                    'sapd_order' => $item['sapd_order']
+                ]);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Subapd order updated successfully',
+            ]);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to reorder Subapd', 500, ['error' => $e->getMessage()]);
+        }
+    }
 }
 

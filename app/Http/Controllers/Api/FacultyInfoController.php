@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Controller;
 use App\Models\FacultyInfo;
 use App\Services\FacultyInfoService;
 use App\Http\Requests\FacultyInfoRequest;
+use App\Models\Faculty;
 use Illuminate\Http\Request;
 use Exception;
 
@@ -43,14 +44,34 @@ class FacultyInfoController extends Controller
     {
         try {
             $data = $request->validated();
-    
-            if (!isset($data['finfo_order'])) {
-                $data['finfo_order'] = FacultyInfo::max('finfo_order') + 1;
+            $createInfo = [];
+            
+            if(!isset($data['f_id'])){
+                return $this->sendError('Faculty ID is required', 422);
             }
-    
-            $finfo = app(FacultyInfoService::class)->create($data);
-    
-            return $this->sendResponse($finfo, 201, 'FacultyInfo created');
+
+            $faculty = Faculty::find($data['f_id']);
+            if(!$faculty){
+                return $this->sendError('Faculty not found', 404);
+            }
+            
+            
+            if (isset($data['finfo_f']) && is_array($data['finfo_f'])) {
+                foreach ($data['finfo_f'] as $item) {
+                    $item['finfo_f'] = $faculty->f_id;
+                    
+                    if (!isset($item['finfo_order'])) {
+                        $item['finfo_order'] = (FacultyInfo::where('finfo_f', $faculty->f_id)->max('finfo_order') ?? 0) +1;
+                    }
+                    
+                    
+                    $item['active'] = $item['active'] ?? 1;
+                    $item['display'] = $item['display'] ?? 1;
+                    
+                    $createInfo [] = FacultyInfo::create($item);
+                }
+            }
+            return $this->sendResponse($createInfo, 201, 'FacultyInfo created');
         } catch (Exception $e) {
             return $this->sendError('Failed to create FacultyInfo', 500, ['error' => $e->getMessage()]);
         }
@@ -85,4 +106,32 @@ class FacultyInfoController extends Controller
             return $this->sendError('Failed to update visibility', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    public function getByFaculty($f_id)
+    {
+        $contact = FacultyInfo::where('finfo_f', $f_id)
+            ->where('active', 1)
+            ->orderBy('finfo_order')
+            ->get();
+
+        return response()->json(['data' => $contact]);
+    }
+
+
+    public function reorder(Request $request)
+    {
+        $data = $request->validate([
+            '*.finfo_id' => 'required|integer|exists:tbfaculty_info,finfo_id',
+            '*.finfo_order' => 'required|integer'
+        ]);
+
+        foreach ($data as $item) {
+            FacultyInfo::where('finfo_id', $item['finfo_id'])->update(['finfo_order' => $item['finfo_order']]);
+        }
+
+        return response()->json([
+            'message' => 'Faculty contact order updated successfully',
+        ], 200);
+    }
+
 }

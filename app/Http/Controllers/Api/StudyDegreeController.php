@@ -41,10 +41,24 @@ class StudyDegreeController extends Controller
     public function create(StudyDegreeRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'Study Degree created');
+            $validated = $request->validated();
+            $createdStudyDegree = [];
+
+            if (isset($validated['study']) && is_array($validated['study'])) {
+                foreach ($validated['study'] as $item) {
+
+                    $item['std_sec'] = $item['std_sec'] ?? null;
+                    $item['std_title'] = $item['std_title'] ?? null;
+                    $item['std_subtitle'] = $item['std_subtitle'] ?? null;
+                    $item['std_type'] = $item['std_type'] ?? null;
+
+                    $createdStudyDegree[] = StudyDegree::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdStudyDegree, 201, 'StudyDegree records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create StudyDegree', 500, ['error' => $e->getMessage()]);
         }
     }
 

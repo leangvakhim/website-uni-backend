@@ -40,10 +40,28 @@ class GcController extends Controller
     public function create(GcRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'GC created');
+            $validated = $request->validated();
+            $createdGc = [];
+
+            if (isset($validated['criteria']) && is_array($validated['criteria'])) {
+                foreach ($validated['criteria'] as $item) {
+
+                    $item['gc_sec'] = $item['gc_sec'] ?? null;
+                    $item['gc_title'] = $item['gc_title'] ?? null;
+                    $item['gc_tag'] = $item['gc_tag'] ?? null;
+                    $item['gc_type'] = $item['gc_type'] ?? null;
+                    $item['gc_detail'] = $item['gc_detail'] ?? null;
+                    $item['gc_img1'] = $item['gc_img1'] ?? null;
+                    $item['gc_img2'] = $item['gc_img2'] ?? null;
+
+
+                    $createdGc[] = Gc::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdGc, 201, 'Gc records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create gc', 500, ['error' => $e->getMessage()]);
         }
     }
 

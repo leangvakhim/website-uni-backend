@@ -22,23 +22,14 @@ class TseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tse_type' => 'nullable|in:1,2',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'tse_sec' => 'nullable|array',
-            'tse_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'tse_sec.sec_order' => 'nullable|integer',
-            'tse_sec.lang' => 'nullable|in:1,2',
-            'tse_sec.display' => 'required_with:tse_sec|boolean',
-            'tse_sec.active' => 'required_with:tse_sec|boolean',
-
-            'tse_text' => 'nullable|array',
-            'tse_text.title' => 'nullable|string|max:255',
-            'tse_text.desc' => 'nullable|string',
-            'tse_text.text_type' => 'nullable|in:1,2',
-            'tse_text.tag' => 'nullable|string|max:255',
-            'tse_text.lang' => 'nullable|in:1,2',
-            'tse_text.display' => 'required_with:tse_text|boolean',
-            'tse_text.active' => 'required_with:tse_text|boolean',
+            'type' => 'nullable|array',
+            'type.*.tse_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'type.*.tse_type' => 'nullable|integer',
+            'type.*.tse_text' => 'nullable|integer|exists:tbtext,text_id',
         ];
     }
 }

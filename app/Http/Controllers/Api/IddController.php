@@ -42,10 +42,23 @@ class IddController extends Controller
     public function create(IddRequest $request)
     {
         try {
-            $data = $this->service->create($request->validated());
-            return $this->sendResponse($data, 201, 'Idd created');
+            $validated = $request->validated();
+            $createdIdd = [];
+
+            if (isset($validated['important']) && is_array($validated['important'])) {
+                foreach ($validated['important'] as $item) {
+
+                    $item['idd_sec'] = $item['idd_sec'] ?? null;
+                    $item['idd_title'] = $item['idd_title'] ?? null;
+                    $item['idd_subtitle'] = $item['idd_subtitle'] ?? null;
+
+                    $createdIdd[] = Idd::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdIdd, 201, 'Idd records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Create failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create idd', 500, ['error' => $e->getMessage()]);
         }
     }
 

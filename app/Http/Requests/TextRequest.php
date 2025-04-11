@@ -22,11 +22,16 @@ class TextRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'nullable|string|max:255',
-            'desc' => 'nullable|string',
-            'text_type' => 'nullable|integer',
-            'tag' => 'nullable|string|max:255',
-            'lang' => 'nullable|integer',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
+            
+            'texts' => 'nullable|array',
+            'texts.*.title' => 'nullable|string|max:255',
+            'texts.*.desc' => 'nullable|string',
+            'texts.*.text_type' => 'nullable|integer',
+            'texts.*.tag' => 'nullable|string|max:255',
+            'texts.*.lang' => 'nullable|integer',
         ];
     }
 }

@@ -82,4 +82,26 @@ class FaqaddonController extends Controller
             return $this->sendError('Failed to update visibility', 500, ['error' => $e->getMessage()]);
         }
     }
+    public function reorder(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                '*.fa_id' => 'required|integer|exists:tbfaqaddon,fa_id',
+                '*.fa_order' => 'required|integer'
+            ]);
+
+            foreach ($data as $item) {
+                Faqaddon::where('fa_id', $item['fa_id'])->update([
+                    'fa_order' => $item['fa_order']
+                ]);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Faqaddon order updated successfully',
+            ]);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to reorder faqaddon', 500, ['error' => $e->getMessage()]);
+        }
+    }
 }

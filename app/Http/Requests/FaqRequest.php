@@ -22,15 +22,14 @@ class FaqRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'faq_sec' => 'nullable|array',
-            'faq_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'faq_sec.sec_order' => 'nullable|integer',
-            'faq_sec.lang' => 'nullable|in:1,2',
-            'faq_sec.display' => 'required|boolean',
-            'faq_sec.active' => 'required|boolean',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'faq_title' => 'nullable|string|max:255',
-            'faq_subtitle' => 'nullable|string',
+            'faq'=> 'nullable|array',
+            'faq.*.faq_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'faq.*.faq_title' => 'nullable|string|max:255',
+            'faq.*.faq_subtitle' => 'nullable|string',
         ];
     }
 }

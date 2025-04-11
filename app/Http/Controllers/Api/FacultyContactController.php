@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\FacultyContact;
 use App\Services\FacultyContactService;
 use App\Http\Requests\FacultyContactRequest;
+use App\Models\Faculty;
 use Exception;
 
 class FacultyContactController extends Controller
@@ -50,7 +51,7 @@ class FacultyContactController extends Controller
                 return $this->sendError('Faculty ID is required', 422);
             }
 
-            $faculty = FacultyContactRequest::find($validated['f_id']);
+            $faculty = Faculty::find($validated['f_id']);
             if (!$faculty) {
                 return $this->sendError('Faculty not found', 404);
             }
@@ -60,13 +61,12 @@ class FacultyContactController extends Controller
                     $item['fc_f'] = $faculty->f_id;
 
                     if (!isset($item['fc_order'])) {
-                        $item['fc_order'] = (FacultyContact::where('fc_order', $faculty->f_id)->max('fc_order') ?? 0) + 1;
+                        $item['fc_order'] = (FacultyContact::where('fc_f', $faculty->f_id)->max('fc_order') ?? 0) + 1;
                     }
-
                     $item['display'] = $item['display'] ?? 1;
                     $item['active'] = $item['active'] ?? 1;
 
-                    $createdFacultyContact[] = FacultyContact::create($item);
+                    $createdFacultyContact [] = FacultyContact::create($item);
                 }
             }
 

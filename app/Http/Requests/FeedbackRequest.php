@@ -22,7 +22,7 @@ class FeedbackRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fb_sec' => 'nullable|integer|exists:tbsection,sec_id',
+           // 'fb_sec' => 'nullable|integer|exists:tbsection,sec_id',
             'fb_title' => 'nullable|string|max:255',
             'fb_subtitle' => 'nullable|string',
             'fb_writer' => 'nullable|string|max:255',

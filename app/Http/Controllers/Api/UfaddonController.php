@@ -77,4 +77,27 @@ class UfaddonController extends Controller
             return $this->sendError('Failed to toggle visibility', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    public function reorder(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                '*.ufa_id' => 'required|integer|exists:tbufaddon,ufa_id',
+                '*.ufa_order' => 'required|integer'
+            ]);
+
+            foreach ($data as $item) {
+                Ufaddon::where('ufa_id', $item['ufa_id'])->update([
+                    'ufa_order' => $item['ufa_order']
+                ]);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Ufaddon order updated successfully',
+            ]);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to reorder Ufaddon', 500, ['error' => $e->getMessage()]);
+        }
+    }
 }

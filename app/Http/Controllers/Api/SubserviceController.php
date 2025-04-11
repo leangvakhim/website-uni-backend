@@ -76,4 +76,27 @@ class SubserviceController extends Controller
             return $this->sendError('Failed to toggle visibility', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    public function reorder(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                '*.ss_id' => 'required|integer|exists:tbsubservice,ss_id',
+                '*.ss_order' => 'required|integer'
+            ]);
+
+            foreach ($data as $item) {
+                Subservice::where('ss_id', $item['ss_id'])->update([
+                    'ss_order' => $item['ss_order']
+                ]);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Subservice order updated successfully',
+            ]);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to reorder Subservice', 500, ['error' => $e->getMessage()]);
+        }
+    }
 }

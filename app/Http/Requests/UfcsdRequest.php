@@ -22,16 +22,15 @@ class UfcsdRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'uf_sec' => 'nullable|array',
-            'uf_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'uf_sec.sec_order' => 'nullable|integer',
-            'uf_sec.lang' => 'nullable|in:1,2',
-            'uf_sec.display' => 'required|boolean',
-            'uf_sec.active' => 'required|boolean',
-    
-            'uf_title' => 'nullable|string|max:255',
-            'uf_subtitle' => 'nullable|string',
-            'uf_img' => 'nullable|integer|exists:tbimage,image_id',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
+
+            'future' => 'nullable|array',
+            'futre.*.uf_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'futre.*.uf_title' => 'nullable|string|max:255',
+            'futre.*.uf_subtitle' => 'nullable|string',
+            'futre.*.uf_img' => 'nullable|integer|exists:tbimage,image_id',
         ];
     }
 }

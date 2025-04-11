@@ -111,24 +111,28 @@ Route::prefix('faculty-contact')->group(function () {
     Route::post('/create', [FacultyContactController::class, 'create']);
     Route::post('/update/{id}', [FacultyContactController::class, 'update']);
     Route::put('/visibility/{id}', [FacultyContactController::class, 'visibility']);
-    Route::get('/by-faculty/{f_id}', [FacultyContactController::class, 'getByFaculty']);
     Route::post('/reorder', [FacultyContactController::class, 'reorder']);
 });
 
 Route::prefix('faculty-bg')->group(function () {
     Route::get('/', [FacultyBgController::class, 'index']);
     Route::get('/{id}', [FacultyBgController::class, 'show']);
+    Route::get('/by-faculty/{f_id}', [FacultyBgController::class, 'getByFaculty']);
     Route::post('/create', [FacultyBgController::class, 'create']);
     Route::post('/update/{id}', [FacultyBgController::class, 'update']);
     Route::put('/visibility/{id}', [FacultyBgController::class, 'visibility']);
+    Route::post('/reorder', [FacultyBgController::class, 'reorder']);
 });
 
 Route::prefix('faculty-info')->group(function () {
     Route::get('/', [FacultyInfoController::class, 'index']);
     Route::get('/{id}', [FacultyInfoController::class, 'show']);
+    Route::get('/by-faculty/{f_id}', [FacultyInfoController::class, 'getByFaculty']);
     Route::post('/create', [FacultyInfoController::class, 'create']);
     Route::post('/update/{id}', [FacultyInfoController::class, 'update']);
     Route::put('/visibility/{id}', [FacultyInfoController::class, 'visibility']);
+    Route::post('/reorder', [FacultyInfoController::class, 'reorder']);
+    
 });
 
 Route::prefix('faculty')->group(function () {
@@ -147,6 +151,7 @@ Route::prefix('subtse')->group(function () {
     Route::post('/create', [SubtseController::class, 'create']);
     Route::post('/update/{id}', [SubtseController::class, 'update']);
     Route::put('/visibility/{id}', [SubtseController::class, 'visibility']);
+    Route::post('/reorder', [SubtseController::class, 'reorder']);
 });
 
 Route::prefix('rason')->group(function () {
@@ -157,13 +162,14 @@ Route::prefix('rason')->group(function () {
     Route::put('/visibility/{id}', [RasonController::class, 'visibility']);
 });
 
-// Route::prefix('year')->group(function () {
-    // Route::get('/', [YearController::class, 'index']);
-    // Route::get('/{id}', [YearController::class, 'show']);
-    // Route::post('/create', [YearController::class, 'create']);
-    // Route::post('/update/{id}', [YearController::class, 'update']);
-    // Route::put('/visibility/{id}', [YearController::class, 'visibility']);
-// });
+Route::prefix('year')->group(function () {
+    Route::get('/', [YearController::class, 'index']);
+    Route::get('/{id}', [YearController::class, 'show']);
+    Route::post('/create', [YearController::class, 'create']);
+    Route::post('/update/{id}', [YearController::class, 'update']);
+    Route::put('/visibility/{id}', [YearController::class, 'visibility']);
+    Route::post('/reorder', [YearController::class, 'reorder']);
+});
 
 Route::prefix('btnss')->group(function () {
     Route::get('/', [BtnssController::class, 'index']);
@@ -179,6 +185,7 @@ Route::prefix('slideshow')->group(function () {
     Route::post('/create', [Slideshow2Controller::class, 'create']);
     Route::post('/update/{id}', [Slideshow2Controller::class, 'update']);
     Route::put('/visibility/{id}', [Slideshow2Controller::class, 'visibility']);
+    Route::post('/reorder', [Slideshow2Controller::class, 'reorder']);
 });
 
 Route::prefix('event')->group(function () {
@@ -334,6 +341,7 @@ Route::prefix('feedback')->group(function () {
     Route::post('/create', [FeedbackController::class, 'create']);
     Route::post('/update/{id}', [FeedbackController::class, 'update']);
     Route::put('/visibility/{id}', [FeedbackController::class, 'visibility']);
+    Route::put('/reorder', [FeedbackController::class, 'reorder']);
 });
 
 Route::prefix('idd')->group(function () {
@@ -412,6 +420,7 @@ Route::prefix('subha')->group(function () {
     Route::post('/create', [SubhaController::class, 'create']);
     Route::post('/update/{id}', [SubhaController::class, 'update']);
     Route::put('/visibility/{id}', [SubhaController::class, 'visibility']);
+    Route::post('/reorder', [SubhaController::class, 'reorder']);
 });
 
 Route::prefix('service')->group(function () {
@@ -419,12 +428,13 @@ Route::prefix('service')->group(function () {
     Route::get('/{id}', [ServiceController::class, 'show']);
     Route::post('/create', [ServiceController::class, 'create']);
     Route::post('/update/{id}', [ServiceController::class, 'update']);
+    Route::post('/reorder', [ServiceController::class, 'reorder']);
 });
 
 Route::prefix('testimonial')->group(function () {
     Route::get('/', [TestimonialController::class, 'index']);
     Route::get('/{id}', [TestimonialController::class, 'show']);
-    Route::post('/create', [TestimonialController::class, 'store']);
+    Route::post('/create', [TestimonialController::class, 'create']);
     Route::post('/update/{id}', [TestimonialController::class, 'update']);
 });
 
@@ -439,14 +449,14 @@ Route::prefix('banner')->group(function () {
 Route::prefix('acad-facilities')->group(function () {
     Route::get('/', [AcadFacilityController::class, 'index']);
     Route::get('/{id}', [AcadFacilityController::class, 'show']);
-    Route::post('/create', [AcadFacilityController::class, 'store']);
+    Route::post('/create', [AcadFacilityController::class, 'create']);
     Route::post('/update/{id}', [AcadFacilityController::class, 'update']);
 });
 
 Route::prefix('tse')->group(function () {
     Route::get('/', [TseController::class, 'index']);
     Route::get('/{id}', [TseController::class, 'show']);
-    Route::post('/create', [TseController::class, 'store']);
+    Route::post('/create', [TseController::class, 'create']);
     Route::post('/update/{id}', [TseController::class, 'update']);
 });
 
@@ -463,6 +473,7 @@ Route::prefix('subcontact')->group(function () {
     Route::post('/create', [SubcontactController::class, 'create']);
     Route::post('/update/{id}', [SubcontactController::class, 'update']);
     Route::put('/visibility/{id}', [SubcontactController::class, 'visibility']);
+    Route::post('/reorder', [SubcontactController::class, 'reorder']);
 });
 
 Route::prefix('ras')->controller(RasController::class)->group(function () {
@@ -492,6 +503,7 @@ Route::prefix('subapd')->controller(SubapdController::class)->group(function () 
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
+    Route::post('/reorder', 'reorder');
 });
 
 Route::prefix('faqaddon')->controller(FaqaddonController::class)->group(function () {
@@ -500,6 +512,7 @@ Route::prefix('faqaddon')->controller(FaqaddonController::class)->group(function
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
+    Route::post('/reorder', 'reorder');
 });
 
 Route::prefix('ufaddon')->controller(UfaddonController::class)->group(function () {
@@ -508,6 +521,7 @@ Route::prefix('ufaddon')->controller(UfaddonController::class)->group(function (
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
+    Route::post('/reorder', 'reorder');
 });
 
 Route::prefix('subidd')->controller(SubiddController::class)->group(function () {
@@ -516,6 +530,7 @@ Route::prefix('subidd')->controller(SubiddController::class)->group(function () 
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
+    Route::post('/reorder', 'reorder');
 });
 
 Route::prefix('subservice')->controller(SubserviceController::class)->group(function () {
@@ -524,6 +539,7 @@ Route::prefix('subservice')->controller(SubserviceController::class)->group(func
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
+    Route::post('/reorder', 'reorder');
 });
 
 Route::prefix('setting')->controller(SettingController::class)->group(function () {
