@@ -22,9 +22,9 @@ class BtnssRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'bss_title' => 'nullable|string|max:50',
+            'bss_title' => 'nullable|string|max:250',
             'bss_routepage' => 'nullable|string',
-            'display' => 'required|boolean',
+            'display' => 'nullable|boolean',
         ];
     }
 }
