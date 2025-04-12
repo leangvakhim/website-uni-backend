@@ -121,8 +121,6 @@ class Slideshow2Controller extends Controller
                 'slider_sec' => 'nullable|integer',
             ]);
 
-            Log::info('UPDATE VALIDATED DATA:', $validated);
-
             $slideshow->update($validated);
 
             return $this->sendResponse($slideshow, 200, 'Slideshow updated successfully');

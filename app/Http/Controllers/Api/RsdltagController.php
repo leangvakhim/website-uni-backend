@@ -9,6 +9,7 @@ use App\Services\RsdltagService;
 use App\Http\Requests\RsdltagRequest;
 use App\Models\Rsdl;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class RsdltagController extends Controller
 {
@@ -66,7 +67,6 @@ class RsdltagController extends Controller
             $validated = $request->validated();
             $createdRsdltag = [];
 
-            // Ensure f_id is provided
             if (!isset($validated['rsdl_id'])) {
                 return $this->sendError('Researchlab ID is required', 422);
             }
@@ -76,8 +76,8 @@ class RsdltagController extends Controller
                 return $this->sendError('Researchlab not found', 404);
             }
 
-            if (isset($validated['rsdlt_rsdl']) && is_array($validated['rsdlt_rsdl'])) {
-                foreach ($validated['rsdlt_rsdl'] as $item) {
+            if (isset($validated['rsdlt_tags']) && is_array($validated['rsdlt_tags'])) {
+                foreach ($validated['rsdlt_tags'] as $item) {
                     $item['rsdlt_rsdl'] = $rsdl->rsdl_id;
 
                     $item['display'] = $item['display'] ?? 1;

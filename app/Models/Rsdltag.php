@@ -16,6 +16,7 @@ class Rsdltag extends Model
         'rsdlt_rsdl',
         'rsdlt_title',
         'rsdlt_img',
+        'active'
     ];
 
     public function rsdl()
