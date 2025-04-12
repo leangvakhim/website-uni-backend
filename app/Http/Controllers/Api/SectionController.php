@@ -65,17 +65,22 @@ class SectionController extends Controller
         }
     }
 
-    public function update(SectionRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        try {
-            $section = Section::find($id);
-            if (!$section) return $this->sendError('Section not found', 404);
+        $section = Section::find($id);
 
-            $updated = $this->service->update($section, $request->validated());
-            return $this->sendResponse($updated, 200, 'Section updated');
-        } catch (Exception $e) {
-            return $this->sendError('Failed to update section', 500, ['error' => $e->getMessage()]);
+        if (!$section) {
+            return response()->json(['message' => 'Section not found'], 404);
         }
+
+        // Update display value
+        if ($request->has('display')) {
+            $section->display = $request->input('display');
+        }
+
+        $section->save();
+
+        return response()->json(['message' => 'Section updated successfully']);
     }
 
     public function visibility($id)

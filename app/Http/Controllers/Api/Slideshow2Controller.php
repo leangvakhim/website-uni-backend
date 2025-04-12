@@ -25,16 +25,17 @@ class Slideshow2Controller extends Controller
     {
         try {
             $slideshows = Slideshow2::with([
-                'btn1:bss_id,bss_title,bss_routepage',
-                'btn2:bss_id,bss_title,bss_routepage',
+                'btn1:bss_id,bss_title,bss_routepage,display',
+                'btn2:bss_id,bss_title,bss_routepage,display',
                 'img:image_id,img',
                 'logo:image_id,img',
                 'slider_sec:sec_id,sec_page,sec_order,lang,display,active' ,
-            ])->where('active', 1)->get();
+            ])
+            ->where('active', 1)
+            ->orderBy('slider_order', 'asc')
+            ->get();
 
-            return $this->sendResponse(
-                $slideshows->count() === 1 ? $slideshows->first() : $slideshows
-            );
+            return $this->sendResponse($slideshows);
         } catch (Exception $e) {
             return $this->sendError('Failed to retrieve slideshows', 500, ['error' => $e->getMessage()]);
         }
@@ -94,16 +95,37 @@ class Slideshow2Controller extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(Slideshow2Request $request, $id)
     {
         try {
+            Log::info('REQUEST DATA:', [$request->all()]);
+
             $slideshow = Slideshow2::find($id);
             if (!$slideshow) {
                 return $this->sendError('Slideshow not found', 404);
             }
 
-            $updated = $this->slideshow2Service->updateSlideshow($slideshow, $request->all());
-            return $this->sendResponse($updated, 200, 'Slideshow updated successfully');
+            // Merge 'Slideshow' data into request root
+            $request->merge($request->input('Slideshow'));
+
+            // Validate without nested structure
+            $validated = $request->validate([
+                'slider_title' => 'required|string',
+                'slider_text' => 'nullable|string',
+                'logo' => 'nullable|integer',
+                'img' => 'nullable|integer',
+                'btn1' => 'nullable|integer',
+                'btn2' => 'nullable|integer',
+                'display' => 'nullable|integer',
+                'active' => 'nullable|integer',
+                'slider_sec' => 'nullable|integer',
+            ]);
+
+            Log::info('UPDATE VALIDATED DATA:', $validated);
+
+            $slideshow->update($validated);
+
+            return $this->sendResponse($slideshow, 200, 'Slideshow updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update slideshow', 500, ['error' => $e->getMessage()]);
         }
