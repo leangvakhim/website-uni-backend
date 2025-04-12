@@ -132,7 +132,7 @@ Route::prefix('faculty-info')->group(function () {
     Route::post('/update/{id}', [FacultyInfoController::class, 'update']);
     Route::put('/visibility/{id}', [FacultyInfoController::class, 'visibility']);
     Route::post('/reorder', [FacultyInfoController::class, 'reorder']);
-    
+
 });
 
 Route::prefix('faculty')->group(function () {
@@ -185,7 +185,7 @@ Route::prefix('slideshow')->group(function () {
     Route::post('/create', [Slideshow2Controller::class, 'create']);
     Route::post('/update/{id}', [Slideshow2Controller::class, 'update']);
     Route::put('/visibility/{id}', [Slideshow2Controller::class, 'visibility']);
-    Route::post('/reorder', [Slideshow2Controller::class, 'reorder']);
+    Route::put('/reorder', [Slideshow2Controller::class, 'reorder']);
 });
 
 Route::prefix('event')->group(function () {
