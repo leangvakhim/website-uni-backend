@@ -31,8 +31,9 @@ class RsdltagRequest extends FormRequest
 
             // Validate multiple social records
             'rsdl' => 'nullable|array',
-            'rsdl.*.rsdlt_title' => 'nullable|string|max:255',
-            'rsdl.*.rsdlt_img' => 'nullable|integer|exists:tbimage,image_id',
+            'rsdlt_tags' => 'nullable|array',
+            'rsdlt_tags.*.rsdlt_title' => 'nullable|string|max:255',
+            'rsdlt_tags.*.rsdlt_img' => 'nullable|integer|exists:tbimage,image_id',
         ];
     }
 }

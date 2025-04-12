@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Rsdltag;
 use App\Services\RsdltagService;
 use App\Http\Requests\RsdltagRequest;
+use App\Models\Rsdl;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class RsdltagController extends Controller
 {
@@ -67,17 +69,23 @@ class RsdltagController extends Controller
 
             // Ensure f_id is provided
             if (!isset($validated['rsdl_id'])) {
+                Log::error('Missing rsdl_id in request payload', ['payload' => $validated]);
                 return $this->sendError('Researchlab ID is required', 422);
             }
 
-            $rsdl = Rsdltag::find($validated['rsdl_id']);
+            $rsdl = Rsdl::find($validated['rsdl_id']);
             if (!$rsdl) {
+                Log::error('Researchlab not found for rsdl_id', ['rsdl_id' => $validated['rsdl_id']]);
                 return $this->sendError('Researchlab not found', 404);
             }
 
-            if (isset($validated['rsdl']) && is_array($validated['rsdl'])) {
-                foreach ($validated['rsdl'] as $item) {
-                    $item['rsdl'] = $rsdl->rsdl_id;
+            Log::info('Validated Data:', $validated);
+
+            if (isset($validated['rsdlt_tags']) && is_array($validated['rsdlt_tags'])) {
+                Log::info('Looping Tags:', $validated['rsdlt_tags']);
+                foreach ($validated['rsdlt_tags'] as $item) {
+                    Log::info('Creating Tag:', $item);
+                    $item['rsdlt_rsdl'] = $rsdl->rsdl_id;
 
                     $item['display'] = $item['display'] ?? 1;
                     $item['active'] = $item['active'] ?? 1;
@@ -86,6 +94,7 @@ class RsdltagController extends Controller
                 }
             }
 
+            Log::info('Researchlab tags created', ['created' => $createdRsdltag]);
             return $this->sendResponse($createdRsdltag, 201, 'Researchlab tag records created successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to create researchlab tag', 500, ['error' => $e->getMessage()]);

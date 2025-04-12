@@ -16,7 +16,7 @@ class BtnssController extends Controller
             $texts = Btnss::all();
             return $this->sendResponse($texts);
         } catch (Exception $e) {
-            return $this->sendError('Failed to retrieve Btnss', 500, $e->getMessage());
+            return $this->sendError('Failed to retrieve Btnss', 500, ['error' => $e->getMessage()]);
         }
     }
 
