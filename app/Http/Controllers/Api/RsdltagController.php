@@ -67,24 +67,17 @@ class RsdltagController extends Controller
             $validated = $request->validated();
             $createdRsdltag = [];
 
-            // Ensure f_id is provided
             if (!isset($validated['rsdl_id'])) {
-                Log::error('Missing rsdl_id in request payload', ['payload' => $validated]);
                 return $this->sendError('Researchlab ID is required', 422);
             }
 
             $rsdl = Rsdl::find($validated['rsdl_id']);
             if (!$rsdl) {
-                Log::error('Researchlab not found for rsdl_id', ['rsdl_id' => $validated['rsdl_id']]);
                 return $this->sendError('Researchlab not found', 404);
             }
 
-            Log::info('Validated Data:', $validated);
-
             if (isset($validated['rsdlt_tags']) && is_array($validated['rsdlt_tags'])) {
-                Log::info('Looping Tags:', $validated['rsdlt_tags']);
                 foreach ($validated['rsdlt_tags'] as $item) {
-                    Log::info('Creating Tag:', $item);
                     $item['rsdlt_rsdl'] = $rsdl->rsdl_id;
 
                     $item['display'] = $item['display'] ?? 1;
@@ -94,7 +87,6 @@ class RsdltagController extends Controller
                 }
             }
 
-            Log::info('Researchlab tags created', ['created' => $createdRsdltag]);
             return $this->sendResponse($createdRsdltag, 201, 'Researchlab tag records created successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to create researchlab tag', 500, ['error' => $e->getMessage()]);
