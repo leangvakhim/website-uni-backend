@@ -29,7 +29,7 @@ class Slideshow2Controller extends Controller
                 'btn2:bss_id,bss_title,bss_routepage',
                 'img:image_id,img',
                 'logo:image_id,img',
-                'section:sec_id,sec_page,sec_order,lang,display,active' ,
+                'slider_sec:sec_id,sec_page,sec_order,lang,display,active' ,
             ])->where('active', 1)->get();
 
             return $this->sendResponse(
