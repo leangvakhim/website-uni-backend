@@ -30,9 +30,9 @@ class RsdltagRequest extends FormRequest
             'lang' => 'nullable|integer',
 
             // Validate multiple social records
-            'rsdl' => 'nullable|array',
-            'rsdl.*.rsdlt_title' => 'nullable|string|max:255',
-            'rsdl.*.rsdlt_img' => 'nullable|integer|exists:tbimage,image_id',
+            'rsdlt_rsdl' => 'nullable|array',
+            'rsdlt_rsdl.*.rsdlt_title' => 'nullable|string|max:255',
+            'rsdlt_rsdl.*.rsdlt_img' => 'nullable|integer|exists:tbimage,image_id',
         ];
     }
 }
