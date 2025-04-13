@@ -22,19 +22,19 @@ class ServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            's_title' => 'required|string|max:255',
-            's_subtitle' => 'required|string|max:255',
-            's_img' => 'nullable|integer|exists:tbimage,image_id',
-            's_order' => 'nullable|integer',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            's_sec' => 'nullable|array',
-            's_sec.sec_page' => 'sometimes|integer|exists:tbpage,p_id',
-            's_sec.sec_order' => 'sometimes|integer',
-            's_sec.lang' => 'sometimes|in:1,2',
-            's_sec.display' => 'sometimes|boolean',
-            's_sec.active' => 'sometimes|boolean',
+            // Validate multiple social records
+            'Service' => 'nullable|array',
+            'Service.*.s_title' => 'nullable|string|max:255',
+            'Service.*.s_subtitle' => 'nullable|string',
+            'Service.*.s_img' => 'nullable|integer|exists:tbimage,image_id',
+            'Service.*.s_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'Service.*.s_order' => 'nullable|integer',
+            'Service.*.display' => 'nullable|boolean',
+            'Service.*.active' => 'nullable|boolean',
         ];
     }
 }
