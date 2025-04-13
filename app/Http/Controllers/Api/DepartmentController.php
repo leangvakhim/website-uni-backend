@@ -61,14 +61,39 @@ class DepartmentController extends Controller
         }
     }
 
+    // public function update(DepartmentRequest $request, $id)
+    // {
+    //     try {
+    //         $department = Department::find($id);
+    //         if (!$department) return $this->sendError('Department not found', 404);
+
+    //         $updated = $this->service->update($department, $request->validated());
+    //         return $this->sendResponse($updated, 200, 'Department updated');
+    //     } catch (Exception $e) {
+    //         return $this->sendError('Failed to update department', 500, ['error' => $e->getMessage()]);
+    //     }
+    // }
     public function update(DepartmentRequest $request, $id)
     {
         try {
             $department = Department::find($id);
-            if (!$department) return $this->sendError('Department not found', 404);
+            if (!$department) {
+                return $this->sendError('Department not found', 404);
+            }
 
-            $updated = $this->service->update($department, $request->validated());
-            return $this->sendResponse($updated, 200, 'Department updated');
+            $request->merge($request->input('programs'));
+
+            $validated = $request->validate([
+                'dep_title' => 'required|string',
+                'dep_detail' => 'nullable|string',
+                'dep_img1' => 'nullable|integer',
+                'dep_img2' => 'nullable|integer',
+                'dep_sec' => 'nullable|integer',
+            ]);
+
+            $department->update($validated);
+
+            return $this->sendResponse($department, 200, 'department updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update department', 500, ['error' => $e->getMessage()]);
         }
