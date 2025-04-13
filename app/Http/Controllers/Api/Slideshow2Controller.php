@@ -98,8 +98,6 @@ class Slideshow2Controller extends Controller
     public function update(Slideshow2Request $request, $id)
     {
         try {
-            Log::info('REQUEST DATA:', [$request->all()]);
-
             $slideshow = Slideshow2::find($id);
             if (!$slideshow) {
                 return $this->sendError('Slideshow not found', 404);
