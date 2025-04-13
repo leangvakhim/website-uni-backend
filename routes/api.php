@@ -285,6 +285,8 @@ Route::prefix('rsdltag')->group(function () {
     Route::get('/{id}', [RsdltagController::class, 'show']);
     Route::post('/create', [RsdltagController::class, 'create']);
     Route::post('/update/{id}', [RsdltagController::class, 'update']);
+    Route::put('/reorder',[RsdltagController::class, 'reorder']);
+
 });
 
 Route::prefix('ashead')->group(function () {
