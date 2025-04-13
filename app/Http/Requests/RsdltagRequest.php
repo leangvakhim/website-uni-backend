@@ -30,7 +30,7 @@ class RsdltagRequest extends FormRequest
             'lang' => 'nullable|integer',
 
             // Validate multiple social records
-            'rsdl' => 'nullable|array',
+            'rsdlt_rsdl' => 'nullable|array',
             'rsdlt_tags' => 'nullable|array',
             'rsdlt_tags.*.rsdlt_title' => 'nullable|string|max:255',
             'rsdlt_tags.*.rsdlt_img' => 'nullable|integer|exists:tbimage,image_id',

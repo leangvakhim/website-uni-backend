@@ -34,6 +34,8 @@ class RsdltagController extends Controller
         }
     }
 
+    
+
     public function show($id)
     {
         try {
@@ -42,7 +44,8 @@ class RsdltagController extends Controller
                 'img:image_id,img'
             ])->find($id);
 
-            if (!$item) return $this->sendError('RSDL Tag not found', 404);
+            if (!$item)
+                return $this->sendError('RSDL Tag not found', 404);
 
             return $this->sendResponse($item);
         } catch (Exception $e) {
@@ -80,7 +83,6 @@ class RsdltagController extends Controller
                 foreach ($validated['rsdlt_tags'] as $item) {
                     $item['rsdlt_rsdl'] = $rsdl->rsdl_id;
 
-                    $item['display'] = $item['display'] ?? 1;
                     $item['active'] = $item['active'] ?? 1;
 
                     $createdRsdltag[] = Rsdltag::create($item);
@@ -93,16 +95,34 @@ class RsdltagController extends Controller
         }
     }
 
+
     public function update(RsdltagRequest $request, $id)
     {
         try {
             $rsdltag = Rsdltag::find($id);
-            if (!$rsdltag) return $this->sendError('RSDL Tag not found', 404);
+            if (!$rsdltag)
+                return $this->sendError('RSDL Tag not found', 404);
 
             $updated = $this->rsdltagService->update($rsdltag, $request->validated());
             return $this->sendResponse($updated, 200, 'RSDL Tag updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update RSDL Tag', 500, ['error' => $e->getMessage()]);
         }
+    }
+
+    public function reorder(Request $request)
+    {
+        $data = $request->validate([
+            '*.rsdlt_id' => 'required|integer|exists:tbrsdl,rsdl_id', // <-- fix table name
+        ]);
+
+
+        foreach ($data as $item) {
+            Rsdltag::where('rsdl_id', $item['rsdl_id'])->update(['rsdl_order' => $item['rsdl_order']]);
+        }
+
+        return response()->json([
+            'message' => 'rsdl order updated successfully',
+        ], 200);
     }
 }

@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Rsdltag extends Model
 {
-    use HasFactory;
-
     protected $table = 'tbrsdltag';
     protected $primaryKey = 'rsdlt';
 
