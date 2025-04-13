@@ -7,6 +7,7 @@ use App\Models\Banner;
 use App\Http\Requests\BannerRequest;
 use App\Services\BannerService;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class BannerController extends Controller
 {
@@ -66,21 +67,24 @@ class BannerController extends Controller
     {
         try {
             $banner = Banner::find($id);
-            if (!$banner) return $this->sendError('Banner not found', 404);
+            if (!$banner) {
+                return $this->sendError('Banner not found', 404);
+            }
 
-            $updated = $this->service->update($banner, $request->validated());
-            return $this->sendResponse($updated, 200, 'Banner updated');
+            $request->merge($request->input('banners'));
+
+            $validated = $request->validate([
+                'ban_title' => 'required|string',
+                'ban_subtitle' => 'nullable|string',
+                'ban_img' => 'nullable|integer',
+                'ban_sec' => 'nullable|integer',
+            ]);
+
+            $banner->update($validated);
+
+            return $this->sendResponse($banner, 200, 'banner updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update banner', 500, ['error' => $e->getMessage()]);
         }
     }
-
-    // public function bannerGetBySection($sec_id)
-    // {
-    //     $banners = Banner::where('ban_sec', $sec_id)
-    //         ->where('active', 1)
-    //         ->get();
-
-    //     return response()->json(['data' => $banners]);
-    // }
 }
