@@ -67,12 +67,29 @@ class AcademicController extends Controller
     public function update(AcademicRequest $request, $id)
     {
         try {
-            $item = Academic::find($id);
-            if (!$item) return $this->sendError('Not found', 404);
-            $updated = $this->service->update($item, $request->validated());
-            return $this->sendResponse($updated, 200, 'Updated');
+            $academic = Academic::find($id);
+            if (!$academic) {
+                return $this->sendError('Academic not found', 404);
+            }
+
+            $request->merge($request->input('academics'));
+
+            $validated = $request->validate([
+                'acad_title' => 'required|string',
+                'acad_detail' => 'nullable|string',
+                'acad_img' => 'nullable|integer',
+                'acad_sec' => 'nullable|integer',
+                'acad_btntext1' => 'nullable|string',
+                'acad_btntext2' => 'nullable|string',
+                'acad_routepage' => 'nullable|string',
+                'acad_routetext' => 'nullable|string',
+            ]);
+
+            $academic->update($validated);
+
+            return $this->sendResponse($academic, 200, 'academic updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update academic', 500, ['error' => $e->getMessage()]);
         }
     }
 }
