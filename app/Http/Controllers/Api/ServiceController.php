@@ -8,6 +8,8 @@ use App\Http\Requests\ServiceRequest;
 use App\Services\ServiceService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ServiceController extends Controller
 {

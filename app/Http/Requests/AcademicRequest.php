@@ -29,6 +29,7 @@ class AcademicRequest extends FormRequest
             'academics' => 'nullable|array',
             'academics.*.acad_title' => 'nullable|string|max:100',
             'academics.*.acad_detail' => 'nullable|string',
+            'academics.*.acad_sec' => 'nullable|integer|exists:tbsection,sec_id',
             'academics.*.acad_img' => 'nullable|integer|exists:tbimage,image_id',
             'academics.*.acad_btntext1' => 'nullable|string|max:30',
             'academics.*.acad_btntext2' => 'nullable|string|max:30',
