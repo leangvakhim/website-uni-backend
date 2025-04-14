@@ -430,7 +430,8 @@ Route::prefix('service')->group(function () {
     Route::get('/{id}', [ServiceController::class, 'show']);
     Route::post('/create', [ServiceController::class, 'create']);
     Route::post('/update/{id}', [ServiceController::class, 'update']);
-    Route::post('/reorder', [ServiceController::class, 'reorder']);
+    Route::put('/visibility/{id}', [ServiceController::class, 'visibility']);
+    Route::put('/reorder', [ServiceController::class, 'reorder']);
 });
 
 Route::prefix('testimonial')->group(function () {
