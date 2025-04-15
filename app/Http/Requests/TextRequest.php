@@ -25,13 +25,13 @@ class TextRequest extends FormRequest
             'display' => 'nullable|boolean',
             'sec_page' => 'nullable|integer|exists:tbpage,p_id',
             'sec_order' => 'nullable|integer',
-            
+
             'texts' => 'nullable|array',
             'texts.*.title' => 'nullable|string|max:255',
+            'texts.*.text_sec' => 'nullable|integer|exists:tbsection,sec_id',
             'texts.*.desc' => 'nullable|string',
             'texts.*.text_type' => 'nullable|integer',
             'texts.*.tag' => 'nullable|string|max:255',
-            'texts.*.lang' => 'nullable|integer',
         ];
     }
 }
