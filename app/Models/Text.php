@@ -14,6 +14,7 @@ class Text extends Model
 
     protected $fillable = [
         'title',
+        'text_sec',
         'desc',
         'text_type',
         'tag',
@@ -40,5 +41,11 @@ public function ras()
 {
     return $this->hasMany(Ras::class, 'ras_text', 'text_id');
 }
+
+    public function text_sec()
+    {
+        return $this->belongsTo(Section::class, 'text_sec', 'sec_id')
+            ->select(['sec_id', 'sec_page', 'sec_type', 'sec_order', 'lang', 'display', 'active']);
+    }
 
 }
