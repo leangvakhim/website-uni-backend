@@ -7,6 +7,7 @@ use App\Http\Requests\GalleryRequest;
 use App\Models\Gallery;
 use App\Services\GalleryService;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class GalleryController extends Controller
 {
@@ -44,6 +45,7 @@ class GalleryController extends Controller
 
             if (isset($validated['gallery']) && is_array($validated['gallery'])) {
                 foreach ($validated['gallery'] as $item) {
+                    Log::info('🛠 Gallery Item Before Create: ', ['item' => $item]);
 
                     $item['gal_text'] = $item['gal_text'] ?? null;
                     $item['gal_sec'] = $item['gal_sec'] ?? null;
@@ -67,12 +69,27 @@ class GalleryController extends Controller
     {
         try {
             $gallery = Gallery::find($id);
-            if (!$gallery) return $this->sendError('Gallery not found', 404);
+            if (!$gallery) {
+                return $this->sendError('Gallery not found', 404);
+            }
 
-            $updated = $this->service->update($gallery, $request->validated());
-            return $this->sendResponse($updated, 200, 'Gallery updated');
+            $request->merge($request->input('gallery'));
+
+            $validated = $request->validate([
+                'gal_text' => 'nullable|integer',
+                'gal_img1' => 'nullable|integer',
+                'gal_img2' => 'nullable|integer',
+                'gal_img3' => 'nullable|integer',
+                'gal_img4' => 'nullable|integer',
+                'gal_img5' => 'nullable|integer',
+                'gal_sec' => 'nullable|integer',
+            ]);
+
+            $gallery->update($validated);
+
+            return $this->sendResponse($gallery, 200, 'Gallery updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update gallery', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update Gallery', 500, ['error' => $e->getMessage()]);
         }
     }
 }
