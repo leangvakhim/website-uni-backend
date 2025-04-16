@@ -38,10 +38,7 @@ class TextController extends Controller
     public function create(TextRequest $request)
     {
         try {
-            Log::info('📝 Creating Text Record - Payload:', $request->all());
-            // Log::info('Text Create Payload:', $request);
             $validated = $request->validated();
-            Log::info('Text Create Payload:', $validated);
             $createdTexts = [];
 
             if (isset($validated['texts']) && is_array($validated['texts'])) {
@@ -58,10 +55,22 @@ class TextController extends Controller
                     $createdTexts[] = Text::create($item);
                 }
             }
-            Log::info('✅ Created Text Record:', $createdTexts);
 
 
-            return $this->sendResponse($createdTexts, 201, 'Text records created successfully');
+            $textRecord = collect($createdTexts)->last();
+
+            if (!$textRecord) {
+                return $this->sendError('Failed to create text record', 500);
+            }
+
+            return response()->json([
+                'status' => 201,
+                'status_code' => 'success',
+                'message' => 'Text record created successfully',
+                'data' => [
+                    'text_id' => $textRecord->text_id
+                ]
+            ], 201);
         } catch (Exception $e) {
             return $this->sendError('Failed to create text', 500, ['error' => $e->getMessage()]);
         }

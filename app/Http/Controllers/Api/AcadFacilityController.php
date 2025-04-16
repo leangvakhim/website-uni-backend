@@ -66,13 +66,24 @@ class AcadFacilityController extends Controller
     public function update(AcadFacilityRequest $request, $id)
     {
         try {
-            $item = AcadFacility::find($id);
-            if (!$item) return $this->sendError('Facility not found', 404);
+            $acadFacility = AcadFacility::find($id);
+            if (!$acadFacility) {
+                return $this->sendError('AcadFacility not found', 404);
+            }
 
-            $updated = $this->service->update($item, $request->validated());
-            return $this->sendResponse($updated, 200, 'Facility updated');
+            $request->merge($request->input('facilities'));
+
+            $validated = $request->validate([
+                'af_text' => 'nullable|integer',
+                'af_img' => 'nullable|integer',
+                'af_sec' => 'nullable|integer',
+            ]);
+
+            $acadFacility->update($validated);
+
+            return $this->sendResponse($acadFacility, 200, 'AcadFacility updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update AcadFacility', 500, ['error' => $e->getMessage()]);
         }
     }
 }

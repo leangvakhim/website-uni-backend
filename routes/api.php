@@ -537,10 +537,10 @@ Route::prefix('subidd')->controller(SubiddController::class)->group(function () 
 Route::prefix('subservice')->controller(SubserviceController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('{id}', 'show');
-    Route::post('/create', 'create');
-    Route::post('/update/{id}', 'update');
-    Route::put('/visibility/{id}', 'visibility');
-    Route::post('/reorder', 'reorder');
+    Route::post('/create-af', 'createSubserviceAF');
+    Route::post('/update-af/{id}', 'updateSubserviceAF');
+    Route::put('/visibility-af/{id}', 'visibilitySubserviceAF');
+    Route::post('/reorder-af', 'reorderSubserviceAF');
 });
 
 Route::prefix('setting')->controller(SettingController::class)->group(function () {
