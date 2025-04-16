@@ -64,6 +64,9 @@ use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\AcademicController;
 use App\Http\Controllers\Api\GalleryController;
 use App\Http\Controllers\Api\AnnouncementController;
+use App\Http\Controllers\Api\StudentController;
+use App\Http\Controllers\Api\SubjectController;
+use App\Http\Controllers\Api\StudentscoreController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -584,3 +587,26 @@ Route::prefix('announcement')->controller(AnnouncementController::class)->group(
     Route::post('/reorder', 'reorder');          
 });
 
+Route::prefix('student')->controller(StudentController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+});
+
+Route::prefix('subject')->controller(SubjectController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+});
+
+Route::prefix('studentscore')->controller(StudentscoreController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::post('/visibility/{id}', 'visibility');
+});
