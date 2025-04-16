@@ -102,7 +102,6 @@ class RsdltagController extends Controller
             $rsdltag = Rsdltag::find($id);
             if (!$rsdltag)
                 return $this->sendError('RSDL Tag not found', 404);
-
             $updated = $this->rsdltagService->update($rsdltag, $request->validated());
             return $this->sendResponse($updated, 200, 'RSDL Tag updated successfully');
         } catch (Exception $e) {
