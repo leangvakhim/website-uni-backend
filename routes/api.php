@@ -547,6 +547,10 @@ Route::prefix('subservice')->controller(SubserviceController::class)->group(func
     Route::post('/update-af/{id}', 'updateSubserviceAF');
     Route::put('/visibility-af/{id}', 'visibilitySubserviceAF');
     Route::post('/reorder-af', 'reorderSubserviceAF');
+    Route::post('/create-ras', 'createSubserviceRAS');
+    Route::post('/update-ras/{id}', 'updateSubserviceRAS');
+    Route::put('/visibility-ras/{id}', 'visibilitySubserviceRAS');
+    Route::post('/reorder-ras', 'reorderSubserviceRAS');
 });
 
 Route::prefix('setting')->controller(SettingController::class)->group(function () {

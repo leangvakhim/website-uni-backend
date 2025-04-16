@@ -30,7 +30,10 @@ class SubserviceRequest extends FormRequest
             'af_sec' => 'nullable|integer|exists:tbsection,sec_id',
             'af_img' => 'nullable|integer|exists:tbimage,image_id',
 
-
+            'ras_text' => 'nullable|integer|exists:tbtext,text_id',
+            'ras_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'ras_img1' => 'nullable|integer|exists:tbimage,image_id',
+            'ras_img2' => 'nullable|integer|exists:tbimage,image_id',
 
             'subservice' => 'nullable|array',
             'subservice.*.ss_af' => 'nullable|integer|exists:tbacadfacility,af_id',
