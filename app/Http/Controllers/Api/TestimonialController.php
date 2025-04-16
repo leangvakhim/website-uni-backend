@@ -66,12 +66,22 @@ class TestimonialController extends Controller
     {
         try {
             $testimonial = Testimonial::find($id);
-            if (!$testimonial) return $this->sendError('Testimonial not found', 404);
+            if (!$testimonial) {
+                return $this->sendError('Testimonial not found', 404);
+            }
 
-            $updated = $this->service->update($testimonial, $request->validated());
-            return $this->sendResponse($updated, 200, 'Testimonial updated');
+            $request->merge($request->input('testimonials'));
+
+            $validated = $request->validate([
+                't_title' => 'required|string',
+                't_sec' => 'nullable|integer'
+            ]);
+
+            $testimonial->update($validated);
+
+            return $this->sendResponse($testimonial, 200, 'text updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update text', 500, ['error' => $e->getMessage()]);
         }
     }
 }
