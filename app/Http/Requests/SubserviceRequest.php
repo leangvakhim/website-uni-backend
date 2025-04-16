@@ -22,24 +22,25 @@ class SubserviceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ss_title' => 'nullable|string|max:255',
-            'ss_subtitle' => 'nullable|string',
-            'ss_order' => 'nullable|integer',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'ss_img' => 'nullable|integer|exists:tbimage,image_id',
+            'af_text' => 'nullable|integer|exists:tbtext,text_id',
+            'af_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'af_img' => 'nullable|integer|exists:tbimage,image_id',
 
-            'ss_ras' => 'nullable|array',
-            'ss_ras.ras_sec' => 'nullable|integer|exists:tbsection,sec_id',
-            'ss_ras.ras_text' => 'nullable|integer|exists:tbtext,text_id',
-            'ss_ras.ras_img1' => 'nullable|integer|exists:tbimage,image_id',
-            'ss_ras.ras_img2' => 'nullable|integer|exists:tbimage,image_id',
 
-            'ss_af' => 'nullable|array',
-            'ss_af.af_sec' => 'nullable|integer|exists:tbsection,sec_id',
-            'ss_af.af_text' => 'nullable|integer|exists:tbtext,text_id',
-            'ss_af.af_img' => 'nullable|integer|exists:tbimage,image_id',
+
+            'subservice' => 'nullable|array',
+            'subservice.*.ss_af' => 'nullable|integer|exists:tbacadfacility,af_id',
+            'subservice.*.ss_ras' => 'nullable|integer|exists:tbras,ras_id',
+            'subservice.*.ss_img' => 'nullable|integer|exists:tbimage,image_id',
+            'subservice.*.ss_title' => 'nullable|string|max:255',
+            'subservice.*.ss_subtitle' => 'nullable|string',
+            'subservice.*.display' => 'nullable|boolean',
+            'subservice.*.active' => 'nullable|boolean',
+            'subservice.*.ss_order' => 'nullable|integer',
         ];
     }
 }
