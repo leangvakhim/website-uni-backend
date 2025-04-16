@@ -66,11 +66,24 @@ class RasController extends Controller
     {
         try {
             $ras = Ras::find($id);
-            if (!$ras) return $this->sendError('Ras not found', 404);
-            $updated = $this->service->update($ras, $request->validated());
-            return $this->sendResponse($updated, 200, 'Ras updated successfully');
+            if (!$ras) {
+                return $this->sendError('Ras not found', 404);
+            }
+
+            $request->merge($request->input('specialization'));
+
+            $validated = $request->validate([
+                'ras_text' => 'nullable|integer',
+                'ras_img1' => 'nullable|integer',
+                'ras_img2' => 'nullable|integer',
+                'af_sec' => 'nullable|integer',
+            ]);
+
+            $ras->update($validated);
+
+            return $this->sendResponse($ras, 200, 'Ras updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update Ras', 500, ['error' => $e->getMessage()]);
         }
     }
 }
