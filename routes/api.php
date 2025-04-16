@@ -63,6 +63,7 @@ use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\AcademicController;
 use App\Http\Controllers\Api\GalleryController;
+use App\Http\Controllers\Api\AnnouncementController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -572,3 +573,14 @@ Route::prefix('gallery')->controller(GalleryController::class)->group(function (
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
 });
+
+Route::prefix('announcement')->controller(AnnouncementController::class)->group(function () {
+    Route::get('/', 'index');                       
+    Route::get('/{id}', 'show');                     
+    Route::post('/create', 'create');                
+    Route::post('/update/{id}', 'update');           
+    Route::put('/visibility/{id}', 'visibility');  
+    Route::post('/duplicate/{id}', 'duplicate');     
+    Route::post('/reorder', 'reorder');          
+});
+
