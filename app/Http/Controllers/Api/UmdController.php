@@ -7,6 +7,7 @@ use App\Models\Umd;
 use App\Http\Requests\UmdRequest;
 use App\Services\UmdService;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class UmdController extends Controller
 {
@@ -67,12 +68,32 @@ class UmdController extends Controller
     public function update(UmdRequest $request, $id)
     {
         try {
-            $umd = Umd::find($id);
-            if (!$umd) return $this->sendError('UMD not found', 404);
-            $updated = $this->service->update($umd, $request->validated());
-            return $this->sendResponse($updated, 200, 'UMD updated');
+
+            $unlock = Umd::find($id);
+            if (!$unlock) {
+                return $this->sendError('unlock not found', 404);
+            }
+
+            $unlockData = $request->input('unlock');
+            if (!$unlockData || !is_array($unlockData)) {
+                return $this->sendError('Invalid unlock data provided', 422);
+            }
+            $request->merge($unlockData);
+
+            $validated = $request->validate([
+                'umd_sec' => 'nullable|integer',
+                'umd_title' => 'nullable|string',
+                'umd_routepage' => 'nullable|string',
+                'umd_btntext' => 'nullable|string',
+                'umd_detail' => 'nullable|string',
+                'umd_img' => 'nullable|integer',
+            ]);
+
+            $unlock->update($validated);
+
+            return $this->sendResponse($unlock, 200, 'Unlock updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update Unlock', 500, ['error' => $e->getMessage()]);
         }
     }
 
