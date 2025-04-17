@@ -22,16 +22,21 @@ class SubtseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'stse_title' => 'nullable|string|max:255',
-            'stse_detail' => 'nullable|string',
-            'stse_order' => 'required|integer',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'stse_tse' => 'nullable|array',
-            'stse_tse.tse_type' => 'nullable|in:1,2',
-            'stse_tse.tse_sec' => 'nullable|integer|exists:tbsection,sec_id',
-            'stse_tse.tse_text' => 'nullable|integer|exists:tbtext,text_id'
+            'tse_text' => 'nullable|integer|exists:tbtext,text_id',
+            'tse_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'tse_type' => 'nullable|integer',
+
+            'subtse' => 'nullable|array',
+            'subtse.*.stse_tse' => 'nullable|integer|exists:tbsection,sec_id',
+            'subtse.*.stse_title' => 'nullable|string',
+            'subtse.*.stse_detail' => 'nullable|string',
+            'subtse.*.stse_order' => 'nullable|integer',
+            'subtse.*.display' => 'nullable|integer',
+            'subtse.*.active' => 'nullable|integer',
         ];
     }
 }

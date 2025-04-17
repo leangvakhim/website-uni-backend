@@ -67,12 +67,23 @@ class TseController extends Controller
     {
         try {
             $tse = Tse::find($id);
-            if (!$tse) return $this->sendError('TSE not found', 404);
+            if (!$tse) {
+                return $this->sendError('Tse not found', 404);
+            }
 
-            $updated = $this->service->update($tse, $request->validated());
-            return $this->sendResponse($updated, 200, 'TSE updated');
+            $request->merge($request->input('type'));
+
+            $validated = $request->validate([
+                'tse_text' => 'nullable|integer',
+                'tse_type' => 'nullable|integer',
+                'tse_sec' => 'nullable|integer',
+            ]);
+
+            $tse->update($validated);
+
+            return $this->sendResponse($tse, 200, 'Tse updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update Tse', 500, ['error' => $e->getMessage()]);
         }
     }
 }
