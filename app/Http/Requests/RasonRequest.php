@@ -22,15 +22,20 @@ class RasonRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'rason_title' => 'nullable|string',
-            'rason_amount' => 'nullable|string',
-            'rason_subtitle' => 'nullable|string',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'rason_ras' => 'nullable|array',
-            'rason_ras.ras_sec' => 'nullable|integer|exists:tbsection,sec_id',
-            'rason_ras.ras_img1' => 'nullable|integer|exists:tbimage,image_id',
-            'rason_ras.ras_img2' => 'nullable|integer|exists:tbimage,image_id',
-            'rason_ras.ras_text' => 'nullable|integer|exists:tbtext,text_id',
+            'ras_text' => 'nullable|integer|exists:tbtext,text_id',
+            'ras_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'ras_img1' => 'nullable|integer|exists:tbimage,image_id',
+            'ras_img2' => 'nullable|integer|exists:tbimage,image_id',
+
+            'rasons' => 'nullable|array',
+            'rasons.*.rason_ras' => 'nullable|integer|exists:tbras,ras_id',
+            'rasons.*.rason_title' => 'nullable|string|max:255',
+            'rasons.*.rason_amount' => 'nullable|string',
+            'rasons.*.rason_subtitle' => 'nullable|string',
         ];
     }
 }
