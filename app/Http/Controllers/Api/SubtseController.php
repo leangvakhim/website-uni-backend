@@ -7,6 +7,7 @@ use App\Http\Requests\SubtseRequest;
 use App\Models\Subtse;
 use App\Services\SubtseService;
 use Exception;
+use Illuminate\Http\Request;
 
 class SubtseController extends Controller
 {
@@ -40,30 +41,63 @@ class SubtseController extends Controller
     public function create(SubtseRequest $request)
     {
         try {
-            $data = $request->validated();
+            $validated = $request->validated();
+            $subtses = $validated['subtse'] ?? [];
 
-            // Auto-increment stse_order if not provided
-            if (!isset($data['stse_order'])) {
-                $data['stse_order'] = Subtse::max('stse_order') + 1;
+            if (empty($subtses)) {
+                return $this->sendError('No subtse Data Provided', 422);
             }
 
-            $result = app(SubtseService::class)->create($data);
-            return $this->sendResponse($result, 201, 'Subtse created');
+            $createdSubtse = [];
+
+            foreach ($subtses as $item) {
+                if (!isset($item['stse_tse'])) {
+                    return $this->sendError('tse ID is required', 422);
+                }
+
+                $item['stse_order'] = (Subtse::where('stse_tse', $item['stse_tse'])->max('stse_order') ?? 0) + 1;
+
+                $item['stse_title'] = $item['stse_title'] ?? null;
+                $item['stse_detail'] = $item['stse_detail'] ?? null;
+                $item['display'] = $item['display'];
+                $item['active'] = $item['active'] ?? 1;
+
+                $createdSubtse[] = Subtse::create($item);
+            }
+
+            return $this->sendResponse($createdSubtse, 201, 'subtse created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create Subtse', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create subtse', 500, ['error' => $e->getMessage()]);
         }
     }
 
     public function update(SubtseRequest $request, $id)
     {
         try {
-            $subtse = Subtse::find($id);
-            if (!$subtse) return $this->sendError('Subtse not found', 404);
 
-            $updated = $this->subtseService->update($subtse, $request->validated());
-            return $this->sendResponse($updated, 200, 'Subtse updated successfully');
+            $subtse = Subtse::find($id);
+            if (!$subtse) {
+                return $this->sendError('Subtse not found', 404);
+            }
+
+            $subtseData = $request->input('subtse');
+            if (!$subtseData || !is_array($subtseData)) {
+                return $this->sendError('Invalid subtse data provided', 422);
+            }
+            $request->merge($subtseData);
+
+            $validated = $request->validate([
+                'stse_tse' => 'nullable|integer',
+                'stse_title' => 'nullable|string',
+                'stse_detail' => 'nullable|string',
+                'display' => 'nullable|boolean',
+            ]);
+
+            $subtse->update($validated);
+
+            return $this->sendResponse($subtse, 200, 'subtse updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update Subtse', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update subtse', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -86,7 +120,7 @@ class SubtseController extends Controller
     {
         try {
             $data = $request->validate([
-                '*.stse_id' => 'required|integer|exists:tbsubstse,stse_id',
+                '*.stse_id' => 'required|integer|exists:tbsubtse,stse_id',
                 '*.stse_order' => 'required|integer'
             ]);
 
