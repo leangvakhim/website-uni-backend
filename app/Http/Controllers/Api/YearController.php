@@ -21,7 +21,10 @@ class YearController extends Controller
     public function index()
     {
         try {
-            $data = Year::with('studydegree')->where('active', 1)->get();
+            $data = Year::with('studydegree')
+            ->where('active', 1)
+            ->orderBy('y_order', 'asc')
+            ->get();
             return $this->sendResponse($data->count() === 1 ? $data->first() : $data);
         } catch (Exception $e) {
             return $this->sendError('Failed to fetch Year data', 500, ['error' => $e->getMessage()]);
@@ -41,12 +44,26 @@ class YearController extends Controller
     public function create(YearRequest $request)
     {
         try {
-            $data = $request->validated();
-            if (!isset($data['y_order'])) {
-                $data['y_order'] = Year::max('y_order') + 1;
+            $validated = $request->validated();
+            $createdYear = [];
+
+            if (isset($validated['year']) && is_array($validated['year'])) {
+                foreach ($validated['year'] as $item) {
+
+                    $item['y_order'] = (Year::where('y_std', $item['y_std'])->max('y_order') ?? 0) + 1;
+
+                    $item['y_std'] = $item['y_std'] ?? null;
+                    $item['y_title'] = $item['y_title'] ?? null;
+                    $item['y_subtitle'] = $item['y_subtitle'] ?? null;
+                    $item['y_detail'] = $item['y_detail'] ?? null;
+                    $item['display'] = $item['display'] ?? 1;
+                    $item['active'] = $item['active'] ?? 1;
+
+                    $createdYear[] = Year::create($item);
+                }
             }
-            $year = app(YearService::class)->create($data);
-            return $this->sendResponse($year, 201, 'Year created');
+
+            return $this->sendResponse($createdYear, 201, 'Year records created successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to create Year', 500, ['error' => $e->getMessage()]);
         }
@@ -56,12 +73,25 @@ class YearController extends Controller
     {
         try {
             $year = Year::find($id);
-            if (!$year) return $this->sendError('Year not found', 404);
+            if (!$year) {
+                return $this->sendError('Year not found', 404);
+            }
 
-            $updated = $this->yearService->update($year, $request->validated());
-            return $this->sendResponse($updated, 200, 'Year updated successfully');
+            $request->merge($request->input('year'));
+
+            $validated = $request->validate([
+                'y_title' => 'required|string',
+                'y_subtitle' => 'nullable|string',
+                'y_detail' => 'nullable|string',
+                'y_std' => 'nullable|integer',
+                'display' => 'nullable|integer',
+            ]);
+
+            $year->update($validated);
+
+            return $this->sendResponse($year, 200, 'year updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update Year', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update year', 500, ['error' => $e->getMessage()]);
         }
     }
 
