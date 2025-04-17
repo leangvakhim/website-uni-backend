@@ -65,11 +65,22 @@ class ApdController extends Controller
     {
         try {
             $apd = Apd::find($id);
-            if (!$apd) return $this->sendError('Not found', 404);
-            $updated = $this->service->update($apd, $request->validated());
-            return $this->sendResponse($updated, 200, 'Updated');
+            if (!$apd) {
+                return $this->sendError('Apd not found', 404);
+            }
+
+            $request->merge($request->input('available'));
+
+            $validated = $request->validate([
+                'apd_title' => 'required|string',
+                'apd_sec' => 'nullable|integer',
+            ]);
+
+            $apd->update($validated);
+
+            return $this->sendResponse($apd, 200, 'apd updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update apd', 500, ['error' => $e->getMessage()]);
         }
     }
 }

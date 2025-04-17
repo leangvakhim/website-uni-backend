@@ -28,7 +28,7 @@ class ApdRequest extends FormRequest
 
             'available' => 'nullable|array',
             'available.*.apd_sec' => 'nullable|integer|exists:tbsection,sec_id',
-            'available.*.apd_title' => 'nullable|string|max:100',
+            'available.*.apd_title' => 'nullable|string',
         ];
     }
 }
