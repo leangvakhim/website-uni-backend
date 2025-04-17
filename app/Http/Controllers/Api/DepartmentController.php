@@ -60,19 +60,6 @@ class DepartmentController extends Controller
             return $this->sendError('Failed to create department', 500, ['error' => $e->getMessage()]);
         }
     }
-
-    // public function update(DepartmentRequest $request, $id)
-    // {
-    //     try {
-    //         $department = Department::find($id);
-    //         if (!$department) return $this->sendError('Department not found', 404);
-
-    //         $updated = $this->service->update($department, $request->validated());
-    //         return $this->sendResponse($updated, 200, 'Department updated');
-    //     } catch (Exception $e) {
-    //         return $this->sendError('Failed to update department', 500, ['error' => $e->getMessage()]);
-    //     }
-    // }
     public function update(DepartmentRequest $request, $id)
     {
         try {
