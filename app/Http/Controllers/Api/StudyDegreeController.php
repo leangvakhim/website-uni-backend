@@ -65,12 +65,25 @@ class StudyDegreeController extends Controller
     public function update(StudyDegreeRequest $request, $id)
     {
         try {
-            $degree = StudyDegree::find($id);
-            if (!$degree) return $this->sendError('Not found', 404);
-            $updated = $this->service->update($degree, $request->validated());
-            return $this->sendResponse($updated, 200, 'Updated');
+            $study = StudyDegree::find($id);
+            if (!$study) {
+                return $this->sendError('StudyDegree not found', 404);
+            }
+
+            $request->merge($request->input('study'));
+
+            $validated = $request->validate([
+                'std_title' => 'required|string',
+                'std_subtitle' => 'nullable|string',
+                'std_sec' => 'nullable|integer',
+                'std_type' => 'nullable|integer',
+            ]);
+
+            $study->update($validated);
+
+            return $this->sendResponse($study, 200, 'study updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update study', 500, ['error' => $e->getMessage()]);
         }
     }
 }

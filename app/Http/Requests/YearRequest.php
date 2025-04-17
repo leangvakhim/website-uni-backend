@@ -22,18 +22,23 @@ class YearRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'y_title' => 'nullable|string|max:50',
-            'y_subtitle' => 'nullable|string|max:255',
-            'y_detail' => 'nullable|string',
-            'y_order' => 'required|integer',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'y_std' => 'nullable|array',
-            'y_std.std_sec' => 'nullable|integer|exists:tbsection,sec_id',
-            'y_std.std_title' => 'nullable|string|max:255',
-            'y_std.std_subtitle' => 'nullable|string',
-            'y_std.std_type' => 'nullable|in:1,2',
+            'std_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'std_title' => 'nullable|string|max:255',
+            'std_subtitle' => 'nullable|string',
+            'std_type' => 'nullable|integer',
+
+            'year' => 'nullable|array',
+            'year.*.y_std' => 'nullable|integer|exists:tbstudydegree,std_id',
+            'year.*.y_title' => 'nullable|string|max:255',
+            'year.*.y_subtitle' => 'nullable|string',
+            'year.*.y_detail' => 'nullable|string',
+            'year.*.display' => 'nullable|integer',
+            'year.*.active' => 'nullable|boolean',
+            'year.*.y_order' => 'nullable|integer',
 
         ];
     }

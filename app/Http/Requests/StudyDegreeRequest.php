@@ -31,7 +31,7 @@ class StudyDegreeRequest extends FormRequest
             'study.*.std_sec' => 'nullable|integer|exists:tbsection,sec_id',
             'study.*.std_title' => 'nullable|string|max:255',
             'study.*.std_subtitle' => 'nullable|string',
-            'study.*.std_type' => 'nullable|integer|in:1,2',
+            'study.*.std_type' => 'nullable|integer',
         ];
     }
 }
