@@ -22,16 +22,21 @@ class SubapdRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'sapd_title' => 'nullable|string|max:50',
-            'sapd_img' => 'nullable|integer|exists:tbimage,image_id',
-            'sapd_routepage' => 'nullable|string',
-            'sapd_order' => 'nullable|integer',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'sapd_apd' => 'nullable|array',
-            'sapd_apd.apd_title' => 'nullable|string|max:100',
-            'sapd_apd.apd_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'apd_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'apd_title' => 'nullable|string',
+
+            'subapd' => 'nullable|array',
+            'subapd.*.sapd_apd' => 'nullable|integer|exists:tbapd,apd_id',
+            'subapd.*.sapd_title' => 'nullable|string|max:255',
+            'subapd.*.sapd_img' => 'nullable|integer|exists:tbimage,image_id',
+            'subapd.*.sapd_routepage' => 'nullable|string',
+            'subapd.*.display' => 'nullable|integer',
+            'subapd.*.active' => 'nullable|boolean',
+            'subapd.*.sapd_order' => 'nullable|integer',
         ];
     }
 }

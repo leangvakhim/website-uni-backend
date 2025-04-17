@@ -7,6 +7,8 @@ use App\Http\Requests\SubapdRequest;
 use App\Models\Subapd;
 use App\Services\SubapdService;
 use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class SubapdController extends Controller
 {
@@ -20,7 +22,10 @@ class SubapdController extends Controller
     public function index()
     {
         try {
-            $data = Subapd::with(['apd', 'image'])->where('active', 1)->get();
+            $data = Subapd::with(['apd', 'image'])
+            ->where('active', 1)
+            ->orderBy('sapd_order', 'asc')
+            ->get();
             return $this->sendResponse($data);
         } catch (Exception $e) {
             return $this->sendError('Failed to fetch', 500, ['error' => $e->getMessage()]);
@@ -40,15 +45,28 @@ class SubapdController extends Controller
     public function create(SubapdRequest $request)
     {
         try {
-            $data = $request->validated();
-            if (!isset($data['sapd_order'])) {
-                $data['sapd_order'] = Subapd::max('sapd_order') + 1;
+            $validated = $request->validated();
+            $createdSubApd = [];
+
+            if (isset($validated['subapd']) && is_array($validated['subapd'])) {
+                foreach ($validated['subapd'] as $item) {
+
+                    $item['sapd_order'] = (Subapd::where('sapd_apd', $item['sapd_apd'])->max('sapd_order') ?? 0) + 1;
+
+                    $item['sapd_apd'] = $item['sapd_apd'] ?? null;
+                    $item['sapd_title'] = $item['sapd_title'] ?? null;
+                    $item['sapd_img'] = $item['sapd_img'] ?? null;
+                    $item['sapd_routepage'] = $item['sapd_routepage'] ?? null;
+                    $item['display'] = $item['display'] ?? 1;
+                    $item['active'] = $item['active'] ?? 1;
+
+                    $createdSubApd[] = Subapd::create($item);
+                }
             }
 
-            $created = $this->subapdService->create($data);
-            return $this->sendResponse($created, 201, 'Created');
+            return $this->sendResponse($createdSubApd, 201, 'Subapd records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create Subapd', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -56,12 +74,25 @@ class SubapdController extends Controller
     {
         try {
             $subapd = Subapd::find($id);
-            if (!$subapd) return $this->sendError('Not found', 404);
+            if (!$subapd) {
+                return $this->sendError('Subapd not found', 404);
+            }
 
-            $updated = $this->subapdService->update($subapd, $request->validated());
-            return $this->sendResponse($updated, 200, 'Updated');
+            $request->merge($request->input('subapd'));
+
+            $validated = $request->validate([
+                'sapd_title' => 'required|string',
+                'sapd_img' => 'nullable|integer',
+                'sapd_routepage' => 'nullable|string',
+                'sapd_apd' => 'nullable|integer',
+                'display' => 'nullable|integer',
+            ]);
+
+            $subapd->update($validated);
+
+            return $this->sendResponse($subapd, 200, 'subapd updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update subapd', 500, ['error' => $e->getMessage()]);
         }
     }
 
