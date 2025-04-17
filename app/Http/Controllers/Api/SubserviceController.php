@@ -151,7 +151,7 @@ class SubserviceController extends Controller
 
             return $this->sendResponse($createdSubservices, 201, 'Subservice created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create slideshow', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create Subservice', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -175,6 +175,7 @@ class SubserviceController extends Controller
                 'ss_title' => 'nullable|string',
                 'ss_subtitle' => 'nullable|string',
                 'ss_img' => 'nullable|integer',
+                'display' => 'nullable|integer',
             ]);
 
             $subservice->update($validated);
