@@ -63,6 +63,13 @@ use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\AcademicController;
 use App\Http\Controllers\Api\GalleryController;
+use App\Http\Controllers\Api\AnnouncementController;
+use App\Http\Controllers\Api\StudentController;
+use App\Http\Controllers\Api\SubjectController;
+use App\Http\Controllers\Api\StudentscoreController;
+use App\Http\Controllers\Api\Setting2Controller;
+use App\Http\Controllers\Api\SettingsocialController;
+
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -285,6 +292,8 @@ Route::prefix('rsdltag')->group(function () {
     Route::get('/{id}', [RsdltagController::class, 'show']);
     Route::post('/create', [RsdltagController::class, 'create']);
     Route::post('/update/{id}', [RsdltagController::class, 'update']);
+    Route::put('/reorder',[RsdltagController::class, 'reorder']);
+
 });
 
 Route::prefix('ashead')->group(function () {
@@ -574,3 +583,57 @@ Route::prefix('gallery')->controller(GalleryController::class)->group(function (
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
 });
+
+Route::prefix('announcement')->controller(AnnouncementController::class)->group(function () {
+    Route::get('/', 'index');                       
+    Route::get('/{id}', 'show');                     
+    Route::post('/create', 'create');                
+    Route::post('/update/{id}', 'update');           
+    Route::put('/visibility/{id}', 'visibility');  
+    Route::post('/duplicate/{id}', 'duplicate');     
+    Route::post('/reorder', 'reorder');          
+});
+
+Route::prefix('student')->controller(StudentController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+});
+
+Route::prefix('subject')->controller(SubjectController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+});
+
+Route::prefix('studentscore')->controller(StudentscoreController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+});
+
+Route::prefix('setting2')->group(function () {
+    Route::get('/', [Setting2Controller::class, 'index']);
+    Route::get('/{id}', [Setting2Controller::class, 'show']);
+    Route::post('/create', [Setting2Controller::class, 'create']);
+    Route::post('/update/{id}', [Setting2Controller::class, 'update']);
+    Route::post('/visibility/{id}', [Setting2Controller::class, 'visibility']);
+    Route::post('/duplicate/{id}', [Setting2Controller::class, 'duplicate']);
+});
+
+Route::prefix('settingsocial')->group(function () {
+    Route::get('/', [SettingsocialController::class, 'index']);
+    Route::get('/{id}', [SettingsocialController::class, 'show']);
+    Route::post('/create', [SettingsocialController::class, 'create']);
+    Route::post('/update/{id}', [SettingsocialController::class, 'update']);
+    Route::put('/visibility/{id}', [SettingsocialController::class, 'visibility']);
+    Route::post('/duplicate/{id}', [SettingsocialController::class, 'duplicate']);
+    Route::post('/reorder', [SettingsocialController::class, 'reorder']);
+});
+

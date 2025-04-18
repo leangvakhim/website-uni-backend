@@ -67,11 +67,24 @@ class FaqController extends Controller
     {
         try {
             $faq = Faq::find($id);
-            if (!$faq) return $this->sendError('Not found', 404);
-            $updated = $this->service->update($faq, $request->validated());
-            return $this->sendResponse($updated, 200, 'Updated');
+            if (!$faq) {
+                return $this->sendError('Faq not found', 404);
+            }
+
+            $request->merge($request->input('faq'));
+
+            $validated = $request->validate([
+                'faq_title' => 'nullable|string',
+                'faq_subtitle' => 'nullable|string',
+                'faq_sec' => 'nullable|integer',
+    
+            ]);
+
+            $faq->update($validated);
+
+            return $this->sendResponse($faq, 200, 'Faq updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update Faq', 500, ['error' => $e->getMessage()]);
         }
     }
 }

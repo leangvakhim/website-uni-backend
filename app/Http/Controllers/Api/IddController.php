@@ -66,11 +66,23 @@ class IddController extends Controller
     {
         try {
             $idd = Idd::find($id);
-            if (!$idd) return $this->sendError('Not found', 404);
-            $updated = $this->service->update($idd, $request->validated());
-            return $this->sendResponse($updated, 200, 'Updated');
+            if (!$idd) {
+                return $this->sendError('Idd not found', 404);
+            }
+
+            $request->merge($request->input('idd'));
+
+            $validated = $request->validate([
+                'idd_title' => 'nullable|string',
+                'idd_subtitle' => 'nullable|string',
+                'idd_sec' => 'nullable|integer',
+            ]);
+
+            $idd->update($validated);
+
+            return $this->sendResponse($idd, 200, 'idd updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update idd', 500, ['error' => $e->getMessage()]);
         }
     }
 }
