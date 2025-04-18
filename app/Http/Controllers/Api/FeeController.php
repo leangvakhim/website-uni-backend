@@ -66,12 +66,26 @@ class FeeController extends Controller
     public function update(FeeRequest $request, $id)
     {
         try {
-            $model = Fee::find($id);
-            if (!$model) return $this->sendError('Not found', 404);
-            $updated = $this->service->update($model, $request->validated());
-            return $this->sendResponse($updated, 200, 'Updated');
+            $fee = Fee::find($id);
+            if (!$fee) {
+                return $this->sendError('Fee not found', 404);
+            }
+
+            $request->merge($request->input('fee'));
+
+            $validated = $request->validate([
+                'fe_title' => 'required|string',
+                'fe_desc' => 'nullable|string',
+                'fe_img' => 'nullable|integer',
+                'fe_price' => 'nullable|string',
+                'fe_sec' => 'nullable|integer',
+            ]);
+
+            $fee->update($validated);
+
+            return $this->sendResponse($fee, 200, 'fee updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update fee', 500, ['error' => $e->getMessage()]);
         }
     }
 }
