@@ -612,5 +612,5 @@ Route::prefix('studentscore')->controller(StudentscoreController::class)->group(
     Route::get('/{id}', 'show');
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
-    Route::post('/visibility/{id}', 'visibility');
+    Route::put('/visibility/{id}', 'visibility');
 });
