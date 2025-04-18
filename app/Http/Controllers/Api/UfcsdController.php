@@ -65,12 +65,25 @@ class UfcsdController extends Controller
     public function update(UfcsdRequest $request, $id)
     {
         try {
-            $model = Ufcsd::find($id);
-            if (!$model) return $this->sendError('Not found', 404);
-            $updated = $this->service->update($model, $request->validated());
-            return $this->sendResponse($updated, 200, 'Updated');
+            $ufcsd = Ufcsd::find($id);
+            if (!$ufcsd) {
+                return $this->sendError('Ufcsd not found', 404);
+            }
+
+            $request->merge($request->input('ufcsd'));
+
+            $validated = $request->validate([
+                'uf_sec' => 'nullable|integer|exists:tbsection,sec_id',
+                'uf_title' => 'nullable|string|max:255',
+                'uf_subtitle' => 'nullable|string',
+                'uf_img' => 'nullable|integer|exists:tbimage,image_id', 
+            ]);
+
+            $ufcsd->update($validated);
+
+            return $this->sendResponse($ufcsd, 200, 'ufcsd updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update ufcsd', 500, ['error' => $e->getMessage()]);
         }
     }
 }
