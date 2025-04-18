@@ -22,16 +22,21 @@ class FaqaddonRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fa_question' => 'nullable|string',
-            'fa_answer' => 'nullable|string',
-            'fa_order' => 'nullable|integer',
-            'display' => 'boolean',
-            'active' => 'boolean',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'fa_faq' => 'nullable|array',
-            'fa_faq.faq_title' => 'nullable|string',
-            'fa_faq.faq_subtitle' => 'nullable|string',
-            'fa_faq.faq_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'faq_title' => 'nullable|string',
+            'faq_subtitle' => 'nullable|string',
+            'faq_sec' => 'nullable|integer|exists:tbsection,sec_id',
+
+            'faqaddon' => 'nullable|array',
+            'faqaddon.*.fa_faq' => 'nullable|integer|exists:tbfaq,faq_id',
+            'faqaddon.*.fa_question' => 'nullable|string',
+            'faqaddon.*.fa_answer' => 'nullable|string',
+            'faqaddon.*.display' => 'nullable|boolean',
+            'faqaddon.*.active' => 'nullable|boolean',
+            'faqaddon.*.fa_order' => 'nullable|integer',
         ];
     }
 }
