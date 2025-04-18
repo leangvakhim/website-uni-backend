@@ -70,11 +70,26 @@ class IntroController extends Controller
     {
         try {
             $intro = Intro::find($id);
-            if (!$intro) return $this->sendError('Not found', 404);
-            $updated = $this->service->update($intro, $request->validated());
-            return $this->sendResponse($updated, 200, 'Updated');
+            if (!$intro) {
+                return $this->sendError('Intro not found', 404);
+            }
+
+            $request->merge($request->input('introduction'));
+
+            $validated = $request->validate([
+                'in_sec' => 'nullable|integer|exists:tbsection,sec_id',
+                'in_title' => 'nullable|string|max:255',
+                'in_detail' => 'nullable|string',
+                'in_img' => 'nullable|integer|exists:tbimage,image_id',
+                'inadd_title' => 'nullable|string|max:50',
+                'in_addsubtitle' => 'nullable|string|max:50',
+            ]);
+
+            $intro->update($validated);
+
+            return $this->sendResponse($intro, 200, 'Intro updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update Intro', 500, ['error' => $e->getMessage()]);
         }
     }
 }
