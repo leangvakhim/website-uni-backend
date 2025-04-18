@@ -21,10 +21,10 @@ class Intro extends Model
     ];
     public function section()
     {
-        return $this->belongsTo(Section::class, 'intro_sec', 'sec_id');
+        return $this->belongsTo(Section::class, 'in_sec', 'sec_id');
     }
     public function image()
     {
-        return $this->belongsTo(Image::class, 'intro_img', 'image_id');
+        return $this->belongsTo(Image::class, 'in_img', 'image_id');
     }
 }
