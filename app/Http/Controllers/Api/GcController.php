@@ -76,9 +76,9 @@ class GcController extends Controller
             $request->merge($request->input('criteria'));
 
             $validated = $request->validate([
-                'gc_title' => 'required|string',
-                'gc_tag' => 'required|string',
-                'gc_type' => 'required|integer',
+                'gc_title' => 'nullable|string',
+                'gc_tag' => 'nullable|string',
+                'gc_type' => 'nullable|integer',
                 'gc_detail' => 'nullable|string',
                 'gc_img1' => 'nullable|integer',
                 'gc_img2' => 'nullable|integer',
