@@ -68,28 +68,28 @@ class GcController extends Controller
     public function update(GcRequest $request, $id)
     {
         try {
-            $criteria = Gc::find($id);
-            if (!$criteria) {
-                return $this->sendError('Criteria not found', 404);
+            $gc = Gc::find($id);
+            if (!$gc) {
+                return $this->sendError('Gc not found', 404);
             }
 
-            $request->merge($request->input('criteria'));
+            $request->merge($request->input('gc'));
 
             $validated = $request->validate([
-                'gc_title' => 'required|string',
-                'gc_tag' => 'required|string',
-                'gc_type' => 'required|integer',
+                'gc_sec' => 'nullable|integer|exists:tbsection,sec_id',
+                'gc_title' => 'nullable|string|max:255',
+                'gc_tag' => 'nullable|string|max:255',
+                'gc_type' => 'nullable|integer',
                 'gc_detail' => 'nullable|string',
-                'gc_img1' => 'nullable|integer',
-                'gc_img2' => 'nullable|integer',
-                'gc_sec' => 'nullable|integer',
+                'gc_img1' => 'nullable|integer|exists:tbimage,image_id',
+                'gc_img2' => 'nullable|integer|exists:tbimage,image_id',
             ]);
 
-            $criteria->update($validated);
+            $gc->update($validated);
 
-            return $this->sendResponse($criteria, 200, 'criteria updated successfully');
+            return $this->sendResponse($gc, 200, 'Gc updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update criteria', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update Gc', 500, ['error' => $e->getMessage()]);
         }
     }
 }
