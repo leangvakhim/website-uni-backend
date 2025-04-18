@@ -67,16 +67,16 @@ class UfcsdController extends Controller
         try {
             $ufcsd = Ufcsd::find($id);
             if (!$ufcsd) {
-                return $this->sendError('Ufcsd not found', 404);
+                return $this->sendError('ufcsd not found', 404);
             }
 
-            $request->merge($request->input('ufcsd'));
+            $request->merge($request->input('future'));
 
             $validated = $request->validate([
-                'uf_sec' => 'nullable|integer|exists:tbsection,sec_id',
-                'uf_title' => 'nullable|string|max:255',
+                'uf_title' => 'required|string',
                 'uf_subtitle' => 'nullable|string',
-                'uf_img' => 'nullable|integer|exists:tbimage,image_id', 
+                'uf_img' => 'nullable|integer',
+                'uf_sec' => 'nullable|integer',
             ]);
 
             $ufcsd->update($validated);
