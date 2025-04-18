@@ -70,11 +70,26 @@ class HaController extends Controller
     {
         try {
             $ha = Ha::find($id);
-            if (!$ha) return $this->sendError('Not found', 404);
-            $updated = $this->service->update($ha, $request->validated());
-            return $this->sendResponse($updated, 200, 'Updated');
+            if (!$ha) {
+                return $this->sendError('Ha not found', 404);
+            }
+
+            $request->merge($request->input('ha'));
+
+            $validated = $request->validate([
+                'ha_sec' => 'nullable|integer|exists:tbsection,sec_id',
+                'ha_title' => 'nullable|string|max:255',
+                'ha_img' => 'nullable|integer|exists:tbimage,image_id',
+                'ha_tagtitle' => 'nullable|string|max:255',
+                'ha_subtitletag' => 'nullable|string|max:255',
+                'ha_date' => 'nullable|date',
+            ]);
+
+            $ha->update($validated);
+
+            return $this->sendResponse($ha, 200, 'Ha updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Update failed', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update ha', 500, ['error' => $e->getMessage()]);
         }
     }
 }
