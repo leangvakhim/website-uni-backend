@@ -76,9 +76,8 @@ class GcController extends Controller
             $request->merge($request->input('gc'));
 
             $validated = $request->validate([
-                'gc_sec' => 'nullable|integer|exists:tbsection,sec_id',
-                'gc_title' => 'nullable|string|max:255',
-                'gc_tag' => 'nullable|string|max:255',
+                'gc_title' => 'nullable|string',
+                'gc_tag' => 'nullable|string',
                 'gc_type' => 'nullable|integer',
                 'gc_detail' => 'nullable|string',
                 'gc_img1' => 'nullable|integer|exists:tbimage,image_id',
