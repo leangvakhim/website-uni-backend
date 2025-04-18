@@ -68,6 +68,7 @@ use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\StudentscoreController;
 use App\Http\Controllers\Api\Setting2Controller;
+use App\Http\Controllers\Api\SettingsocialController;
 
 
 Route::prefix('text')->group(function () {
@@ -625,3 +626,14 @@ Route::prefix('setting2')->group(function () {
     Route::post('/visibility/{id}', [Setting2Controller::class, 'visibility']);
     Route::post('/duplicate/{id}', [Setting2Controller::class, 'duplicate']);
 });
+
+Route::prefix('settingsocial')->group(function () {
+    Route::get('/', [SettingsocialController::class, 'index']);
+    Route::get('/{id}', [SettingsocialController::class, 'show']);
+    Route::post('/create', [SettingsocialController::class, 'create']);
+    Route::post('/update/{id}', [SettingsocialController::class, 'update']);
+    Route::put('/visibility/{id}', [SettingsocialController::class, 'visibility']);
+    Route::post('/duplicate/{id}', [SettingsocialController::class, 'duplicate']);
+    Route::post('/reorder', [SettingsocialController::class, 'reorder']);
+});
+
