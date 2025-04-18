@@ -22,17 +22,22 @@ class UfaddonRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ufa_title' => 'nullable|string|max:50',
-            'ufa_subtitle' => 'nullable|string',
-            'ufa_order' => 'nullable|integer',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'ufa_uf' => 'nullable|array',
-            'ufa_uf.uf_title' => 'nullable|string|max:255',
-            'ufa_uf.uf_subtitle' => 'nullable|string',
-            'ufa_uf.uf_img' => 'nullable|integer|exists:tbimage,image_id',
-            'ufa_uf.uf_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'uf_title' => 'nullable|string',
+            'uf_subtitle' => 'nullable|string',
+            'uf_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'uf_img' => 'nullable|integer|exists:tbimage,image_id',
+
+            'ufaddon' => 'nullable|array',
+            'ufaddon.*.ufa_uf' => 'nullable|integer|exists:tbufcsd,uf_id',
+            'ufaddon.*.ufa_title' => 'nullable|string|max:255',
+            'ufaddon.*.ufa_subtitle' => 'nullable|string',
+            'ufaddon.*.display' => 'nullable|boolean',
+            'ufaddon.*.active' => 'nullable|boolean',
+            'ufaddon.*.ufa_order' => 'nullable|integer',
         ];
     }
 }
