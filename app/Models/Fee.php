@@ -13,7 +13,7 @@ class Fee extends Model
     protected $fillable = [
         'fe_sec',
         'fe_title',
-        'fe_detail',
+        'fe_desc',
         'fe_img',
         'fe_price',
 
