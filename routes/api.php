@@ -67,6 +67,8 @@ use App\Http\Controllers\Api\AnnouncementController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\StudentscoreController;
+use App\Http\Controllers\Api\Setting2Controller;
+
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -613,4 +615,13 @@ Route::prefix('studentscore')->controller(StudentscoreController::class)->group(
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
     Route::put('/visibility/{id}', 'visibility');
+});
+
+Route::prefix('setting2')->group(function () {
+    Route::get('/', [Setting2Controller::class, 'index']);
+    Route::get('/{id}', [Setting2Controller::class, 'show']);
+    Route::post('/create', [Setting2Controller::class, 'create']);
+    Route::post('/update/{id}', [Setting2Controller::class, 'update']);
+    Route::post('/visibility/{id}', [Setting2Controller::class, 'visibility']);
+    Route::post('/duplicate/{id}', [Setting2Controller::class, 'duplicate']);
 });
