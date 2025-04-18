@@ -27,10 +27,10 @@ class UfcsdRequest extends FormRequest
             'sec_order' => 'nullable|integer',
 
             'future' => 'nullable|array',
-            'futre.*.uf_sec' => 'nullable|integer|exists:tbsection,sec_id',
-            'futre.*.uf_title' => 'nullable|string|max:255',
-            'futre.*.uf_subtitle' => 'nullable|string',
-            'futre.*.uf_img' => 'nullable|integer|exists:tbimage,image_id',
+            'future.*.uf_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'future.*.uf_title' => 'nullable|string|max:255',
+            'future.*.uf_subtitle' => 'nullable|string',
+            'future.*.uf_img' => 'nullable|integer|exists:tbimage,image_id',
         ];
     }
 }
