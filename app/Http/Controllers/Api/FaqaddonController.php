@@ -6,8 +6,10 @@ use App\Http\Controllers\Api\Controller;
 use App\Models\Faqaddon;
 use App\Services\FaqaddonService;
 use App\Http\Requests\FaqaddonRequest;
+use App\Models\Faq;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class FaqaddonController extends Controller
 {
@@ -21,7 +23,10 @@ class FaqaddonController extends Controller
     public function index()
     {
         try {
-            $data = Faqaddon::with('faq')->where('active', 1)->get();
+            $data = Faqaddon::with('faq')
+                ->where('active', 1)
+                ->orderBy('fa_order', 'asc')
+                ->get();
             return $this->sendResponse($data->count() === 1 ? $data->first() : $data);
         } catch (Exception $e) {
             return $this->sendError('Failed to fetch FAQ Addons', 500, ['error' => $e->getMessage()]);
@@ -41,30 +46,64 @@ class FaqaddonController extends Controller
     public function create(FaqaddonRequest $request)
     {
         try {
-            $data = $request->validated();
+            $validated = $request->validated();
+            $faqaddons = $validated['faqaddon'] ?? [];
 
-            if (!isset($data['fa_order'])) {
-                $data['fa_order'] = Faqaddon::max('fa_order') + 1;
+            if (empty($faqaddons)) {
+                return $this->sendError('No faqs Data Provided', 422);
             }
 
-            $created = app(FaqaddonService::class)->create($data);
-            return $this->sendResponse($created, 201, 'FAQ Addon created');
+            $createdfaqaddons = [];
+
+            foreach ($faqaddons as $item) {
+                if (!isset($item['fa_faq'])) {
+                    return $this->sendError('faq ID is required', 422);
+                }
+
+                $item['fa_order'] = (Faqaddon::where('fa_faq', $item['fa_faq'])->max('fa_order') ?? 0) + 1;
+
+                $item['fa_question'] = $item['fa_question'] ?? null;
+                $item['fa_answer'] = $item['fa_answer'] ?? null;
+                $item['display'] = $item['display'] ?? 1;
+                $item['active'] = $item['active'] ?? 1;
+
+                $faqaddons = Faqaddon::create($item);
+                $createdfaqaddons[] = $faqaddons;
+            }
+
+            return $this->sendResponse($createdfaqaddons, 201, 'Faqaddon created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create FAQ Addon', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create Faqaddon', 500, ['error' => $e->getMessage()]);
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(FaqaddonRequest $request, $id)
     {
         try {
-            $addon = Faqaddon::find($id);
-            if (!$addon) return $this->sendError('FAQ Addon not found', 404);
 
-            $updated = $this->faqaddonService->update($addon, $request->all());
-            $updated->load('faq');
-            return $this->sendResponse($updated, 200, 'FAQ Addon updated successfully');
+            $faqaddon = Faqaddon::find($id);
+            if (!$faqaddon) {
+                return $this->sendError('faq not found', 404);
+            }
+
+            $faqaddonData = $request->input('faqaddon');
+            if (!$faqaddonData || !is_array($faqaddonData)) {
+                return $this->sendError('Invalid faqaddon data provided', 422);
+            }
+            $request->merge($faqaddonData);
+
+            $validated = $request->validate([
+                'fa_question' => 'nullable|string',
+                'fa_answer' => 'nullable|string',
+                'fa_faq' => 'nullable|integer',
+                'display' => 'nullable|integer',
+            ]);
+
+            $faqaddon->update($validated);
+
+            return $this->sendResponse($faqaddon, 200, 'faqaddon updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update FAQ Addon', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update faqaddon', 500, ['error' => $e->getMessage()]);
         }
     }
 
