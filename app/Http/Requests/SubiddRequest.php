@@ -22,20 +22,23 @@ class SubiddRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'sidd_title' => 'nullable|string|max:255',
-            'sidd_subtitle' => 'nullable|string|max:255',
-            'sidd_tag' => 'nullable|string|max:255',
-            'sidd_date' => 'nullable|date',
-            'sidd_order' => 'nullable|integer',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
+            'idd_title' => 'nullable|string|max:255',
+            'idd_subtitle' => 'nullable|string|max:255',
+            'idd_sec' => 'nullable|integer|exists:tbsection,sec_id',
 
-            'sidd_idd' => 'nullable|array',
-            'sidd_idd.idd_title' => 'nullable|string|max:255',
-            'sidd_idd.idd_subtitle' => 'nullable|string|max:255',
-            'sidd_idd.idd_sec' => 'nullable|integer|exists:tbsection,sec_id',
-
+            'subimportant' => 'nullable|array',
+            'subimportant.*.sidd_idd' => 'nullable|integer|exists:tbidd,idd_id',
+            'subimportant.*.sidd_title' => 'nullable|string|max:255',
+            'subimportant.*.sidd_subtitle' => 'nullable|string|max:255',
+            'subimportant.*.sidd_tag' => 'nullable|string|max:255',
+            'subimportant.*.sidd_date' => 'nullable|date',
+            'subimportant.*.sidd_order' => 'nullable|integer',
+            'subimportant.*.display' => 'nullable|boolean',
+            'subimportant.*.active' => 'nullable|boolean',
         ];
     }
 }

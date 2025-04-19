@@ -70,7 +70,7 @@ class IddController extends Controller
                 return $this->sendError('Idd not found', 404);
             }
 
-            $request->merge($request->input('idd'));
+            $request->merge($request->input('important'));
 
             $validated = $request->validate([
                 'idd_title' => 'nullable|string',
