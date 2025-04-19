@@ -74,14 +74,14 @@ class HaController extends Controller
                 return $this->sendError('Ha not found', 404);
             }
 
-            $request->merge($request->input('ha'));
+            $request->merge($request->input('apply'));
 
             $validated = $request->validate([
-                'ha_sec' => 'nullable|integer|exists:tbsection,sec_id',
-                'ha_title' => 'nullable|string|max:255',
-                'ha_img' => 'nullable|integer|exists:tbimage,image_id',
-                'ha_tagtitle' => 'nullable|string|max:255',
-                'ha_subtitletag' => 'nullable|string|max:255',
+                'ha_sec' => 'nullable|integer',
+                'ha_title' => 'nullable|string',
+                'ha_img' => 'nullable|integer',
+                'ha_tagtitle' => 'nullable|string',
+                'ha_subtitletag' => 'nullable|string',
                 'ha_date' => 'nullable|date',
             ]);
 
