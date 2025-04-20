@@ -69,7 +69,8 @@ use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\StudentscoreController;
 use App\Http\Controllers\Api\Setting2Controller;
 use App\Http\Controllers\Api\SettingsocialController;
-
+use App\Http\Controllers\Api\DeveloperController;
+use App\Http\Controllers\Api\DevelopersocialController;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -637,3 +638,20 @@ Route::prefix('settingsocial')->group(function () {
     Route::post('/reorder', [SettingsocialController::class, 'reorder']);
 });
 
+Route::prefix('developer')->group(function () {
+    Route::get('/', [DeveloperController::class, 'index']);
+    Route::get('/{id}', [DeveloperController::class, 'show']);
+    Route::post('/create', [DeveloperController::class, 'create']);
+    Route::post('/update/{id}', [DeveloperController::class, 'update']);
+    Route::put('/visibility/{id}', [DeveloperController::class, 'visibility']);
+    Route::post('/reorder', [DeveloperController::class, 'reorder']);
+});
+
+Route::prefix('developersocial')->group(function () {
+    Route::get('/', [DevelopersocialController::class, 'index']);
+    Route::get('/{id}', [DevelopersocialController::class, 'show']);
+    Route::post('/create', [DevelopersocialController::class, 'create']);
+    Route::post('/update/{id}', [DevelopersocialController::class, 'update']);
+    Route::put('/visibility/{id}', [DevelopersocialController::class, 'visibility']);
+    Route::post('/reorder', [DevelopersocialController::class, 'reorder']);
+});
