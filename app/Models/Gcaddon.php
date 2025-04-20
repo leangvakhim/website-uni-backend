@@ -16,7 +16,7 @@ class Gcaddon extends Model
         'gca_tag',
         'gca_btntitle',
         'gca_btnlink',
-       
+
     ];
 
     public function gc()
