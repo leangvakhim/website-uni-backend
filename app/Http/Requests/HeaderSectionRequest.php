@@ -22,17 +22,18 @@ class HeaderSectionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'hsec_sec' => 'nullable|array',
-            'hsec_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'hsec_sec.sec_order' => 'nullable|integer',
-            'hsec_sec.lang' => 'nullable|in:1,2',
-            'hsec_sec.display' => 'nullable|boolean',
-            'hsec_sec.active' => 'nullable|boolean',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'hsec_title' => 'nullable|string|max:50',
-            'hsec_subtitle' => 'nullable|string|max:255',
-            'hsec_btntitle' => 'nullable|string|max:15',
-            'hsec_routepage' => 'nullable|string',
+
+            'headersection' => 'nullable|array',
+            'headersection.*.hsec_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'headersection.*.hsec_title' => 'nullable|string',
+            'headersection.*.hsec_subtitle' => 'nullable|string',
+            'headersection.*.hsec_btntitle' => 'nullable|string',
+            'headersection.*.hsec_routepage' => 'nullable|string',
+            'headersection.*.hsec_amount' => 'nullable|integer',
         ];
     }
 }
