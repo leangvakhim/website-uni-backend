@@ -122,4 +122,23 @@ class DeveloperController extends Controller
             return $this->sendError('Failed to reorder developer', 500, ['error' => $e->getMessage()]);
         }
     }
+
+    public function duplicate($id)
+    {
+        try {
+            $developer = Developer::find($id);
+            if (!$developer) return $this->sendError('Developer not found', 404);
+
+            $newDeveloper = $developer->replicate();
+            $newDeveloper->d_name = $developer->d_name . ' (Copy)';
+            $newDeveloper->d_order = Developer::max('d_order') + 1;
+            $newDeveloper->save();
+
+            return response()->json(['message' => 'Developer duplicated', 'data' => $newDeveloper], 200);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to duplicate developer', 500, ['error' => $e->getMessage()]);
+        }
+    }
+
+
 }

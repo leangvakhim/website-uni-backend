@@ -645,6 +645,7 @@ Route::prefix('developer')->group(function () {
     Route::post('/update/{id}', [DeveloperController::class, 'update']);
     Route::put('/visibility/{id}', [DeveloperController::class, 'visibility']);
     Route::post('/reorder', [DeveloperController::class, 'reorder']);
+    Route::post('/duplicate/{id}', [DeveloperController::class, 'duplicate']);
 });
 
 Route::prefix('developersocial')->group(function () {
