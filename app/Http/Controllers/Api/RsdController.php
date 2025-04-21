@@ -7,6 +7,7 @@ use App\Http\Requests\RsdRequest;
 use App\Models\Rsd;
 use App\Services\RsdService;
 use Exception;
+use Illuminate\Http\Request;
 
 class RsdController extends Controller
 {
@@ -37,18 +38,17 @@ class RsdController extends Controller
         }
     }
 
+
     public function create(RsdRequest $request)
     {
         try {
             $data = $request->validated();
-    
             if (!isset($data['rsd_order'])) {
                 $data['rsd_order'] = Rsd::max('rsd_order') + 1;
             }
     
-            $fc = app(RsdService::class)->create($data);
-    
-            return $this->sendResponse($fc, 201, 'Rsd created');
+            $rsd = Rsd::create($data);
+            return $this->sendResponse($rsd, 201, 'Rsd created');
         } catch (Exception $e) {
             return $this->sendError('Failed to create Rsd', 500, ['error' => $e->getMessage()]);
         }
