@@ -585,7 +585,7 @@ Route::prefix('gallery')->controller(GalleryController::class)->group(function (
     Route::post('/update/{id}', 'update');
 });
 
-Route::prefix('announcement')->controller(AnnouncementController::class)->group(function () {
+Route::prefix('announcements')->controller(AnnouncementController::class)->group(function () {
     Route::get('/', 'index');                       
     Route::get('/{id}', 'show');                     
     Route::post('/create', 'create');                
