@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class HeaderSectionRequest extends FormRequest
+class DeveloperRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,14 +26,15 @@ class HeaderSectionRequest extends FormRequest
             'sec_page' => 'nullable|integer|exists:tbpage,p_id',
             'sec_order' => 'nullable|integer',
 
-
-            'headersection' => 'nullable|array',
-            'headersection.*.hsec_sec' => 'nullable|integer|exists:tbsection,sec_id',
-            'headersection.*.hsec_title' => 'nullable|string',
-            'headersection.*.hsec_subtitle' => 'nullable|string',
-            'headersection.*.hsec_btntitle' => 'nullable|string',
-            'headersection.*.hsec_routepage' => 'nullable|string',
-            'headersection.*.hsec_amount' => 'nullable|integer',
+            'developer' => 'nullable|array',
+            'developer.*.d_name' => 'nullable|string|max:50',
+            'developer.*.d_position' => 'nullable|string|max:50',
+            'developer.*.d_write' => 'nullable|string',
+            'developer.*.d_img' => 'nullable|integer|exists:tbimage,image_id',
+            'developer.*.lang' => 'nullable|in:1,2',
+            'developer.*.d_order' => 'nullable|integer',
+            'developer.*.display' => 'required|boolean',
+            'developer.*.active' => 'required|boolean',
         ];
     }
 }

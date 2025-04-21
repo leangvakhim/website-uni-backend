@@ -37,30 +37,6 @@ class GcaddonController extends Controller
         }
     }
 
-    // public function create(GcaddonRequest $request)
-    // {
-    //     try {
-    //         $data = $request->validated();
-    //         $gcaddon = $this->gcaddonService->create($data);
-    //         return $this->sendResponse($gcaddon, 201, 'Gcaddon created');
-    //     } catch (Exception $e) {
-    //         return $this->sendError('Failed to create gcaddon', 500, ['error' => $e->getMessage()]);
-    //     }
-    // }
-
-    // public function update(GcaddonRequest $request, $id)
-    // {
-    //     try {
-    //         $addon = Gcaddon::find($id);
-    //         if (!$addon) return $this->sendError('Gcaddon not found', 404);
-
-    //         $updated = $this->gcaddonService->update($addon, $request->validated());
-    //         return $this->sendResponse($updated, 200, 'Gcaddon updated successfully');
-    //     } catch (Exception $e) {
-    //         return $this->sendError('Failed to update gcaddon', 500, ['error' => $e->getMessage()]);
-    //     }
-    // }
-
     public function create(GcaddonRequest $request)
     {
         try {

@@ -10,7 +10,7 @@ class HeaderSection extends Model
     use HasFactory;
     protected $table = 'tbheadersection';
     protected $primaryKey = 'hsec_id';
-    protected $fillable = ['hsec_sec', 'hsec_title', 'hsec_subtitle', 'hsec_btntitle', 'hsec_routepage'];
+    protected $fillable = ['hsec_sec', 'hsec_title', 'hsec_subtitle', 'hsec_btntitle', 'hsec_routepage', 'hsec_amount'];
 
     public function section()
     {

@@ -22,17 +22,23 @@ class SubhaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'sha_ha' => 'nullable|array',
-            'sha_ha.ha_title' => 'nullable|string|max:255',
-            'sha_ha.ha_img' => 'nullable|integer|exists:tbimage,image_id',
-            'sha_ha.ha_tagtitle' => 'nullable|string|max:255',
-            'sha_ha.ha_subtitletag' => 'nullable|string|max:255',
-            'sha_ha.ha_date' => 'nullable|date',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'sha_title' => 'nullable|string',
-            'sha_order' => 'nullable|integer',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
+            'ha_sec' => 'nullable|integer|exists:tbsection,sec_id',
+            'ha_title' => 'nullable|string|max:255',
+            'ha_img' => 'nullable|integer|exists:tbimage,image_id',
+            'ha_tagtitle' => 'nullable|string|max:255',
+            'ha_subtitletag' => 'nullable|string|max:255',
+            'ha_date' => 'nullable|date',
+
+            'subapply' => 'nullable|array',
+            'subapply.*.sha_ha' => 'nullable|integer|exists:tbha,ha_id',
+            'subapply.*.sha_title' => 'nullable|string',
+            'subapply.*.display' => 'nullable|boolean',
+            'subapply.*.active' => 'nullable|boolean',
+            'subapply.*.sha_order' => 'nullable|integer',
         ];
     }
 }
