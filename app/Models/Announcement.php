@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Announcement extends Model
 {
     use HasFactory;
-    protected $table = 'tbannouncements';
+    protected $table = 'tbannouncement';
     protected $primaryKey = 'am_id';
     protected $fillable = [
         'am_title',
