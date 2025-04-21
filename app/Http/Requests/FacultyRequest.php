@@ -31,7 +31,6 @@ class FacultyRequest extends FormRequest
             'display' => 'required|boolean',
             'active' => 'required|boolean',
 
-
         ];
     }
 }
