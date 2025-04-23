@@ -9,6 +9,7 @@ use App\Http\Requests\FacultyBgRequest;
 use App\Models\Faculty;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class FacultyBgController extends Controller
 {
@@ -40,41 +41,33 @@ class FacultyBgController extends Controller
         }
     }
 
-    public function create(FacultyBgRequest $request)
+    public function create(Request $request)
     {
-        try {
-            $data = $request->validated();
-            $createdBgs = [];
-    
-            // Ensure f_id is provided
-            if (!isset($data['f_id'])) {
-                return $this->sendError('Faculty ID is required', 422);
-            }
+        $validated = $request->validate([
+            'facultyBG' => 'nullable|array',
+            'facultyBG.*.fbg_img' => 'nullable|integer|exists:tbimage,image_id',
+            'facultyBG.*.fbg_f' => 'nullable|integer|exists:tbfaculty,f_id',
+            'facultyBG.*.fbg_name' => 'nullable|string|max:255',
+            'facultyBG.*.fbg_order' => 'nullable|integer',
+        ]);
 
-            $faculty = Faculty::find($data['f_id']);
-            if (!$faculty) {
-                return $this->sendError('Faculty not found', 404);
-            }
-            
-            if (isset($data['fbg_f']) && is_array($data['fbg_f'])) {
-                foreach ($data['fbg_f'] as $item) {
-                    $item['fbg_f'] = $faculty->f_id;
-                    
-                    if (!isset($item['fbg_order'])) {
-                        $item['fbg_order'] = (FacultyBg::where('fbg_f', $faculty->f_id)->max('fbg_order') ?? 0) +1;
-                    }
-                   
-                    $item['active'] = $item['active'] ?? 1;
-                    $item['display'] = $item['display'] ?? 1;
-                    
-                    $createdBgs[] = FacultyBg::create($item);
-                }
-            }
-            return $this->sendResponse($createdBgs, 201, 'Faculty Background created successfully');
-            
-        } catch (Exception $e) {
-            return $this->sendError('Failed to create FacultyBg', 500, ['error' => $e->getMessage()]);
+        foreach ($request->input('facultyBG', []) as $item) {
+
+            FacultyBG::create([
+                'fbg_f' => $item['fbg_f'] ?? null,
+                'fbg_order' => $item['fbg_order'] ?? null,
+                'fbg_name' => $item['fbg_name'] ?? null,
+                'fbg_img' => $item['fbg_img'] ?? null,
+                'display' => $item['display'] ?? 0,
+                'active' => $item['active'] ?? 1,
+            ]);
         }
+
+        return response()->json([
+            'status' => 201,
+            'status_code' => 'success',
+            'message' => 'Faculty BG created successfully'
+        ], 201);
     }
 
 
@@ -85,10 +78,14 @@ class FacultyBgController extends Controller
             $info = FacultyBg::find($id);
             if (!$info) return $this->sendError('Faculty Background not found', 404);
 
-            $updated = $this->facultyBgService->update($info, $request->all());
-            $updated->load(['faculty', 'img']);
 
-            return $this->sendResponse($updated, 200, 'Faculty Background updated successfully');
+            try {
+                $updated = $this->facultyBgService->update($info, $request->all());
+                $updated->load(['faculty', 'img']);
+                return $this->sendResponse($updated, 200, 'Faculty Background updated successfully');
+            } catch (Exception $e) {
+                return $this->sendError('Failed to update Faculty BG', 500, ['error' => $e->getMessage()]);
+            }
         } catch (Exception $e) {
             return $this->sendError('Failed to update faculty Background', 500, ['error' => $e->getMessage()]);
         }
@@ -123,7 +120,7 @@ class FacultyBgController extends Controller
             '*.fbg_id' => 'required|integer|exists:tbfaculty_bg,fbg_id', // <-- fix table name
             '*.fbg_order' => 'required|integer'
         ]);
-        
+
 
         foreach ($data as $item) {
             FacultyBg::where('fbg_id', $item['fbg_id'])->update(['fbg_order' => $item['fbg_order']]);
