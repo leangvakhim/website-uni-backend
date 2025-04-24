@@ -158,17 +158,15 @@ class SectionController extends Controller
                     'sec_order' => $section['sec_order'],
                     'sec_type' => $section['sec_type'],
                     'lang' => $section['lang'],
-                    'display' => $section['display'] ?? 0,
                     'active' => $section['active'] ?? 1,
                 ]);
-            } else {
+            } else if (!isset($section['sec_id']) || $section['sec_id'] === null){
                 // Create new section
                 Section::create([
                     'sec_page' => $page_id,
                     'sec_order' => $section['sec_order'],
                     'sec_type' => $section['sec_type'],
                     'lang' => $section['lang'],
-                    'display' => $section['display'] ?? 0,
                     'active' => $section['active'] ?? 1,
                 ]);
             }
