@@ -13,8 +13,10 @@ class RsdMeet extends Model
     protected $fillable = [
         'rsdm_detail',
         'rsdm_img',
+        'rsdm_rsdtitle',
         'rsdm_faculty',
         'active',
+
     ];
     public function img()
     {
@@ -24,5 +26,10 @@ class RsdMeet extends Model
     public function faculty()
     {
         return $this->belongsTo(FacultyContact::class, 'rsdm_faculty', 'fc_id')->select(['fc_id', 'fc_name']);
+    }
+
+    public function title()
+    {
+        return $this->belongsTo(RsdTitle::class, 'rsdm_rsdtitle', 'rsdt_id')->select(['rsdt_id', 'rsdt_name']);
     }
 }
