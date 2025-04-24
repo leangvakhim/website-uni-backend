@@ -14,6 +14,7 @@ class RsdTitle extends Model
 
     protected $fillable = [
         'rsdt_title',
+        'rsdt_text',
         'rsdt_order',
         'display',
         'active',
@@ -29,7 +30,7 @@ class RsdTitle extends Model
 
     public function rsd()
     {
-        return $this->hasMany(Rsd::class, 'rsd_text', 'rsdt_id')->select(['rsd_id', 'rsd_text']);
+        return $this->hasMany(Rsd::class, 'rsdt_text', 'rsdt_id')->select(['rsd_id', 'rsdt_text']);
     }
 
 

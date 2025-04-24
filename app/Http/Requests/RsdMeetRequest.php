@@ -27,6 +27,7 @@ class RsdMeetRequest extends FormRequest
 
             'rsdm_faculty' => 'nullable',
 
+            'rsdm_rsdtile' => 'nullable|integer|exists:tbrsd_title,rsdt_id',
 
             'rsdm_faculty' => 'nullable|integer|exists:tbfaculty_contact,fc_id',
 
