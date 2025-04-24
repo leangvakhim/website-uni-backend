@@ -16,6 +16,7 @@ class Setting2 extends Model
         'set_logo',
         'set_amstu',
         'set_enroll',
+        'set_baseurl',
         'lang'
     ];
 }

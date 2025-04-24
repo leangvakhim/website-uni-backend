@@ -32,6 +32,7 @@ class Setting2Request extends FormRequest
             'about.*.set_logo'         => 'nullable|integer|exists:tbimage,image_id',
             'about.*.set_amstu'        => 'required|numeric',
             'about.*.set_enroll'       => 'required|numeric',
+            'about.*.set_baseurl'      => 'nullable|string|max:50',
             'about.*.lang'             => 'nullable|integer|in:1,2'
         ];
     }
