@@ -73,7 +73,7 @@ class GcController extends Controller
                 return $this->sendError('Gc not found', 404);
             }
 
-            $request->merge($request->input('gc'));
+            $request->merge($request->input('criteria'));
 
             $validated = $request->validate([
                 'gc_title' => 'nullable|string',
