@@ -308,7 +308,8 @@ Route::post('/gc/update/test', function (\Illuminate\Http\Request $request) {
     $criteriaInput = $request->input('criteria');
 
     if (!is_array($criteriaInput)) {
-        return response()->json(['error' => 'Invalid input: criteria must be an array.'], 400);
+        Log::error('❌ Invalid input in test', ['criteria' => $criteriaInput]);
+        return response()->json(['error' => 'criteria must be an array'], 400);
     }
 
     return response()->json(['message' => 'Input looks good.'], 200);

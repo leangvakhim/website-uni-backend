@@ -78,14 +78,14 @@ class GcController extends Controller
             $criteriaInput = $request->input('criteria');
 
             // Prevent null/invalid input from crashing
-            if (!is_array($criteriaInput)) {
-                Log::error('❌ Invalid criteria input on update', [
-                    'id' => $id,
-                    'raw_input' => $request->all(),
-                    'criteria' => $criteriaInput
-                ]);
-                return response()->json(['error' => 'Invalid input: criteria must be an array.'], 400);
-            }
+            // if (!is_array($criteriaInput)) {
+            //     Log::error('❌ Invalid criteria input on update', [
+            //         'id' => $id,
+            //         'raw_input' => $request->all(),
+            //         'criteria' => $criteriaInput
+            //     ]);
+            //     return response()->json(['error' => 'Invalid input: criteria must be an array.'], 400);
+            // }
 
             $request->merge($criteriaInput);
 
