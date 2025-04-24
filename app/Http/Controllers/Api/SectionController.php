@@ -140,12 +140,21 @@ class SectionController extends Controller
 
         $sections = $request->input('sections', []);
 
-        $existingSectionIds = collect($sections)->pluck('sec_id')->filter()->toArray();
+        $existingSectionIds = collect($sections)
+            ->pluck('sec_id')
+            ->filter(fn($id) => !is_null($id))
+            ->unique()
+            ->values()
+            ->toArray();
 
-        // Delete sections in this page that are not included in the request
-        Section::where('sec_page', $page_id)
-            ->whereNotIn('sec_id', $existingSectionIds)
-            ->delete();
+        // Delete sections in this page that are not included in the request,
+        // but do not delete sections where active = 0 (inactive)
+        if (!empty($existingSectionIds)) {
+            Section::where('sec_page', $page_id)
+                ->whereNotIn('sec_id', $existingSectionIds)
+                ->where('active', '!=', 0)
+                ->delete();
+        }
 
         foreach ($sections as $section) {
             $existingSection = Section::where('sec_id', $section['sec_id'] ?? 0)
@@ -160,7 +169,7 @@ class SectionController extends Controller
                     'lang' => $section['lang'],
                     'active' => $section['active'] ?? 1,
                 ]);
-            } else if (!isset($section['sec_id']) || $section['sec_id'] === null){
+            } else {
                 // Create new section
                 Section::create([
                     'sec_page' => $page_id,
