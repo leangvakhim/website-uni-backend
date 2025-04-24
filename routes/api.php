@@ -658,19 +658,3 @@ Route::prefix('developersocial')->group(function () {
     Route::put('/visibility/{id}', [DevelopersocialController::class, 'visibility']);
     Route::post('/reorder', [DevelopersocialController::class, 'reorder']);
 });
-
-Route::post('/gc/update/test', function (\Illuminate\Http\Request $request) {
-    Log::debug('🧪 Test update endpoint hit', [
-        'raw_input' => $request->all(),
-        'criteria' => $request->input('criteria')
-    ]);
-
-    $criteriaInput = $request->input('criteria');
-
-    if (!is_array($criteriaInput)) {
-        Log::error('❌ Invalid input in test', ['criteria' => $criteriaInput]);
-        return response()->json(['error' => 'criteria must be an array'], 400);
-    }
-
-    return response()->json(['message' => 'Input looks good.'], 200);
-});
