@@ -18,10 +18,17 @@ class SectionController extends Controller
         $this->service = $service;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $sections = Section::with('page')->where('active', 1)->get();
+            $query = $sections = Section::with('page')->where('active', 1);
+
+            if ($request->has('sec_page')) {
+                $query->where('sec_page', $request->input('sec_page'));
+            }
+
+            $sections = $query->get();
+
             return $this->sendResponse($sections);
         } catch (Exception $e) {
             return $this->sendError('Failed to retrieve sections', 500, ['error' => $e->getMessage()]);

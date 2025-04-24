@@ -7,6 +7,7 @@ use App\Models\Gc;
 use App\Http\Requests\GcRequest;
 use App\Services\GcService;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class GcController extends Controller
 {
@@ -73,7 +74,8 @@ class GcController extends Controller
                 return $this->sendError('Gc not found', 404);
             }
 
-            $request->merge($request->input('gc'));
+            $criteriaInput = $request->input('criteria');
+            $request->merge($criteriaInput);
 
             $validated = $request->validate([
                 'gc_title' => 'nullable|string',

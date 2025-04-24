@@ -26,7 +26,9 @@ class RsdltagController extends Controller
             $data = Rsdltag::with([
                 'rsdl:rsdl_id,rsdl_title',
                 'img:image_id,img'
-            ])->get();
+            ])
+            ->where('active', 1)
+            ->get();
 
             return $this->sendResponse($data);
         } catch (Exception $e) {
@@ -34,7 +36,6 @@ class RsdltagController extends Controller
         }
     }
 
-    
 
     public function show($id)
     {
@@ -52,17 +53,6 @@ class RsdltagController extends Controller
             return $this->sendError('Failed to retrieve RSDL Tag', 500, ['error' => $e->getMessage()]);
         }
     }
-
-    // public function create(RsdltagRequest $request)
-    // {
-    //     try {
-    //         $validated = $request->validated();
-    //         $created = $this->rsdltagService->create($validated);
-    //         return $this->sendResponse($created, 201, 'RSDL Tag created successfully');
-    //     } catch (Exception $e) {
-    //         return $this->sendError('Failed to create RSDL Tag', 500, ['error' => $e->getMessage()]);
-    //     }
-    // }
 
     public function create(RsdltagRequest $request)
     {
@@ -95,17 +85,52 @@ class RsdltagController extends Controller
         }
     }
 
-
-    public function update(RsdltagRequest $request, $id)
+    public function update(Request $request, $id)
     {
         try {
             $rsdltag = Rsdltag::find($id);
-            if (!$rsdltag)
-                return $this->sendError('RSDL Tag not found', 404);
-            $updated = $this->rsdltagService->update($rsdltag, $request->validated());
-            return $this->sendResponse($updated, 200, 'RSDL Tag updated successfully');
+            if (!$rsdltag) {
+                return $this->sendError('RSDL tag not found', 404);
+            }
+
+            $validated = $request->validate([
+                'rsdlt_tags' => 'required|array',
+                'rsdlt_tags.*.rsdlt_title' => 'required|string',
+                'rsdlt_tags.*.rsdlt_img' => 'nullable|integer|exists:tbimage,image_id',
+                'rsdlt_tags.*.rsdlt_rsdl' => 'required|integer|exists:tbrsdl,rsdl_id',
+            ]);
+
+            $updates = [];
+
+            foreach ($validated['rsdlt_tags'] as $tagData) {
+                $tag = Rsdltag::find($id);
+                if (!$tag) {
+                    return $this->sendError('RSDL tag not found', 404);
+                }
+
+                $tag->update([
+                    'rsdlt_title' => $tagData['rsdlt_title'],
+                    'rsdlt_img' => $tagData['rsdlt_img'] ?? null,
+                    'rsdlt_rsdl' => $tagData['rsdlt_rsdl'],
+                ]);
+            }
+            return $this->sendResponse($rsdltag, 200, 'RSDL tag updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update RSDL Tag', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update RSDL tag', 500, ['error' => $e->getMessage()]);
+        }
+    }
+
+    public function visibility($id)
+    {
+        try {
+            $rsdltag = Rsdltag::find($id);
+            if (!$rsdltag) return $this->sendError('rsdltag not found', 404);
+
+            $rsdltag->active = !$rsdltag->active;
+            $rsdltag->save();
+            return $this->sendResponse([], 200, 'rsdltag visibility toggled');
+        } catch (Exception $e) {
+            return $this->sendError('Failed to toggle visibility', 500, ['error' => $e->getMessage()]);
         }
     }
 
