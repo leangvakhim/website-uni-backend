@@ -294,6 +294,7 @@ Route::prefix('rsdltag')->group(function () {
     Route::post('/create', [RsdltagController::class, 'create']);
     Route::post('/update/{id}', [RsdltagController::class, 'update']);
     Route::put('/reorder',[RsdltagController::class, 'reorder']);
+    Route::put('/visibility/{id}', [RsdltagController::class, 'visibility']);
 
 });
 
@@ -586,13 +587,13 @@ Route::prefix('gallery')->controller(GalleryController::class)->group(function (
 });
 
 Route::prefix('announcements')->controller(AnnouncementController::class)->group(function () {
-    Route::get('/', 'index');                       
-    Route::get('/{id}', 'show');                     
-    Route::post('/create', 'create');                
-    Route::post('/update/{id}', 'update');           
-    Route::put('/visibility/{id}', 'visibility');  
-    Route::post('/duplicate/{id}', 'duplicate');     
-    Route::post('/reorder', 'reorder');          
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+    Route::post('/duplicate/{id}', 'duplicate');
+    Route::post('/reorder', 'reorder');
 });
 
 Route::prefix('student')->controller(StudentController::class)->group(function () {
