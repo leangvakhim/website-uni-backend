@@ -7,6 +7,7 @@ use App\Models\Gc;
 use App\Http\Requests\GcRequest;
 use App\Services\GcService;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class GcController extends Controller
 {
@@ -73,7 +74,20 @@ class GcController extends Controller
                 return $this->sendError('Gc not found', 404);
             }
 
-            $request->merge($request->input('criteria'));
+            // $request->merge($request->input('criteria'));
+            $criteriaInput = $request->input('criteria');
+
+            // Prevent null/invalid input from crashing
+            if (!is_array($criteriaInput)) {
+                Log::error('❌ Invalid criteria input on update', [
+                    'id' => $id,
+                    'raw_input' => $request->all(),
+                    'criteria' => $criteriaInput
+                ]);
+                return response()->json(['error' => 'Invalid input: criteria must be an array.'], 400);
+            }
+
+            $request->merge($criteriaInput);
 
             $validated = $request->validate([
                 'gc_title' => 'nullable|string',

@@ -71,6 +71,7 @@ use App\Http\Controllers\Api\Setting2Controller;
 use App\Http\Controllers\Api\SettingsocialController;
 use App\Http\Controllers\Api\DeveloperController;
 use App\Http\Controllers\Api\DevelopersocialController;
+use Illuminate\Support\Facades\Log;
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -296,6 +297,21 @@ Route::prefix('rsdltag')->group(function () {
     Route::put('/reorder',[RsdltagController::class, 'reorder']);
     Route::put('/visibility/{id}', [RsdltagController::class, 'visibility']);
 
+});
+
+Route::post('/gc/update/test', function (\Illuminate\Http\Request $request) {
+    Log::debug('🧪 Test update endpoint hit', [
+        'raw_input' => $request->all(),
+        'criteria' => $request->input('criteria')
+    ]);
+
+    $criteriaInput = $request->input('criteria');
+
+    if (!is_array($criteriaInput)) {
+        return response()->json(['error' => 'Invalid input: criteria must be an array.'], 400);
+    }
+
+    return response()->json(['message' => 'Input looks good.'], 200);
 });
 
 Route::prefix('ashead')->group(function () {
