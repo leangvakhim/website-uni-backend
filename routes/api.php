@@ -74,7 +74,7 @@ use App\Http\Controllers\Api\DevelopersocialController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Log;
 
-Route::middleware('auth:api')->group(function () {
+
 
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
@@ -662,7 +662,7 @@ Route::prefix('developersocial')->group(function () {
     Route::post('/reorder', [DevelopersocialController::class, 'reorder']);
 });
 
-});
+
 
 
 Route::post('/register', [AuthController::class, 'register']);
