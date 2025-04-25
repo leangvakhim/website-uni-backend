@@ -19,7 +19,7 @@ class RsdDescController extends Controller
 
     public function index()
     {
-        $data = RsdDesc::with('title')->where('active', 1)->get();
+        $data = RsdDesc::with('title')->get();
         return $this->sendResponse($data);
     }
 
@@ -32,34 +32,46 @@ class RsdDescController extends Controller
     public function create(RsdDescRequest $request)
     {
         try {
-            $desc = $this->service->create($request->validated());
-            return $this->sendResponse($desc, 201, 'Created successfully');
+            $validated = $request->validated();
+            $createdRsdDesc = [];
+
+            if (isset($validated['research_desc']) && is_array($validated['research_desc'])) {
+                foreach ($validated['research_desc'] as $item) {
+
+                    $item['rsdd_rsdtitle'] = $item['rsdd_rsdtitle'] ?? null;
+                    $item['rsdd_details'] = $item['rsdd_details'] ?? null;
+
+                    $createdRsdDesc[] = RsdDesc::create($item);
+                }
+            }
+
+            return $this->sendResponse($createdRsdDesc, 201, 'RsdDesc records created successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create RsdDesc', 500, ['error' => $e->getMessage()]);
         }
     }
 
     public function update(RsdDescRequest $request, $id)
     {
-        $desc = RsdDesc::find($id);
-        if (!$desc) return $this->sendError('Not found', 404);
-
         try {
-            $updated = $this->service->update($desc, $request->validated());
-            return $this->sendResponse($updated, 200, 'Updated successfully');
+            $RsdDesc = RsdDesc::find($id);
+            if (!$RsdDesc) {
+                return $this->sendError('RsdDesc not found', 404);
+            }
+
+            $request->merge($request->input('research_desc'));
+
+            $validated = $request->validate([
+                'rsdd_rsdtitle' => 'nullable|string|max:255',
+                'rsdd_details' => 'nullable|string',
+
+            ]);
+
+            $RsdDesc->update($validated);
+
+            return $this->sendResponse($RsdDesc, 200, 'RsdDesc updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update RsdDesc', 500, ['error' => $e->getMessage()]);
         }
-    }
-
-    public function visibility($id)
-    {
-        $desc = RsdDesc::find($id);
-        if (!$desc) return $this->sendError('Not found', 404);
-
-        $desc->active = !$desc->active;
-        $desc->save();
-
-        return $this->sendResponse([], 200, 'Visibility toggled');
     }
 }

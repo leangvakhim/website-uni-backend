@@ -22,12 +22,18 @@ class Setting2Request extends FormRequest
     public function rules(): array
     {
         return [
-            'set_facultytitle' => 'nullable|string|max:50',
-            'set_facultydep'   => 'nullable|string|max:50',
-            'set_logo'         => 'nullable|integer|exists:tbimage,image_id',
-            'set_amstu'        => 'required|numeric',
-            'set_enroll'       => 'required|numeric',
-            'lang'             => 'nullable|integer|in:1,2'
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
+
+            'about' => 'nullable|array',
+            'about.*.set_facultytitle' => 'nullable|string|max:50',
+            'about.*.set_facultydep'   => 'nullable|string|max:50',
+            'about.*.set_logo'         => 'nullable|integer|exists:tbimage,image_id',
+            'about.*.set_amstu'        => 'required|numeric',
+            'about.*.set_enroll'       => 'required|numeric',
+            'about.*.set_baseurl'      => 'nullable|string|max:50',
+            'about.*.lang'             => 'nullable|integer|in:1,2'
         ];
     }
 }

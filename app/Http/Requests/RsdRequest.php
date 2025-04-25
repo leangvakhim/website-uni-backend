@@ -29,16 +29,7 @@ class RsdRequest extends FormRequest
             'rsd_fav' => 'nullable|boolean',
             'lang' => 'nullable|integer|in:1,2',
             'rsd_order' => 'nullable|integer',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
-            
-            'rsd_text' => 'nullable',
-            'rsd_text.rsdt_title' => 'nullable|string|max:255',
-            'rsd_text.rsdt_order' => 'nullable|integer',
-            'rsd_text.display' => 'nullable|boolean',
-            'rsd_text.active' => 'nullable|boolean',
-
-            
+            'display' => 'nullable|integer',
         ];
     }
 }

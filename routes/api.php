@@ -69,6 +69,11 @@ use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\StudentscoreController;
 use App\Http\Controllers\Api\Setting2Controller;
 use App\Http\Controllers\Api\SettingsocialController;
+use App\Http\Controllers\Api\DeveloperController;
+use App\Http\Controllers\Api\DevelopersocialController;
+use App\Http\Controllers\Api\AuthController;
+use Illuminate\Support\Facades\Log;
+
 
 
 Route::prefix('text')->group(function () {
@@ -250,7 +255,6 @@ Route::prefix('rsd-meet')->controller(RsdMeetController::class)->group(function 
     Route::get('/{id}', 'show');
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
-    Route::put('/visibility/{id}', 'visibility');
 });
 
 Route::prefix('rsd-title')->group(function () {
@@ -259,6 +263,9 @@ Route::prefix('rsd-title')->group(function () {
     Route::post('/create', [RsdTitleController::class, 'create']);
     Route::post('/update/{id}', [RsdTitleController::class, 'update']);
     Route::put('/visibility/{id}', [RsdTitleController::class, 'visibility']);
+    Route::get('/by_title/{rsd_id}', [RsdTitleController::class, 'getByTitle']);
+    Route::post('/reorder', [RsdTitleController::class, 'reorder']);
+    Route::post('/sync_titles', [RsdTitleController::class, 'syncRsdTitles']);
 });
 
 Route::prefix('rsd-desc')->group(function () {
@@ -266,7 +273,6 @@ Route::prefix('rsd-desc')->group(function () {
     Route::get('/{id}', [RsdDescController::class, 'show']);
     Route::post('/create', [RsdDescController::class, 'create']);
     Route::post('/update/{id}', [RsdDescController::class, 'update']);
-    Route::put('/visibility/{id}', [RsdDescController::class, 'visibility']);
 });
 
 Route::prefix('rsd-project')->group(function () {
@@ -274,7 +280,6 @@ Route::prefix('rsd-project')->group(function () {
     Route::get('/{id}', [RsdProjectController::class, 'show']);
     Route::post('/create', [RsdProjectController::class, 'create']);
     Route::post('/update/{id}', [RsdProjectController::class, 'update']);
-    Route::put('/visibility/{id}', [RsdProjectController::class, 'visibility']);
 });
 
 Route::prefix('rsd')->controller(RsdController::class)->group(function () {
@@ -293,6 +298,7 @@ Route::prefix('rsdltag')->group(function () {
     Route::post('/create', [RsdltagController::class, 'create']);
     Route::post('/update/{id}', [RsdltagController::class, 'update']);
     Route::put('/reorder',[RsdltagController::class, 'reorder']);
+    Route::put('/visibility/{id}', [RsdltagController::class, 'visibility']);
 
 });
 
@@ -584,14 +590,14 @@ Route::prefix('gallery')->controller(GalleryController::class)->group(function (
     Route::post('/update/{id}', 'update');
 });
 
-Route::prefix('announcement')->controller(AnnouncementController::class)->group(function () {
-    Route::get('/', 'index');                       
-    Route::get('/{id}', 'show');                     
-    Route::post('/create', 'create');                
-    Route::post('/update/{id}', 'update');           
-    Route::put('/visibility/{id}', 'visibility');  
-    Route::post('/duplicate/{id}', 'duplicate');     
-    Route::post('/reorder', 'reorder');          
+Route::prefix('announcements')->controller(AnnouncementController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'create');
+    Route::post('/update/{id}', 'update');
+    Route::put('/visibility/{id}', 'visibility');
+    Route::post('/duplicate/{id}', 'duplicate');
+    Route::post('/reorder', 'reorder');
 });
 
 Route::prefix('student')->controller(StudentController::class)->group(function () {
@@ -626,7 +632,7 @@ Route::prefix('setting2')->group(function () {
     Route::post('/visibility/{id}', [Setting2Controller::class, 'visibility']);
     Route::post('/duplicate/{id}', [Setting2Controller::class, 'duplicate']);
 });
-
+Route::middleware('auth:api')->group(function () {
 Route::prefix('settingsocial')->group(function () {
     Route::get('/', [SettingsocialController::class, 'index']);
     Route::get('/{id}', [SettingsocialController::class, 'show']);
@@ -636,4 +642,53 @@ Route::prefix('settingsocial')->group(function () {
     Route::post('/duplicate/{id}', [SettingsocialController::class, 'duplicate']);
     Route::post('/reorder', [SettingsocialController::class, 'reorder']);
 });
+});
+Route::prefix('developer')->group(function () {
+    Route::get('/', [DeveloperController::class, 'index']);
+    Route::get('/{id}', [DeveloperController::class, 'show']);
+    Route::post('/create', [DeveloperController::class, 'create']);
+    Route::post('/update/{id}', [DeveloperController::class, 'update']);
+    Route::put('/visibility/{id}', [DeveloperController::class, 'visibility']);
+    Route::post('/reorder', [DeveloperController::class, 'reorder']);
+    Route::post('/duplicate/{id}', [DeveloperController::class, 'duplicate']);
+});
 
+Route::prefix('developersocial')->group(function () {
+    Route::get('/', [DevelopersocialController::class, 'index']);
+    Route::get('/{id}', [DevelopersocialController::class, 'show']);
+    Route::post('/create', [DevelopersocialController::class, 'create']);
+    Route::post('/update/{id}', [DevelopersocialController::class, 'update']);
+    Route::put('/visibility/{id}', [DevelopersocialController::class, 'visibility']);
+    Route::post('/reorder', [DevelopersocialController::class, 'reorder']);
+});
+
+
+
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
+
+Route::middleware(['auth:api'])->group(function () {
+
+    Route::get('/admin/dashboard', function () {
+        return response()->json(['message' => 'Admin access only']);
+    })->middleware('role:admin');
+
+    Route::get('/editor/dashboard', function () {
+        return response()->json(['message' => 'Editor access only']);
+    })->middleware('role:editor');
+
+    Route::get('/viewer/dashboard', function () {
+        return response()->json(['message' => 'Viewer access only']);
+    })->middleware('role:viewer');
+
+    Route::get('/manage-users', function () {
+        return response()->json(['message' => 'Permission: manage users']);
+    })->middleware('permission:manage users');
+
+});

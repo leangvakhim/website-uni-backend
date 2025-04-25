@@ -22,21 +22,14 @@ class RsdMeetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'rsdm_detail' => 'nullable|string',
-            'rsdm_img' => 'nullable|integer|exists:tbimage,image_id',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            'rsdm_faculty' => 'nullable',
-
-
-            'rsdm_faculty' => 'nullable|integer|exists:tbfaculty_contact,fc_id',
-
-            'rsdm_faculty' => 'nullable|array',
-            'rsdm_faculty.fc_name' => 'nullable|string|max:100',
-            'rsdm_faculty.fc_order' => 'nullable|integer',
-            'rsdm_faculty.display' => 'nullable|boolean',
-            'rsdm_faculty.active' => 'nullable|boolean',
-
-            'active' => 'required|boolean',
+            'research_meet' => 'nullable|array',
+            'research_meet.*.rsdm_rsdtile' => 'nullable|integer|exists:tbrsd_title,rsdt_id',
+            'research_meet.*.rsdm_detail' => 'nullable|string',
+            'research_meet.*.rsdm_img' => 'nullable|integer|exists:tbimage,image_id',
         ];
     }
 }

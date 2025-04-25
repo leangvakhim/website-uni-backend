@@ -85,7 +85,6 @@ class DeveloperController extends Controller
         }
     }
 
-
     public function visibility($id)
     {
         try {

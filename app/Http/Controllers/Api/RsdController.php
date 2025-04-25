@@ -7,6 +7,7 @@ use App\Http\Requests\RsdRequest;
 use App\Models\Rsd;
 use App\Services\RsdService;
 use Exception;
+use Illuminate\Http\Request;
 
 class RsdController extends Controller
 {
@@ -20,35 +21,48 @@ class RsdController extends Controller
     public function index()
     {
         try {
-            $data = Rsd::with(['image', 'text'])->where('active', 1)->get();
-            return $this->sendResponse($data->count() === 1 ? $data->first() : $data);
+            $rsd = Rsd::with([
+                'img:image_id,img',
+            ])
+            ->where('active', 1)
+            ->orderBy('rsd_order', 'asc')
+            ->get();
+
+            return $this->sendResponse(
+                $rsd->count() === 1 ? $rsd->first() : $rsd
+            );
         } catch (Exception $e) {
-            return $this->sendError('Failed to fetch RSD', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to retrieve Rsd', 500, ['error' => $e->getMessage()]);
         }
     }
 
     public function show(string $id)
     {
         try {
-            $data = Rsd::with(['image', 'text'])->find($id);
-            return $data ? $this->sendResponse($data) : $this->sendError('RSD not found', 404);
+            $Rsd = Rsd::with([
+                'img:image_id,img',
+            ])->find($id);
+
+            if (!$Rsd) {
+                return $this->sendError('Rsd not found', 404);
+            }
+            return $this->sendResponse($Rsd);
         } catch (Exception $e) {
-            return $this->sendError('Error fetching RSD', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to retrieve rsd', 500, ['error' => $e->getMessage()]);
         }
     }
+
 
     public function create(RsdRequest $request)
     {
         try {
             $data = $request->validated();
-    
             if (!isset($data['rsd_order'])) {
                 $data['rsd_order'] = Rsd::max('rsd_order') + 1;
             }
     
-            $fc = app(RsdService::class)->create($data);
-    
-            return $this->sendResponse($fc, 201, 'Rsd created');
+            $rsd = Rsd::create($data);
+            return $this->sendResponse($rsd, 201, 'Rsd created');
         } catch (Exception $e) {
             return $this->sendError('Failed to create Rsd', 500, ['error' => $e->getMessage()]);
         }

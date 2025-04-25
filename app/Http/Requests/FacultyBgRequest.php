@@ -22,8 +22,8 @@ class FacultyBgRequest extends FormRequest
     public function rules(): array
     {
         return [
-            
-            'f_id' => 'required|integer|exists:tbfaculty,f_id',
+
+            'f_id' => 'nullable|integer|exists:tbfaculty,f_id',
             'f_name' => 'nullable|string|max:255',
             'f_position' => 'nullable|string|max:100',
             'f_portfolio' => 'nullable|string',
@@ -31,11 +31,12 @@ class FacultyBgRequest extends FormRequest
             'lang' => 'nullable|integer|in:1,2',
 
             // Validate multiple contact records
-            'fbg_f' => 'nullable|array',
-            'fbg_f.*.fbg_img' => 'nullable|integer|exists:tbimage,image_id',
-            'fbg_f.*.fbg_name' => 'nullable|string|max:255',
-            'fbg_f.*.fbg_order' => 'nullable|integer',
-             
+            'facultyBG' => 'nullable|array',
+            'facultyBG.*.fbg_img' => 'nullable|integer|exists:tbimage,image_id',
+            'facultyBG.*.fbg_f' => 'nullable|integer|exists:tbfaculty,f_id',
+            'facultyBG.*.fbg_name' => 'nullable|string|max:255',
+            'facultyBG.*.fbg_order' => 'nullable|integer',
+
         ];
     }
 }
