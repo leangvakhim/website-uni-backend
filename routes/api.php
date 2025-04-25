@@ -274,7 +274,6 @@ Route::prefix('rsd-desc')->group(function () {
     Route::get('/{id}', [RsdDescController::class, 'show']);
     Route::post('/create', [RsdDescController::class, 'create']);
     Route::post('/update/{id}', [RsdDescController::class, 'update']);
-    Route::put('/visibility/{id}', [RsdDescController::class, 'visibility']);
 });
 
 Route::prefix('rsd-project')->group(function () {

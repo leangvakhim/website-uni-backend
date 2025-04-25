@@ -22,13 +22,13 @@ class RsdDescRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'rsdt_text' => 'required|integer|exists:tbrsd_title,rsdt_id',
-            'rsdt_rsd.rsdt_title' => 'nullable|string|max:255',
-            'rsdt_rsd.rsdt_order' => 'nullable|integer',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
            
-            'rsdd_rsd' => 'nullable|array',
-            'rsdd_rsd.*.rsdd_rsdtitle' => 'nullable|string|max:255',
-            'rsdd_rsd.*.rsdd_details' => 'nullable|string',
+            'research_desc' => 'nullable|array',
+            'research_desc.*.rsdd_rsdtitle' => 'nullable|string|max:255',
+            'research_desc.*.rsdd_details' => 'nullable|string',
             
         ];
     }
