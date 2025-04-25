@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Controller;
 use App\Models\Developer;
 use App\Http\Requests\DeveloperRequest;
 use Exception;
+use Illuminate\Http\Request;
 
 class DeveloperController extends Controller
 {
@@ -66,11 +67,11 @@ class DeveloperController extends Controller
             $request->merge($request->input('developer'));
 
             $validated = $request->validate([
-                'd_name' => 'required|string|max:50',
-                'd_position' => 'required|string|max:50',
+                'd_name' => 'nullable|string',
+                'd_position' => 'nullable|string',
                 'd_write' => 'nullable|string',
-                'd_img' => 'nullable|integer|exists:tbimage,image_id',
-                'lang' => 'nullable|in:1,2',
+                'd_img' => 'nullable|integer',
+                'lang' => 'nullable|integer',
                 'd_order' => 'nullable|integer',
                 'display' => 'nullable|boolean',
                 'active' => 'nullable|boolean',
@@ -84,7 +85,6 @@ class DeveloperController extends Controller
         }
     }
 
-    
     public function visibility($id)
     {
         try {

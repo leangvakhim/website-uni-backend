@@ -33,8 +33,8 @@ class DeveloperRequest extends FormRequest
             'developer.*.d_img' => 'nullable|integer|exists:tbimage,image_id',
             'developer.*.lang' => 'nullable|in:1,2',
             'developer.*.d_order' => 'nullable|integer',
-            'developer.*.display' => 'required|boolean',
-            'developer.*.active' => 'required|boolean',
+            'developer.*.display' => 'nullable|boolean',
+            'developer.*.active' => 'nullable|boolean',
         ];
     }
 }
