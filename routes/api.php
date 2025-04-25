@@ -255,7 +255,6 @@ Route::prefix('rsd-meet')->controller(RsdMeetController::class)->group(function 
     Route::get('/{id}', 'show');
     Route::post('/create', 'create');
     Route::post('/update/{id}', 'update');
-    Route::put('/visibility/{id}', 'visibility');
 });
 
 Route::prefix('rsd-title')->group(function () {
@@ -281,7 +280,6 @@ Route::prefix('rsd-project')->group(function () {
     Route::get('/{id}', [RsdProjectController::class, 'show']);
     Route::post('/create', [RsdProjectController::class, 'create']);
     Route::post('/update/{id}', [RsdProjectController::class, 'update']);
-    Route::put('/visibility/{id}', [RsdProjectController::class, 'visibility']);
 });
 
 Route::prefix('rsd')->controller(RsdController::class)->group(function () {

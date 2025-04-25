@@ -19,13 +19,13 @@ class RsdProjectController extends Controller
 
     public function index()
     {
-        $projects = RsdProject::with('title')->get();
+        $projects = RsdProject::with('rsdp_rsdtitle')->get();
         return $this->sendResponse($projects);
     }
 
     public function show($id)
     {
-        $project = RsdProject::with('title')->find($id);
+        $project = RsdProject::with('rsdp_rsdtitle')->find($id);
         return $project ? $this->sendResponse($project) : $this->sendError('Not found', 404);
     }
 
