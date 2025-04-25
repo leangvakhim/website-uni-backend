@@ -71,6 +71,7 @@ use App\Http\Controllers\Api\Setting2Controller;
 use App\Http\Controllers\Api\SettingsocialController;
 use App\Http\Controllers\Api\DeveloperController;
 use App\Http\Controllers\Api\DevelopersocialController;
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Log;
 
 Route::prefix('text')->group(function () {
@@ -629,7 +630,7 @@ Route::prefix('setting2')->group(function () {
     Route::post('/visibility/{id}', [Setting2Controller::class, 'visibility']);
     Route::post('/duplicate/{id}', [Setting2Controller::class, 'duplicate']);
 });
-
+Route::middleware('auth:api')->group(function () {
 Route::prefix('settingsocial')->group(function () {
     Route::get('/', [SettingsocialController::class, 'index']);
     Route::get('/{id}', [SettingsocialController::class, 'show']);
@@ -639,7 +640,7 @@ Route::prefix('settingsocial')->group(function () {
     Route::post('/duplicate/{id}', [SettingsocialController::class, 'duplicate']);
     Route::post('/reorder', [SettingsocialController::class, 'reorder']);
 });
-
+});
 Route::prefix('developer')->group(function () {
     Route::get('/', [DeveloperController::class, 'index']);
     Route::get('/{id}', [DeveloperController::class, 'show']);
@@ -657,4 +658,33 @@ Route::prefix('developersocial')->group(function () {
     Route::post('/update/{id}', [DevelopersocialController::class, 'update']);
     Route::put('/visibility/{id}', [DevelopersocialController::class, 'visibility']);
     Route::post('/reorder', [DevelopersocialController::class, 'reorder']);
+});
+
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
+
+Route::middleware(['auth:api'])->group(function () {
+
+    Route::get('/admin/dashboard', function () {
+        return response()->json(['message' => 'Admin access only']);
+    })->middleware('role:admin');
+
+    Route::get('/editor/dashboard', function () {
+        return response()->json(['message' => 'Editor access only']);
+    })->middleware('role:editor');
+
+    Route::get('/viewer/dashboard', function () {
+        return response()->json(['message' => 'Viewer access only']);
+    })->middleware('role:viewer');
+
+    Route::get('/manage-users', function () {
+        return response()->json(['message' => 'Permission: manage users']);
+    })->middleware('permission:manage users');
+
 });
