@@ -74,6 +74,8 @@ use App\Http\Controllers\Api\DevelopersocialController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Log;
 
+Route::middleware('auth:api')->group(function () {
+
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
     Route::get('/{id}', [TextController::class, 'show']);
@@ -658,6 +660,8 @@ Route::prefix('developersocial')->group(function () {
     Route::post('/update/{id}', [DevelopersocialController::class, 'update']);
     Route::put('/visibility/{id}', [DevelopersocialController::class, 'visibility']);
     Route::post('/reorder', [DevelopersocialController::class, 'reorder']);
+});
+
 });
 
 

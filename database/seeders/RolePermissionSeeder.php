@@ -13,6 +13,9 @@ class RolePermissionSeeder extends Seeder
     public function run(): void
     {
 
+        // 1. Create permissions
+
+
         $permissions = [
             'view dashboard',
             'edit content',
@@ -27,12 +30,14 @@ class RolePermissionSeeder extends Seeder
             ]);
         }
 
-      
-        $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
+
+        // 2. Create roles
+        $admin  = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
         $editor = Role::firstOrCreate(['name' => 'editor', 'guard_name' => 'api']);
         $viewer = Role::firstOrCreate(['name' => 'viewer', 'guard_name' => 'api']);
 
-        // 1. Assign permissions to roles
+        // 3. Assign permissions to roles
+
         $admin->givePermissionTo(Permission::all());
 
         $editor->givePermissionTo([
@@ -44,14 +49,19 @@ class RolePermissionSeeder extends Seeder
             'view dashboard',
         ]);
 
-        // 2. Create admin user
-        $adminUser = User::firstOrCreate([
-            'username' => 'adminuser'
-        ], [
-            'password' => Hash::make('admin123'),
-        ]);
 
-        // 3. Assign role
+        // 4. Create admin user WITH role and permission fields
+        $adminUser = User::firstOrCreate(
+            ['username' => 'adminuser'],
+            [
+                'password'   => Hash::make('admin123'),
+                'role'       => 'admin',
+                'permission' => 'full access',
+            ]
+        );
+
+        // 5. Assign actual permissioned role
+
         $adminUser->assignRole('admin');
     }
 }
