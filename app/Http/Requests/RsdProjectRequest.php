@@ -22,20 +22,13 @@ class RsdProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'rsdp_rsdtile' => 'nullable',
+            'display' => 'nullable|boolean',
+            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
+            'sec_order' => 'nullable|integer',
 
-            // as int FK
-            'rsdp_rsdtile' => 'nullable|integer|exists:tbrsd_title,rsdt_id',
-
-            // if passing as object
-            'rsdp_rsdtile' => 'nullable|array',
-            'rsdp_rsdtile.rsdt_title' => 'nullable|string|max:255',
-            'rsdp_rsdtile.rsdt_order' => 'nullable|integer',
-            'rsdp_rsdtile.display' => 'nullable|boolean',
-            'rsdp_rsdtile.active' => 'nullable|boolean',
-
-            'rsdp_detail' => 'nullable|string',
-            'active' => 'required|boolean',
+            'research_project' => 'nullable|array',
+            'research_project.*.rsdp_rsdtitle' => 'nullable|integer|exists:tbrsd_title,rsdt_id',
+            'research_project.*.rsdp_detail' => 'nullable|string',
         ];
     }
 }
