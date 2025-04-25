@@ -14,6 +14,7 @@ class AuthController extends Controller
     public function register(UserRequest $request)
     {
         try {
+
             $role = $request->input('role'); // 'editor' or 'viewer'
             $permission = $role === 'editor' ? 'edit & view' : 'view only';
             
@@ -25,6 +26,7 @@ class AuthController extends Controller
             ]);
     
             $user->assignRole($role);
+
     
             return response()->json([
                 'status' => 201,
