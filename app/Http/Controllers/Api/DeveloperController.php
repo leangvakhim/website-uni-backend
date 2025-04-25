@@ -13,7 +13,10 @@ class DeveloperController extends Controller
     public function index()
     {
         try {
-            $data = Developer::with('img')->where('active', 1)->get();
+            $data = Developer::with('img')
+            ->where('active', 1)
+            ->orderBy('d_order', 'asc')
+            ->get();
             return $this->sendResponse($data->count() === 1 ? $data->first() : $data);
         } catch (Exception $e) {
             return $this->sendError('Failed to load developers', 500, ['error' => $e->getMessage()]);
@@ -102,25 +105,18 @@ class DeveloperController extends Controller
 
     public function reorder(Request $request)
     {
-        try {
-            $data = $request->validate([
-                '*.d_id' => 'required|integer|exists:developers,d_id',
-                '*.d_order' => 'required|integer'
-            ]);
+        $data = $request->validate([
+            '*.d_id' => 'required|integer|exists:tbdeveloper,d_id',
+            '*.d_order' => 'required|integer'
+        ]);
 
-            foreach ($data as $item) {
-                Developer::where('d_id', $item['d_id'])->update([
-                    'd_order' => $item['d_order']
-                ]);
-            }
-
-            return response()->json([
-                'status' => 200,
-                'message' => 'Developer order updated successfully',
-            ]);
-        } catch (Exception $e) {
-            return $this->sendError('Failed to reorder developer', 500, ['error' => $e->getMessage()]);
+        foreach ($data as $item) {
+            Developer::where('d_id', $item['d_id'])->update(['d_order' => $item['d_order']]);
         }
+
+        return response()->json([
+            'message' => 'Faculty order updated successfully',
+        ], 200);
     }
 
     public function duplicate($id)
