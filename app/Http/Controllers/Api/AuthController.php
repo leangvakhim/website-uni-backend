@@ -14,12 +14,17 @@ class AuthController extends Controller
     public function register(UserRequest $request)
     {
         try {
+            $role = $request->input('role'); // 'editor' or 'viewer'
+            $permission = $role === 'editor' ? 'edit & view' : 'view only';
+            
             $user = User::create([
                 'username' => $request->username,
                 'password' => Hash::make($request->password),
+                'role' => $role,
+                'permission' => $permission,
             ]);
     
-            $user->assignRole('editor'); 
+            $user->assignRole($role);
     
             return response()->json([
                 'status' => 201,

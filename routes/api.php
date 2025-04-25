@@ -74,6 +74,8 @@ use App\Http\Controllers\Api\DevelopersocialController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Log;
 
+Route::middleware('auth:api')->group(function () {
+
 Route::prefix('text')->group(function () {
     Route::get('/', [TextController::class, 'index']);
     Route::get('/{id}', [TextController::class, 'show']);
@@ -630,7 +632,7 @@ Route::prefix('setting2')->group(function () {
     Route::post('/visibility/{id}', [Setting2Controller::class, 'visibility']);
     Route::post('/duplicate/{id}', [Setting2Controller::class, 'duplicate']);
 });
-Route::middleware('auth:api')->group(function () {
+
 Route::prefix('settingsocial')->group(function () {
     Route::get('/', [SettingsocialController::class, 'index']);
     Route::get('/{id}', [SettingsocialController::class, 'show']);
@@ -640,7 +642,7 @@ Route::prefix('settingsocial')->group(function () {
     Route::post('/duplicate/{id}', [SettingsocialController::class, 'duplicate']);
     Route::post('/reorder', [SettingsocialController::class, 'reorder']);
 });
-});
+
 Route::prefix('developer')->group(function () {
     Route::get('/', [DeveloperController::class, 'index']);
     Route::get('/{id}', [DeveloperController::class, 'show']);
@@ -659,7 +661,7 @@ Route::prefix('developersocial')->group(function () {
     Route::put('/visibility/{id}', [DevelopersocialController::class, 'visibility']);
     Route::post('/reorder', [DevelopersocialController::class, 'reorder']);
 });
-
+});
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
