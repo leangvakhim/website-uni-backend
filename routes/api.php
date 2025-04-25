@@ -264,6 +264,9 @@ Route::prefix('rsd-title')->group(function () {
     Route::post('/create', [RsdTitleController::class, 'create']);
     Route::post('/update/{id}', [RsdTitleController::class, 'update']);
     Route::put('/visibility/{id}', [RsdTitleController::class, 'visibility']);
+    Route::get('/by_title/{rsd_id}', [RsdTitleController::class, 'getByTitle']);
+    Route::post('/reorder', [RsdTitleController::class, 'reorder']);
+    Route::post('/sync_titles', [RsdTitleController::class, 'syncRsdTitles']);
 });
 
 Route::prefix('rsd-desc')->group(function () {
