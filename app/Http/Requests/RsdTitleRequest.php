@@ -22,7 +22,6 @@ class RsdTitleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'rsd_id' => 'required|integer|exists:tbrsd,rsd_id',
             'rsd_title' => 'nullable|string|max:255',
             'rsd_subtitle' => 'nullable|string|max:255',
             'rsd_lead' => 'nullable|string|max:255',
@@ -30,9 +29,12 @@ class RsdTitleRequest extends FormRequest
             'rsd_fav' => 'nullable|boolean',
             'lang' => 'nullable|integer|in:1,2',
             
-            'rsdt_rsd' => 'nullable|array',
-            'rsdt_rsd.rsdt_title' => 'nullable|string|max:255',
-            'rsdt_rsd.rsdt_order' => 'nullable|integer',
+            'research_title' => 'nullable|array',
+            'research_title.*.rsdt_title' => 'nullable|string|max:255',
+            'research_title.*.rsdt_text' => 'nullable|integer|exists:tbrsd,rsd_id',
+            'rearch_title.*.rsdt_type' => 'nullable|string|max:255',
+            'research_title.*.rsdt_code' => 'nullable|string|max:255',
+            'research_title.*.rsdt_order' => 'nullable|integer',
             'display' => 'required|boolean',
             'active' => 'required|boolean',
         ];
