@@ -20,6 +20,19 @@ class Setting2Controller extends Controller
         }
     }
 
+    public function getByLang($lang)
+    {
+        try {
+            $item = Setting2::where('lang', $lang)->first();
+            if (!$item) {
+                return $this->sendError('Setting2 with this language not found', 404);
+            }
+            return $this->sendResponse($item);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to fetch setting by language', 500, ['error' => $e->getMessage()]);
+        }
+    }
+
     public function show($id)
     {
         try {
@@ -29,32 +42,6 @@ class Setting2Controller extends Controller
             return $this->sendError('Failed to fetch record', 500, ['error' => $e->getMessage()]);
         }
     }
-
-    // public function create(Setting2Request $request)
-    // {
-    //     try {
-    //         $validated = $request->validated();
-    //         $createdSetting2 = [];
-
-    //         if (isset($validated['about']) && is_array($validated['about'])) {
-    //             foreach ($validated['about'] as $item) {
-
-    //                 $item['set_facultytitle'] = $item['set_facultytitle'] ?? null;
-    //                 $item['set_facultydep'] = $item['set_facultydep'] ?? null;
-    //                 $item['set_logo'] = $item['set_logo'] ?? null;
-    //                 $item['set_amstu'] = $item['set_amstu'] ?? null;
-    //                 $item['set_enroll'] = $item['set_enroll'] ?? null;
-    //                 $item['lang'] = $item['lang'] ?? null;
-
-    //                 $createdSetting2[] = Setting2::create($item);
-    //             }
-    //         }
-
-    //         return $this->sendResponse($createdSetting2, 201, 'Setting records created successfully');
-    //     } catch (Exception $e) {
-    //         return $this->sendError('Failed to create setting', 500, ['error' => $e->getMessage()]);
-    //     }
-    // }
 
     public function create(Setting2Request $request)
     {
@@ -78,33 +65,6 @@ class Setting2Controller extends Controller
             return $this->sendError('Failed to create setting', 500, ['error' => $e->getMessage()]);
         }
     }
-
-    // public function update(Setting2Request $request, $id)
-    // {
-    //     try {
-    //         $set2 = Setting2::find($id);
-    //         if (!$set2) {
-    //             return $this->sendError('Setting2 not found', 404);
-    //         }
-
-    //         $request->merge($request->input('about'));
-
-    //         $validated = $request->validate([
-    //             'set_facultytitle' => 'nullable|string|max:50',
-    //             'set_facultydep' => 'nullable|string|max:50',
-    //             'set_logo' => 'nullable|integer|exists:tbimage,image_id',
-    //             'set_amstu' => 'nullable|numeric',
-    //             'set_enroll' => 'nullable|numeric',
-    //             'lang' => 'nullable|integer|in:1,2',
-    //         ]);
-
-    //         $set2->update($validated);
-
-    //         return $this->sendResponse($set2, 200, 'Setting updated successfully');
-    //     } catch (Exception $e) {
-    //         return $this->sendError('Failed to update setting', 500, ['error' => $e->getMessage()]);
-    //     }
-    // }
 
     public function update(Setting2Request $request, $id)
     {

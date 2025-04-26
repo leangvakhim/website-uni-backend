@@ -14,7 +14,10 @@ class SettingsocialController extends Controller
     public function index()
     {
         try {
-            $records = Settingsocial::with(['img', 'setting'])->where('active', 1)->get();
+            $records = Settingsocial::with(['img', 'setting'])
+            ->where('active', 1)
+            ->orderBy('setsoc_order', 'asc')
+            ->get();
             return $this->sendResponse($records);
         } catch (Exception $e) {
             return $this->sendError('Failed to fetch records', 500, ['error' => $e->getMessage()]);
@@ -37,21 +40,11 @@ class SettingsocialController extends Controller
             $validated = $request->validated();
             $createdSocials = [];
 
-            if (!isset($validated['set_id'])) {
-                return $this->sendError('Setting ID is required', 422);
-            }
-
-            $setting = Setting2::find($validated['set_id']);
-            if (!$setting) {
-                return $this->sendError('Setting not found', 404);
-            }
-
             if (isset($validated['setting_social']) && is_array($validated['setting_social'])) {
                 foreach ($validated['setting_social'] as $item) {
-                    $item['setsoc_setting'] = $setting->set_id;
 
                     if (!isset($item['setsoc_order'])) {
-                        $item['setsoc_order'] = (Settingsocial::where('setsoc_setting', $setting->set_id)->max('setsoc_order') ?? 0) + 1;
+                        $item['setsoc_order'] = (Settingsocial::max('setsoc_order') ?? 0) + 1;
                     }
 
                     $item['display'] = $item['display'] ?? 1;
@@ -70,15 +63,25 @@ class SettingsocialController extends Controller
     public function update(SettingsocialRequest $request, $id)
     {
         try {
-            $record = Settingsocial::find($id);
-            if (!$record) {
-                return $this->sendError('Record not found', 404);
+            $settingsocial = Settingsocial::find($id);
+            if (!$settingsocial) {
+                return $this->sendError('Settingsocial not found', 404);
             }
 
-            $record->update($request->validated());
-            return $this->sendResponse($record, 200, 'Record updated successfully');
+            $request->merge($request->input('setting_social'));
+
+            $validated = $request->validate([
+                'setsoc_title' => 'required|string',
+                'setsoc_link' => 'nullable|string',
+                'setsoc_img' => 'nullable|integer',
+                'display' => 'nullable|integer',
+            ]);
+
+            $settingsocial->update($validated);
+
+            return $this->sendResponse($settingsocial, 200, 'settingsocial updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update record', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update settingsocial', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -123,17 +126,17 @@ class SettingsocialController extends Controller
                 '*.setsoc_id' => 'required|integer|exists:tbsettingsocial,setsoc_id',
                 '*.setsoc_order' => 'required|integer'
             ]);
-    
+
             foreach ($data as $item) {
                 Settingsocial::where('setsoc_id', $item['setsoc_id'])->update([
                     'setsoc_order' => $item['setsoc_order']
                 ]);
             }
-    
+
             return $this->sendResponse([], 200, 'Settingsocial reordered successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update reorder', 500, ['error' => $e->getMessage()]);
         }
     }
-    
+
 }

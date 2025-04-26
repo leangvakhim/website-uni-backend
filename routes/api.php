@@ -562,13 +562,6 @@ Route::prefix('subservice')->controller(SubserviceController::class)->group(func
     Route::post('/reorder-ras', 'reorderSubserviceRAS');
 });
 
-Route::prefix('setting')->controller(SettingController::class)->group(function () {
-    Route::get('/', 'index');
-    Route::get('/{id}', 'show');
-    Route::post('/create', 'create');
-    Route::post('/update/{id}', 'update');
-});
-
 Route::prefix('department')->controller(DepartmentController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
@@ -631,8 +624,9 @@ Route::prefix('setting2')->group(function () {
     Route::post('/update/{id}', [Setting2Controller::class, 'update']);
     Route::post('/visibility/{id}', [Setting2Controller::class, 'visibility']);
     Route::post('/duplicate/{id}', [Setting2Controller::class, 'duplicate']);
+    Route::get('/lang/{lang}', [Setting2Controller::class, 'getByLang']);
 });
-Route::middleware('auth:api')->group(function () {
+// Route::middleware('auth:api')->group(function () {
 Route::prefix('settingsocial')->group(function () {
     Route::get('/', [SettingsocialController::class, 'index']);
     Route::get('/{id}', [SettingsocialController::class, 'show']);
@@ -642,7 +636,7 @@ Route::prefix('settingsocial')->group(function () {
     Route::post('/duplicate/{id}', [SettingsocialController::class, 'duplicate']);
     Route::post('/reorder', [SettingsocialController::class, 'reorder']);
 });
-});
+// });
 Route::prefix('developer')->group(function () {
     Route::get('/', [DeveloperController::class, 'index']);
     Route::get('/{id}', [DeveloperController::class, 'show']);
