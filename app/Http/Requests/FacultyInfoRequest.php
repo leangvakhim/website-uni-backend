@@ -32,7 +32,7 @@ class FacultyInfoRequest extends FormRequest
             'finfo_f' => 'nullable|array',
             'finfo_f.*.finfo_title' => 'nullable|string|max:255',
             'finfo_f.*.finfo_detail' => 'nullable|string',
-            'finfo_f.*.finfo_side' => 'required|integer',
+            'finfo_f.*.finfo_side' => 'nullable|integer',
             'finfo_f.*.finfo_order' => 'nullable|integer',
         ];
     }

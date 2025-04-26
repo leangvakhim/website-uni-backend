@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Controller;
 use App\Models\RsdTitle;
 use App\Http\Requests\RsdTitleRequest;
 use Exception;
+use Illuminate\Http\Request;
 
 class RsdTitleController extends Controller
 {
@@ -46,7 +47,7 @@ class RsdTitleController extends Controller
             if (!isset($validated['rsdt_order'])) {
                 $validated['rsdt_order'] = (RsdTitle::where('rsdt_text', $validated['rsdt_text'])->max('rsdt_order') ?? 0) + 1;
             }
-            
+
 
             $validated['rsdt_title'] = $validated['rsdt_title'] ?? 1;
             $validated['rsdt_text'] = $validated['rsdt_text'] ?? 1;
@@ -144,7 +145,7 @@ class RsdTitleController extends Controller
 
         foreach ($titles as $title) {
             $existing = RsdTitle::where('rsdt_id', $title['rsdt_id'] ?? 0)
-                ->where('rsdt_text', $rds_id)
+                ->where('rsdt_text', $rsd_id)
                 ->first();
 
             if ($existing) {
@@ -154,7 +155,7 @@ class RsdTitleController extends Controller
                 ]);
             } else {
                 RsdTitle::create([
-                    'rsdt_text' => $rds_id,
+                    'rsdt_text' => $rsd_id,
                     'rsdt_order' => $title['rsdt_order'],
                     'active' => $title['active'] ?? 1,
                 ]);

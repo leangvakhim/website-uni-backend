@@ -22,7 +22,7 @@ class RsdController extends Controller
     {
         try {
             $rsd = Rsd::with([
-                'img:image_id,img',
+                'image:image_id,img',
             ])
             ->where('active', 1)
             ->orderBy('rsd_order', 'asc')
@@ -40,7 +40,7 @@ class RsdController extends Controller
     {
         try {
             $Rsd = Rsd::with([
-                'img:image_id,img',
+                'image:image_id,img',
             ])->find($id);
 
             if (!$Rsd) {
@@ -60,14 +60,14 @@ class RsdController extends Controller
             if (!isset($data['rsd_order'])) {
                 $data['rsd_order'] = Rsd::max('rsd_order') + 1;
             }
-    
+
             $rsd = Rsd::create($data);
             return $this->sendResponse($rsd, 201, 'Rsd created');
         } catch (Exception $e) {
             return $this->sendError('Failed to create Rsd', 500, ['error' => $e->getMessage()]);
         }
     }
-    
+
 
     public function update(RsdRequest $request, $id)
     {

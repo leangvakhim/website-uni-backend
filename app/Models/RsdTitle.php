@@ -18,6 +18,8 @@ class RsdTitle extends Model
         'rsdt_order',
         'display',
         'active',
+        'rsdt_type',
+        'rsdt_code'
     ];
     public function desc()
     {
