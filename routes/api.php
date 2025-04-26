@@ -481,6 +481,7 @@ Route::prefix('contact')->group(function () {
     Route::get('/{id}', [ContactController::class, 'show']);
     Route::post('/create', [ContactController::class, 'create']);
     Route::post('/update/{id}', [ContactController::class, 'update']);
+    Route::get('/lang/{lang}', [ContactController::class, 'getByLang']);
 });
 
 Route::prefix('subcontact')->group(function () {
@@ -626,7 +627,6 @@ Route::prefix('setting2')->group(function () {
     Route::post('/duplicate/{id}', [Setting2Controller::class, 'duplicate']);
     Route::get('/lang/{lang}', [Setting2Controller::class, 'getByLang']);
 });
-// Route::middleware('auth:api')->group(function () {
 Route::prefix('settingsocial')->group(function () {
     Route::get('/', [SettingsocialController::class, 'index']);
     Route::get('/{id}', [SettingsocialController::class, 'show']);
@@ -636,7 +636,6 @@ Route::prefix('settingsocial')->group(function () {
     Route::post('/duplicate/{id}', [SettingsocialController::class, 'duplicate']);
     Route::post('/reorder', [SettingsocialController::class, 'reorder']);
 });
-// });
 Route::prefix('developer')->group(function () {
     Route::get('/', [DeveloperController::class, 'index']);
     Route::get('/{id}', [DeveloperController::class, 'show']);
@@ -655,9 +654,6 @@ Route::prefix('developersocial')->group(function () {
     Route::put('/visibility/{id}', [DevelopersocialController::class, 'visibility']);
     Route::post('/reorder', [DevelopersocialController::class, 'reorder']);
 });
-
-
-
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
