@@ -95,7 +95,7 @@ class RsdTitleController extends Controller
         }
     }
 
-    public function getByTilte($rsd_id)
+    public function getByRsd($rsd_id)
     {
         $records = RsdTitle::where('rsdt_text', $rsd_id)
             ->where('active', 1)
@@ -127,7 +127,7 @@ class RsdTitleController extends Controller
             return response()->json(['message' => 'Missing rsdt_text'], 400);
         }
 
-        $titles = $request->input('titles', []);
+        $titles = $request->input('research_title', []);
 
         $existingIds = collect($titles)
             ->pluck('rsdt_id')
@@ -138,7 +138,7 @@ class RsdTitleController extends Controller
 
         if (!empty($existingIds)) {
             RsdTitle::where('rsdt_text', $rsd_id)
-                ->whereNotIn('rsdt_text', $existingIds)
+                ->whereNotIn('rsdt_id', $existingIds)
                 ->where('active', '!=', 0)
                 ->delete();
         }
@@ -151,13 +151,22 @@ class RsdTitleController extends Controller
             if ($existing) {
                 $existing->update([
                     'rsdt_order' => $title['rsdt_order'],
+                    'rsdt_type' => $title['rsdt_type'] ?? '',
+                    'rsdt_code' => $title['rsdt_type'] . "-" . $existing->rsdt_id,
                     'active' => $title['active'] ?? 1,
                 ]);
+                continue;
             } else {
-                RsdTitle::create([
+                $created = RsdTitle::create([
                     'rsdt_text' => $rsd_id,
                     'rsdt_order' => $title['rsdt_order'],
+                    'rsdt_type' => $title['rsdt_type'] ?? '',
+                    'rsdt_code' => $title['rsdt_type'] . "-" . $title['rsdt_id'],
                     'active' => $title['active'] ?? 1,
+                ]);
+
+                $created->update([
+                    'rsdt_code' => $created->rsdt_type . '-' . $created->rsdt_id,
                 ]);
             }
         }

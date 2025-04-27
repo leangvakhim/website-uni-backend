@@ -22,13 +22,10 @@ class RsdMeetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'display' => 'nullable|boolean',
-            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'sec_order' => 'nullable|integer',
-
             'research_meet' => 'nullable|array',
-            'research_meet.*.rsdm_rsdtile' => 'nullable|integer|exists:tbrsd_title,rsdt_id',
+            'research_meet.*.rsdm_rsdtitle' => 'nullable|integer|exists:tbrsd_title,rsdt_id',
             'research_meet.*.rsdm_detail' => 'nullable|string',
+            'research_meet.*.rsdm_title' => 'nullable|string',
             'research_meet.*.rsdm_img' => 'nullable|integer|exists:tbimage,image_id',
         ];
     }

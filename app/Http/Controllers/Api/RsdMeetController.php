@@ -21,7 +21,7 @@ class RsdMeetController extends Controller
     public function index()
     {
         try {
-            $data = RsdMeet::with('rsdm_rsdtitle')->get();
+            $data = RsdMeet::with('title')->with('img')->get();
             return $this->sendResponse($data);
         } catch (Exception $e) {
             return $this->sendError('Failed to retrieve list', 500, ['error' => $e->getMessage()]);
@@ -31,7 +31,7 @@ class RsdMeetController extends Controller
     public function show($id)
     {
         try {
-            $item = RsdMeet::with('rsdm_rsdtitle')->find($id);
+            $item = RsdMeet::with('title')->with('img')->find($id);
             if (!$item) return $this->sendError('RSD Meet not found', 404);
             return $this->sendResponse($item);
         } catch (Exception $e) {
@@ -47,8 +47,9 @@ class RsdMeetController extends Controller
 
             if (isset($validated['research_meet']) && is_array($validated['research_meet'])) {
                 foreach ($validated['research_meet'] as $item) {
-                    $item['rsdm_rsdtile'] = $item['rsdm_rsdtile'] ?? null;
+                    $item['rsdm_rsdtitle'] = $item['rsdm_rsdtitle'] ?? null;
                     $item['rsdm_detail'] = $item['rsdm_detail'] ?? null;
+                    $item['rsdm_title'] = $item['rsdm_title'] ?? null;
                     $item['rsdm_img'] = $item['rsdm_img'] ?? null;
 
                     $createdRsdMeet[] = RsdMeet::create($item);
@@ -71,8 +72,9 @@ class RsdMeetController extends Controller
             $request->merge($request->input('research_meet'));
 
             $validated = $request->validate([
-                'rsdm_rsdtile' => 'nullable|integer|exists:tbrsd_title,rsdt_id',
+                'rsdm_rsdtitle' => 'nullable|integer|exists:tbrsd_title,rsdt_id',
                 'rsdm_detail' => 'nullable|string',
+                'rsdm_title' => 'nullable|string',
                 'rsdm_img' => 'nullable|integer|exists:tbimage,image_id',
             ]);
 

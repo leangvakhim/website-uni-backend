@@ -28,15 +28,13 @@ class RsdTitleRequest extends FormRequest
             'rsd_img' => 'nullable|integer|exists:tbimage,image_id',
             'rsd_fav' => 'nullable|boolean',
             'lang' => 'nullable|integer|in:1,2',
-            
+
             'research_title' => 'nullable|array',
             'research_title.*.rsdt_title' => 'nullable|string|max:255',
             'research_title.*.rsdt_text' => 'nullable|integer|exists:tbrsd,rsd_id',
-            'rearch_title.*.rsdt_type' => 'nullable|string|max:255',
+            'research_title.*.rsdt_type' => 'nullable|string|max:255',
             'research_title.*.rsdt_code' => 'nullable|string|max:255',
             'research_title.*.rsdt_order' => 'nullable|integer',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
         ];
     }
 }

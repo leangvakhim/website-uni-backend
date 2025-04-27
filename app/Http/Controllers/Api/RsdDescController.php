@@ -7,6 +7,9 @@ use App\Models\RsdDesc;
 use App\Services\RsdDescService;
 use App\Http\Requests\RsdDescRequest;
 use Exception;
+use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Support\Facades\Log;
 
 class RsdDescController extends Controller
 {
@@ -17,9 +20,15 @@ class RsdDescController extends Controller
         $this->service = $service;
     }
 
-    public function index()
+    public function index(HttpRequest $request)
     {
-        $data = RsdDesc::with('title')->get();
+        $query = RsdDesc::with('title');
+
+        if ($request->has('rsdd_rsdtile')) {
+            $query->where('rsdd_rsdtile', $request->input('rsdd_rsdtile'));
+        }
+
+        $data = $query->get();
         return $this->sendResponse($data);
     }
 
@@ -38,10 +47,22 @@ class RsdDescController extends Controller
             if (isset($validated['research_desc']) && is_array($validated['research_desc'])) {
                 foreach ($validated['research_desc'] as $item) {
 
-                    $item['rsdd_rsdtitle'] = $item['rsdd_rsdtitle'] ?? null;
+                    $item['rsdd_title'] = $item['rsdd_title'] ?? null;
                     $item['rsdd_details'] = $item['rsdd_details'] ?? null;
+                    $item['rsdd_rsdtile'] = $item['rsdd_rsdtile'] ?? null;
 
-                    $createdRsdDesc[] = RsdDesc::create($item);
+                    $existing = RsdDesc::where('rsdd_rsdtile', $item['rsdd_rsdtile'])->first();
+
+                    if ($existing) {
+                        $existing->update([
+                            'rsdd_title' => $item['rsdd_title'],
+                            'rsdd_details' => $item['rsdd_details'],
+                        ]);
+                        $createdRsdDesc[] = $existing;
+                    } else {
+                        $createdRecord = RsdDesc::create($item);
+                        $createdRsdDesc[] = $createdRecord;
+                    }
                 }
             }
 
@@ -62,14 +83,16 @@ class RsdDescController extends Controller
             $request->merge($request->input('research_desc'));
 
             $validated = $request->validate([
-                'rsdd_rsdtitle' => 'nullable|string|max:255',
+                'rsdd_title' => 'nullable|string|max:255',
                 'rsdd_details' => 'nullable|string',
+                'rsdd_rsdtile' => 'nullable|integer',
 
             ]);
 
             $RsdDesc->update($validated);
 
             return $this->sendResponse($RsdDesc, 200, 'RsdDesc updated successfully');
+            return $this->sendResponse([], 200, 'RsdDesc updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update RsdDesc', 500, ['error' => $e->getMessage()]);
         }

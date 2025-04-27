@@ -22,14 +22,11 @@ class RsdDescRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'display' => 'nullable|boolean',
-            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'sec_order' => 'nullable|integer',
-           
             'research_desc' => 'nullable|array',
-            'research_desc.*.rsdd_rsdtitle' => 'nullable|string|max:255',
+            'research_desc.*.rsdd_title' => 'nullable|string|max:255',
             'research_desc.*.rsdd_details' => 'nullable|string',
-            
+            'research_desc.*.rsdd_rsdtile' => 'nullable|integer',
+
         ];
     }
 }

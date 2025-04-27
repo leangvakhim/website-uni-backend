@@ -19,13 +19,13 @@ class RsdProjectController extends Controller
 
     public function index()
     {
-        $projects = RsdProject::with('rsdp_rsdtitle')->get();
+        $projects = RsdProject::with('title')->get();
         return $this->sendResponse($projects);
     }
 
     public function show($id)
     {
-        $project = RsdProject::with('rsdp_rsdtitle')->find($id);
+        $project = RsdProject::with('title')->find($id);
         return $project ? $this->sendResponse($project) : $this->sendError('Not found', 404);
     }
 
@@ -38,8 +38,9 @@ class RsdProjectController extends Controller
             if (isset($validated['research_project']) && is_array($validated['research_project'])) {
                 foreach ($validated['research_project'] as $item) {
 
-                    $item['rsdp_rsdtitle'] = $item['rsdp_rsdtitle'] ?? null;
+                    $item['rsdp_rsdtile'] = $item['rsdp_rsdtile'] ?? null;
                     $item['rsdp_detail'] = $item['rsdp_detail'] ?? null;
+                    $item['rsdp_title'] = $item['rsdp_title'] ?? null;
 
                     $createdRsdProject[] = RsdProject::create($item);
                 }
@@ -61,8 +62,9 @@ class RsdProjectController extends Controller
             $request->merge($request->input('research_project'));
 
             $validated = $request->validate([
-                'rsdp_rsdtitle' => 'nullable|integer|exists:tbrsd_title,rsdt_id',
+                'rsdp_rsdtile' => 'nullable|integer|exists:tbrsd_title,rsdt_id',
                 'rsdp_detail' => 'nullable|string',
+                'rsdp_title' => 'nullable|string',
             ]);
 
             $rsdproject->update($validated);
