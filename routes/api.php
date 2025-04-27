@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnnouncementImportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TextController;
@@ -72,6 +73,7 @@ use App\Http\Controllers\Api\SettingsocialController;
 use App\Http\Controllers\Api\DeveloperController;
 use App\Http\Controllers\Api\DevelopersocialController;
 use App\Http\Controllers\Api\AuthController;
+use App\Imports\AnnouncementImport;
 use Illuminate\Support\Facades\Log;
 
 
@@ -654,6 +656,10 @@ Route::prefix('developersocial')->group(function () {
     Route::put('/visibility/{id}', [DevelopersocialController::class, 'visibility']);
     Route::post('/reorder', [DevelopersocialController::class, 'reorder']);
 });
+
+Route::post('/announcement/import', [AnnouncementImportController::class, 'import']);
+Route::get('/announcement/student', [AnnouncementImportController::class, 'fetchStudents']);
+
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
