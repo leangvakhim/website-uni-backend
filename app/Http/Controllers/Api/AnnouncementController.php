@@ -13,7 +13,7 @@ class AnnouncementController extends Controller
     public function index()
     {
         try {
-            $announcements = Announcement::where('active', 1)->get();
+            $announcements = Announcement::where('active', 1)->orderBy("am_orders", "asc")->get();
             return $this->sendResponse($announcements->count() === 1 ? $announcements->first() : $announcements);
         } catch (Exception $e) {
             return $this->sendError('Failed to fetch announcements', 500, ['error' => $e->getMessage()]);
@@ -36,7 +36,7 @@ class AnnouncementController extends Controller
         try {
             $data = $request->validated();
 
-            if (!isset($data['am_orders'])) {
+            if (empty($data['am_orders'])) {
                 $data['am_orders'] = Announcement::max('am_orders') + 1;
             }
 
