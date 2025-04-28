@@ -659,6 +659,7 @@ Route::prefix('developersocial')->group(function () {
 
 Route::post('/announcement/import', [AnnouncementImportController::class, 'import']);
 Route::get('/announcement/student', [AnnouncementImportController::class, 'fetchStudents']);
+Route::post('/announcement/set-visibility', [AnnouncementImportController::class, 'setVisibility']);
 
 
 Route::post('/register', [AuthController::class, 'register']);

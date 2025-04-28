@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class AnnouncementImport implements ToCollection, WithHeadingRow
 {
@@ -23,9 +24,9 @@ class AnnouncementImport implements ToCollection, WithHeadingRow
         foreach ($rows as $row) {
             // 1. Insert or update Student
             $student = Student::updateOrCreate(
-                ['student_id' => $row['student_id']],
+                ['student_identity' => $row->get('student_identity')],
                 [
-                    'result' => $row['result'],
+                    'result' => $row->get('result'),
                     'display' => 1,
                     'active' => 1,
                 ]
