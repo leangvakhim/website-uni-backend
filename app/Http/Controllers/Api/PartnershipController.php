@@ -13,7 +13,7 @@ class PartnershipController extends Controller
     public function index()
     {
         try {
-            $data = Partnership::where('active', 1)->get();
+            $data = Partnership::with(['img'])->where('active', 1)->get();
             return $this->sendResponse($data->count() === 1 ? $data->first() : $data);
         } catch (Exception $e) {
             return $this->sendError('Failed to fetch partnerships', 500, ['error' => $e->getMessage()]);

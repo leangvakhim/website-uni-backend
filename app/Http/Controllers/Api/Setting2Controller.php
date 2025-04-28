@@ -13,7 +13,7 @@ class Setting2Controller extends Controller
     public function index()
     {
         try {
-            $items = Setting2::all();
+            $items = Setting2::with(['logo'])->get();
             return $this->sendResponse($items->count() === 1 ? $items->first() : $items);
         } catch (Exception $e) {
             return $this->sendError('Failed to fetch records', 500, ['error' => $e->getMessage()]);

@@ -19,4 +19,9 @@ class Setting2 extends Model
         'set_baseurl',
         'lang'
     ];
+
+    public function logo()
+    {
+        return $this->belongsTo(Image::class, 'set_logo', 'image_id');
+    }
 }
