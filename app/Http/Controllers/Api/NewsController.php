@@ -13,7 +13,7 @@ class NewsController extends Controller
     public function index()
     {
         try {
-            $news = News::where('active', 1)->get();
+            $news = News::with('img')->where('active', 1)->get();
             return $this->sendResponse($news->count() === 1 ? $news->first() : $news);
         } catch (Exception $e) {
             return $this->sendError('Failed to fetch news', 500, ['error' => $e->getMessage()]);
@@ -23,7 +23,7 @@ class NewsController extends Controller
     public function show($id)
     {
         try {
-            $news = News::find($id);
+            $news = News::with('img')->find($id);
             if (!$news) return $this->sendError('News not found', 404);
             return $this->sendResponse($news);
         } catch (Exception $e) {

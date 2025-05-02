@@ -13,7 +13,7 @@ class EventController extends Controller
     public function index()
     {
         try {
-            $events = Event::where('active', 1)->get();
+            $events = Event::with('img')->where('active', 1)->get();
             return $this->sendResponse($events->count() === 1 ? $events->first() : $events);
         } catch (Exception $e) {
             return $this->sendError('Failed to fetch events', 500, ['error' => $e->getMessage()]);
@@ -23,7 +23,7 @@ class EventController extends Controller
     public function show($id)
     {
         try {
-            $event = Event::find($id);
+            $event = Event::with('img')->find($id);
             if (!$event) return $this->sendError('Event not found', 404);
             return $this->sendResponse($event);
         } catch (Exception $e) {

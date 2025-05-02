@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Event extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'tbevent';
     protected $primaryKey = 'e_id';
     protected $fillable = [
@@ -26,6 +26,6 @@ class Event extends Model
     ];
     public function img()
     {
-        return $this->belongsTo(Image::class, 'n_img', 'image_id')->select(['image_id', 'img']);
+        return $this->belongsTo(Image::class, 'e_img', 'image_id')->select(['image_id', 'img']);
     }
 }
