@@ -22,4 +22,9 @@ class Announcement extends Model
         'display',
         'active'
     ];
+
+    public function img()
+    {
+        return $this->belongsTo(Image::class, 'am_img', 'image_id');
+    }
 }

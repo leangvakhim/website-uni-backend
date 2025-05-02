@@ -13,7 +13,7 @@ class AnnouncementController extends Controller
     public function index()
     {
         try {
-            $announcements = Announcement::where('active', 1)->orderBy("am_orders", "asc")->get();
+            $announcements = Announcement::with('img')->where('active', 1)->orderBy("am_orders", "asc")->get();
             return $this->sendResponse($announcements->count() === 1 ? $announcements->first() : $announcements);
         } catch (Exception $e) {
             return $this->sendError('Failed to fetch announcements', 500, ['error' => $e->getMessage()]);
@@ -23,7 +23,7 @@ class AnnouncementController extends Controller
     public function show($id)
     {
         try {
-            $announcement = Announcement::find($id);
+            $announcement = Announcement::with('img')->find($id);
             if (!$announcement) return $this->sendError('Announcement not found', 404);
             return $this->sendResponse($announcement);
         } catch (Exception $e) {
