@@ -13,7 +13,7 @@ class CareerController extends Controller
     public function index()
     {
         try {
-            $careers = Career::where('active', 1)->get();
+            $careers = Career::with(['img'])->where('active', 1)->get();
             return response()->json(['status' => 200, 'data' => $careers]);
         } catch (Exception $e) {
             return response()->json(['status' => 500, 'error' => $e->getMessage()]);
@@ -23,7 +23,7 @@ class CareerController extends Controller
     public function show($id)
     {
         try {
-            $career = Career::find($id);
+            $career = Career::with(['img'])->find($id);
             return $career
                 ? response()->json(['status' => 200, 'data' => $career])
                 : response()->json(['status' => 404, 'message' => 'Not Found']);

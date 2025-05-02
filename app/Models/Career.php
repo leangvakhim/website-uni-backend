@@ -23,4 +23,9 @@ class Career extends Model
         'active'
     ];
 
+    public function img()
+    {
+        return $this->belongsTo(Image::class, 'c_img', 'image_id');
+    }
+
 }
