@@ -26,5 +26,10 @@ class Rsdl extends Model
         return $this->hasMany(Rsdltag::class, 'rsdlt_rsdl', 'rsdl_id')->select(['rsdlt', 'rsdlt_title', 'rsdlt_img']);
     }
 
+    public function img()
+    {
+        return $this->belongsTo(Image::class, 'rsdl_img', 'image_id');
+    }
+
 
 }
