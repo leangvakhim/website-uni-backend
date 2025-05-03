@@ -81,8 +81,8 @@ class IntroController extends Controller
                 'in_title' => 'nullable|string|max:255',
                 'in_detail' => 'nullable|string',
                 'in_img' => 'nullable|integer|exists:tbimage,image_id',
-                'inadd_title' => 'nullable|string|max:50',
-                'in_addsubtitle' => 'nullable|string|max:50',
+                'inadd_title' => 'nullable|string',
+                'in_addsubtitle' => 'nullable|string',
             ]);
 
             $intro->update($validated);
