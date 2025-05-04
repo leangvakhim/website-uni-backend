@@ -23,7 +23,7 @@ class Setting2Controller extends Controller
     public function getByLang($lang)
     {
         try {
-            $item = Setting2::where('lang', $lang)->first();
+            $item = Setting2::with(['logo'])->where('lang', $lang)->first();
             if (!$item) {
                 return $this->sendError('Setting2 with this language not found', 404);
             }
