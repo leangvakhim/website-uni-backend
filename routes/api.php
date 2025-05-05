@@ -73,6 +73,7 @@ use App\Http\Controllers\Api\SettingsocialController;
 use App\Http\Controllers\Api\DeveloperController;
 use App\Http\Controllers\Api\DevelopersocialController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\EmailController;
 use App\Imports\AnnouncementImport;
 use Illuminate\Support\Facades\Log;
 
@@ -664,6 +665,12 @@ Route::prefix('developersocial')->group(function () {
     Route::put('/visibility/{id}', [DevelopersocialController::class, 'visibility']);
     Route::post('/reorder', [DevelopersocialController::class, 'reorder']);
 });
+
+Route::get('/emails', [EmailController::class, 'index']);
+Route::get('/emails/{id}', [EmailController::class, 'show']);
+Route::post('/emails/create', [EmailController::class, 'create']);
+Route::put('/emails/visibility/{id}', [EmailController::class, 'visibility']);
+
 
 Route::post('/announcement/import', [AnnouncementImportController::class, 'import']);
 Route::get('/announcement/student', [AnnouncementImportController::class, 'fetchStudents']);
