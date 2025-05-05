@@ -158,7 +158,7 @@ Route::prefix('faculty')->group(function () {
     Route::post('/duplicate/{id}', [FacultyController::class, 'duplicate']);
     Route::put('/reorder', [FacultyController::class, 'reorder']);
 });
-Route::get('/faculty/assign-ref-ids', [App\Http\Controllers\Api\FacultyController::class, 'assignRefIds']);
+Route::get('/faculty-assign-ref-ids', [App\Http\Controllers\Api\FacultyController::class, 'assignRefIds']);
 
 Route::prefix('subtse')->group(function () {
     Route::get('/', [SubtseController::class, 'index']);
@@ -212,7 +212,7 @@ Route::prefix('event')->group(function () {
     Route::post('/duplicate/{id}', [EventController::class, 'duplicate']);
     Route::put('/reorder', [EventController::class, 'reorder']);
 });
-Route::get('/event/assign-ref-ids', [App\Http\Controllers\Api\EventController::class, 'assignRefIds']);
+Route::get('/event-assign-ref-ids', [App\Http\Controllers\Api\EventController::class, 'assignRefIds']);
 
 Route::prefix('news')->group(function () {
     Route::get('/', [NewsController::class, 'index']);
@@ -223,7 +223,7 @@ Route::prefix('news')->group(function () {
     Route::post('/duplicate/{id}', [NewsController::class, 'duplicate']);
     Route::put('/reorder', [NewsController::class, 'reorder']);
 });
-Route::get('/news/assign-ref-ids', [App\Http\Controllers\Api\NewsController::class, 'assignRefIds']);
+Route::get('/news-assign-ref-ids', [App\Http\Controllers\Api\NewsController::class, 'assignRefIds']);
 
 Route::prefix('career')->group(function () {
     Route::get('/', [CareerController::class, 'index']);
@@ -234,7 +234,7 @@ Route::prefix('career')->group(function () {
     Route::post('/duplicate/{id}', [CareerController::class, 'duplicate']);
     Route::put('/reorder', [CareerController::class, 'reorder']);
 });
-Route::get('/career/assign-ref-ids', [App\Http\Controllers\Api\CareerController::class, 'assignRefIds']);
+Route::get('/career-assign-ref-ids', [App\Http\Controllers\Api\CareerController::class, 'assignRefIds']);
 
 Route::prefix('rsdl')->group(function () {
     Route::get('/', [RsdlController::class, 'index']);
@@ -245,7 +245,7 @@ Route::prefix('rsdl')->group(function () {
     Route::post('/duplicate/{id}', [RsdlController::class, 'duplicate']);
     Route::put('/reorder', [RsdlController::class, 'reorder']);
 });
-Route::get('/rsdl/assign-ref-ids', [App\Http\Controllers\Api\RsdlController::class, 'assignRefIds']);
+Route::get('/rsdl-assign-ref-ids', [App\Http\Controllers\Api\RsdlController::class, 'assignRefIds']);
 
 Route::prefix('scholarship')->group(function () {
     Route::get('/', [ScholarshipController::class, 'index']);
@@ -256,7 +256,7 @@ Route::prefix('scholarship')->group(function () {
     Route::post('/duplicate/{id}', [ScholarshipController::class, 'duplicate']);
     Route::put('/reorder', [ScholarshipController::class, 'reorder']);
 });
-Route::get('/scholarship/assign-ref-ids', [App\Http\Controllers\Api\ScholarshipController::class, 'assignRefIds']);
+Route::get('/scholarship-assign-ref-ids', [App\Http\Controllers\Api\ScholarshipController::class, 'assignRefIds']);
 
 Route::prefix('rsd-meet')->controller(RsdMeetController::class)->group(function () {
     Route::get('/', 'index');
@@ -299,7 +299,7 @@ Route::prefix('rsd')->controller(RsdController::class)->group(function () {
     Route::post('/duplicate/{id}', 'duplicate');
     Route::put('/reorder', 'reorder');
 });
-Route::get('/rsd/assign-ref-ids', [App\Http\Controllers\Api\RsdController::class, 'assignRefIds']);
+Route::get('/rsd-assign-ref-ids', [App\Http\Controllers\Api\RsdController::class, 'assignRefIds']);
 
 Route::prefix('rsdltag')->group(function () {
     Route::get('/', [RsdltagController::class, 'index']);
@@ -602,7 +602,7 @@ Route::prefix('announcements')->controller(AnnouncementController::class)->group
     Route::post('/duplicate/{id}', 'duplicate');
     Route::post('/reorder', 'reorder');
 });
-Route::get('/announcements/assign-ref-ids', [App\Http\Controllers\Api\AnnouncementController::class, 'assignRefIds']);
+Route::get('/announcements-assign-ref-ids', [App\Http\Controllers\Api\AnnouncementController::class, 'assignRefIds']);
 
 Route::prefix('student')->controller(StudentController::class)->group(function () {
     Route::get('/', 'index');
