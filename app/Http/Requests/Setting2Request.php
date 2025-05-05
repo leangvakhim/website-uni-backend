@@ -28,6 +28,7 @@ class Setting2Request extends FormRequest
             'set_amstu'        => 'nullable|integer',
             'set_enroll'       => 'nullable|integer',
             'set_baseurl'      => 'nullable|string',
+            'set_email'        => 'nullable|string|max:100',
             'lang'      => 'nullable|integer',
         ];
     }

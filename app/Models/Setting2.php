@@ -17,6 +17,7 @@ class Setting2 extends Model
         'set_amstu',
         'set_enroll',
         'set_baseurl',
+        'set_email',
         'lang'
     ];
 
