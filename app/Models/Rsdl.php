@@ -19,6 +19,7 @@ class Rsdl extends Model
         'display',
         'active',
         'rsdl_img',
+        'ref_id',
     ];
 
     public function rsdltag()

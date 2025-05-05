@@ -22,7 +22,8 @@ class Event extends Model
         'lang',
         'e_order',
         'display',
-        'active'
+        'active',
+        'ref_id'
     ];
     public function img()
     {

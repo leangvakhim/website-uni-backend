@@ -27,6 +27,7 @@ class FacultyRequest extends FormRequest
             'f_portfolio' => 'nullable|string',
             'f_img' => 'nullable|integer|exists:tbimage,image_id',
             'f_order' => 'nullable|integer',
+            'ref_id' => 'nullable|integer',
             'lang' => 'nullable|integer|in:1,2',
             'display' => 'required|boolean',
             'active' => 'required|boolean',

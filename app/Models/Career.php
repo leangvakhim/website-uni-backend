@@ -20,7 +20,8 @@ class Career extends Model
         'lang',
         'c_order',
         'display',
-        'active'
+        'active',
+        'ref_id'
     ];
 
     public function img()

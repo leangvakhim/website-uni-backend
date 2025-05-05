@@ -57,6 +57,9 @@ class RsdController extends Controller
     {
         try {
             $data = $request->validated();
+
+            $data['ref_id'] = $data['ref_id'] ?? (Rsd::max('ref_id') ? Rsd::max('ref_id') + 1 : 100);
+
             if (!isset($data['rsd_order'])) {
                 $data['rsd_order'] = Rsd::max('rsd_order') + 1;
             }
@@ -74,6 +77,12 @@ class RsdController extends Controller
         try {
             $rsd = Rsd::find($id);
             if (!$rsd) return $this->sendError('RSD not found', 404);
+
+            if (!$rsd->ref_id && $request->has('ref_id')) {
+                $rsd->ref_id = $request->input('ref_id');
+                $rsd->save();
+            }
+
             $updated = $this->rsdService->update($rsd, $request->validated());
             return $this->sendResponse($updated, 200, 'RSD updated successfully');
         } catch (Exception $e) {
@@ -131,6 +140,23 @@ class RsdController extends Controller
             ], 200);
         } catch (Exception $e) {
             return $this->sendError('Failed to reorder RSD', 500, ['error' => $e->getMessage()]);
+        }
+    }
+
+    public function assignRefIds()
+    {
+        try {
+            $rsds = Rsd::whereNull('ref_id')->get();
+            $nextRef = Rsd::max('ref_id') ?? 99;
+
+            foreach ($rsds as $rsd) {
+                $rsd->ref_id = ++$nextRef;
+                $rsd->save();
+            }
+
+            return response()->json(['message' => 'Ref IDs assigned successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to assign Ref IDs', 'error' => $e->getMessage()], 500);
         }
     }
 }

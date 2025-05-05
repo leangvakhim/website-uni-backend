@@ -29,6 +29,7 @@ class AnnouncementRequest extends FormRequest
             'am_img' => 'nullable|integer|exists:tbimage,image_id',
             'am_fav' => 'nullable|boolean',
             'lang' => 'nullable|integer',
+            'ref_id' => 'nullable|integer',
             'am_orders' => 'nullable|integer',
             'display' => 'boolean',
             'active' => 'boolean'

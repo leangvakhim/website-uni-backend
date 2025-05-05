@@ -36,6 +36,8 @@ class NewsController extends Controller
         try {
             $data = $request->validated();
 
+            $data['ref_id'] = $data['ref_id'] ?? (News::max('ref_id') ? News::max('ref_id') + 1 : 100);
+
             if (!isset($data['n_order'])) {
                 $data['n_order'] = News::max('n_order') + 1;
             }
@@ -52,6 +54,12 @@ class NewsController extends Controller
         try {
             $news = News::find($id);
             if (!$news) return $this->sendError('News not found', 404);
+
+            if (!$news->ref_id && $request->has('ref_id')) {
+                $news->ref_id = $request->input('ref_id');
+                $news->save();
+            }
+
             $news->update($request->all());
             return $this->sendResponse($news, 200, 'News updated');
         } catch (Exception $e) {
@@ -102,5 +110,22 @@ class NewsController extends Controller
         return response()->json([
             'message' => 'News order updated successfully',
         ], 200);
+    }
+
+    public function assignRefIds()
+    {
+        try {
+            $news = News::whereNull('ref_id')->get();
+            $nextRef = News::max('ref_id') ?? 99;
+
+            foreach ($news as $new) {
+                $new->ref_id = ++$nextRef;
+                $new->save();
+            }
+
+            return response()->json(['message' => 'Ref IDs assigned successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to assign Ref IDs', 'error' => $e->getMessage()], 500);
+        }
     }
 }

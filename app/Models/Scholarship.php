@@ -23,7 +23,8 @@ class Scholarship extends Model
         'lang',
         'sc_orders',
         'display',
-        'active'
+        'active',
+        'ref_id'
     ];
 
     public function image()

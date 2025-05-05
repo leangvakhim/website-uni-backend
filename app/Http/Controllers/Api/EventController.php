@@ -37,6 +37,8 @@ class EventController extends Controller
             // $event = Event::create($request->validated());
             $data = $request->validated();
 
+            $data['ref_id'] = $data['ref_id'] ?? (Event::max('ref_id') ? Event::max('ref_id') + 1 : 100);
+
             if (!isset($data['e_order'])) {
                 $data['e_order'] = Event::max('e_order') + 1;
             }
@@ -53,7 +55,13 @@ class EventController extends Controller
         try {
             $event = Event::find($id);
             if (!$event) return $this->sendError('Event not found', 404);
+
             $event->update($request->all());
+
+            if (!$event->ref_id && $request->has('ref_id')) {
+                $event->ref_id = $request->input('ref_id');
+                $event->save();
+            }
             return $this->sendResponse($event, 200, 'Event updated');
         } catch (Exception $e) {
             return $this->sendError('Failed to update event', 500, ['error' => $e->getMessage()]);
@@ -103,5 +111,22 @@ class EventController extends Controller
         return response()->json([
             'message' => 'Event order updated successfully',
         ], 200);
+    }
+
+    public function assignRefIds()
+    {
+        try {
+            $events = Event::whereNull('ref_id')->get();
+            $nextRef = Event::max('ref_id') ?? 99;
+
+            foreach ($events as $event) {
+                $event->ref_id = ++$nextRef;
+                $event->save();
+            }
+
+            return response()->json(['message' => 'Ref IDs assigned successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to assign Ref IDs', 'error' => $e->getMessage()], 500);
+        }
     }
 }

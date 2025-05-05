@@ -20,7 +20,8 @@ class Announcement extends Model
         'lang',
         'am_orders',
         'display',
-        'active'
+        'active',
+        'ref_id'
     ];
 
     public function img()

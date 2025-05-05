@@ -30,6 +30,7 @@ class EventRequest extends FormRequest
             'e_detail' => 'nullable|string',
             'e_fav' => 'required|boolean',
             'lang' => 'nullable|integer',
+            'ref_id' => 'nullable|integer',
             'e_order' => 'nullable|integer',
             'display' => 'required|boolean',
             'active' => 'required|boolean'

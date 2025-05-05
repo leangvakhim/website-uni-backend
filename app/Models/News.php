@@ -22,7 +22,8 @@ class News extends Model
         'lang',
         'n_order',
         'display',
-        'active'
+        'active',
+        'ref_id'
     ];
     public function img()
     {

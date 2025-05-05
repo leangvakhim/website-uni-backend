@@ -37,6 +37,8 @@ class CareerController extends Controller
         try {
             $data = $request->validated();
 
+            $data['ref_id'] = $data['ref_id'] ?? (Career::max('ref_id') ? Career::max('ref_id') + 1 : 100);
+
             if (!isset($data['c_order'])) {
                 $data['c_order'] = Career::max('c_order') + 1;
             }
@@ -53,6 +55,12 @@ class CareerController extends Controller
         try {
             $career = Career::find($id);
             if (!$career) return response()->json(['status' => 404, 'message' => 'Not Found']);
+
+            if (!$career->ref_id && $request->has('ref_id')) {
+                $career->ref_id = $request->input('ref_id');
+                $career->save();
+            }
+
             $career->update($request->validated());
             return response()->json(['status' => 200, 'message' => 'Updated', 'data' => $career]);
         } catch (Exception $e) {
@@ -99,5 +107,22 @@ class CareerController extends Controller
         return response()->json([
             'message' => 'Career order updated successfully',
         ], 200);
+    }
+
+    public function assignRefIds()
+    {
+        try {
+            $careers = Career::whereNull('ref_id')->get();
+            $nextRef = Career::max('ref_id') ?? 99;
+
+            foreach ($careers as $career) {
+                $career->ref_id = ++$nextRef;
+                $career->save();
+            }
+
+            return response()->json(['message' => 'Ref IDs assigned successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to assign Ref IDs', 'error' => $e->getMessage()], 500);
+        }
     }
 }
