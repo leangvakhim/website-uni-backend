@@ -17,7 +17,8 @@ class Setting2 extends Model
         'set_amstu',
         'set_enroll',
         'set_baseurl',
-        'set_email',
+        'set_telegramtoken',
+        'set_chatid',
         'lang'
     ];
 

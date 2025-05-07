@@ -28,7 +28,8 @@ class Setting2Request extends FormRequest
             'set_amstu'        => 'nullable|integer',
             'set_enroll'       => 'nullable|integer',
             'set_baseurl'      => 'nullable|string',
-            'set_email'        => 'nullable|string|max:100',
+            'set_telegramtoken'        => 'nullable|string',
+            'set_chatid'        => 'nullable|string',
             'lang'      => 'nullable|integer',
         ];
     }

@@ -55,7 +55,8 @@ class Setting2Controller extends Controller
                 'set_amstu' => $validated['set_amstu'] ?? null,
                 'set_enroll' => $validated['set_enroll'] ?? null,
                 'set_baseurl' => $validated['set_baseurl'] ?? null,
-                'set_email' => $validated['set_email'] ?? null,
+                'set_telegramtoken' => $validated['set_telegramtoken'] ?? null,
+                'set_chatid' => $validated['set_chatid'] ?? null,
                 'lang' => $validated['lang'] ?? null,
             ];
 

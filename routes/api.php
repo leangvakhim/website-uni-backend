@@ -670,6 +670,7 @@ Route::get('/emails', [EmailController::class, 'index']);
 Route::get('/emails/{id}', [EmailController::class, 'show']);
 Route::post('/emails/create', [EmailController::class, 'create']);
 Route::put('/emails/visibility/{id}', [EmailController::class, 'visibility']);
+// Route::post('/emails/submit', [EmailController::class, 'submitEmail']);
 
 
 Route::post('/announcement/import', [AnnouncementImportController::class, 'import']);
