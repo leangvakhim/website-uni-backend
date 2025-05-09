@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\Controller;
 use App\Models\RsdTitle;
 use App\Http\Requests\RsdTitleRequest;
 use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RsdTitleController extends Controller
 {
@@ -46,7 +48,7 @@ class RsdTitleController extends Controller
             if (!isset($validated['rsdt_order'])) {
                 $validated['rsdt_order'] = (RsdTitle::where('rsdt_text', $validated['rsdt_text'])->max('rsdt_order') ?? 0) + 1;
             }
-            
+
 
             $validated['rsdt_title'] = $validated['rsdt_title'] ?? 1;
             $validated['rsdt_text'] = $validated['rsdt_text'] ?? 1;
@@ -94,7 +96,7 @@ class RsdTitleController extends Controller
         }
     }
 
-    public function getByTilte($rsd_id)
+    public function getByRsd($rsd_id)
     {
         $records = RsdTitle::where('rsdt_text', $rsd_id)
             ->where('active', 1)
@@ -107,7 +109,7 @@ class RsdTitleController extends Controller
     public function reorder(Request $request)
     {
         $data = $request->validate([
-            '*.rsdt_id' => 'required|integer|exists:rsd_titles,rsdt_id',
+            '*.rsdt_id' => 'required|integer|exists:tbrsd_title,rsdt_id',
             '*.rsdt_order' => 'required|integer'
         ]);
 
@@ -126,7 +128,7 @@ class RsdTitleController extends Controller
             return response()->json(['message' => 'Missing rsdt_text'], 400);
         }
 
-        $titles = $request->input('titles', []);
+        $titles = $request->input('research_title', []);
 
         $existingIds = collect($titles)
             ->pluck('rsdt_id')
@@ -137,26 +139,41 @@ class RsdTitleController extends Controller
 
         if (!empty($existingIds)) {
             RsdTitle::where('rsdt_text', $rsd_id)
-                ->whereNotIn('rsdt_text', $existingIds)
+                ->whereNotIn('rsdt_id', $existingIds)
                 ->where('active', '!=', 0)
                 ->delete();
         }
 
         foreach ($titles as $title) {
-            $existing = RsdTitle::where('rsdt_id', $title['rsdt_id'] ?? 0)
-                ->where('rsdt_text', $rds_id)
-                ->first();
+            $existing = null;
+
+            if (!empty($title['rsdt_id'])) {
+                $existing = RsdTitle::where('rsdt_id', $title['rsdt_id'])
+                    ->where('rsdt_text', $rsd_id)
+                    ->first();
+            } elseif (!empty($title['rsdt_code'])) {
+                $existing = RsdTitle::where('rsdt_code', $title['rsdt_code'])->first();
+            }
 
             if ($existing) {
                 $existing->update([
                     'rsdt_order' => $title['rsdt_order'],
+                    'rsdt_type' => $title['rsdt_type'] ?? '',
+                    'rsdt_code' => $title['rsdt_type'] . "-" . $existing->rsdt_id,
                     'active' => $title['active'] ?? 1,
                 ]);
+                continue;
             } else {
-                RsdTitle::create([
-                    'rsdt_text' => $rds_id,
+                $created = RsdTitle::create([
+                    'rsdt_text' => $rsd_id,
                     'rsdt_order' => $title['rsdt_order'],
+                    'rsdt_type' => $title['rsdt_type'] ?? '',
+                    'rsdt_code' => '', // temporary
                     'active' => $title['active'] ?? 1,
+                ]);
+
+                $created->update([
+                    'rsdt_code' => $created->rsdt_type . '-' . $created->rsdt_id,
                 ]);
             }
         }
