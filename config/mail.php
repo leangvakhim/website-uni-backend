@@ -113,4 +113,6 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    // 'dynamic_recipient' => env('MAIL_RECEIVER', 'vakhiml60@gmail.com'),
+
 ];

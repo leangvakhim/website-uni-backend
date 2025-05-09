@@ -31,7 +31,7 @@ class SubtseRequest extends FormRequest
             'tse_type' => 'nullable|integer',
 
             'subtse' => 'nullable|array',
-            'subtse.*.stse_tse' => 'nullable|integer|exists:tbsection,sec_id',
+            'subtse.*.stse_tse' => 'nullable|integer|exists:tbtse,tse_id',
             'subtse.*.stse_title' => 'nullable|string',
             'subtse.*.stse_detail' => 'nullable|string',
             'subtse.*.stse_order' => 'nullable|integer',

@@ -20,6 +20,12 @@ class Announcement extends Model
         'lang',
         'am_orders',
         'display',
-        'active'
+        'active',
+        'ref_id'
     ];
+
+    public function img()
+    {
+        return $this->belongsTo(Image::class, 'am_img', 'image_id');
+    }
 }

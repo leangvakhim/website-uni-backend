@@ -27,7 +27,7 @@ class Subservice extends Model
 
     public function af()
     {
-        return $this->belongsTo(Acadfacility::class, 'ss_af');
+        return $this->belongsTo(AcadFacility::class, 'ss_af');
     }
 
     public function image()

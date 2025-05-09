@@ -13,7 +13,7 @@ class AnnouncementController extends Controller
     public function index()
     {
         try {
-            $announcements = Announcement::where('active', 1)->get();
+            $announcements = Announcement::with('img')->where('active', 1)->orderBy("am_orders", "asc")->get();
             return $this->sendResponse($announcements->count() === 1 ? $announcements->first() : $announcements);
         } catch (Exception $e) {
             return $this->sendError('Failed to fetch announcements', 500, ['error' => $e->getMessage()]);
@@ -23,7 +23,7 @@ class AnnouncementController extends Controller
     public function show($id)
     {
         try {
-            $announcement = Announcement::find($id);
+            $announcement = Announcement::with('img')->find($id);
             if (!$announcement) return $this->sendError('Announcement not found', 404);
             return $this->sendResponse($announcement);
         } catch (Exception $e) {
@@ -36,7 +36,9 @@ class AnnouncementController extends Controller
         try {
             $data = $request->validated();
 
-            if (!isset($data['am_orders'])) {
+            $data['ref_id'] = $data['ref_id'] ?? (Announcement::max('ref_id') ? Announcement::max('ref_id') + 1 : 100);
+
+            if (empty($data['am_orders'])) {
                 $data['am_orders'] = Announcement::max('am_orders') + 1;
             }
 
@@ -52,6 +54,11 @@ class AnnouncementController extends Controller
         try {
             $announcement = Announcement::find($id);
             if (!$announcement) return $this->sendError('Announcement not found', 404);
+
+            if (!$announcement->ref_id && $request->has('ref_id')) {
+                $announcement->ref_id = $request->input('ref_id');
+                $announcement->save();
+            }
 
             $announcement->update($request->all());
             return $this->sendResponse($announcement, 200, 'Announcement updated');
@@ -105,5 +112,22 @@ class AnnouncementController extends Controller
         return response()->json([
             'message' => 'Announcement order updated successfully',
         ], 200);
+    }
+
+    public function assignRefIds()
+    {
+        try {
+            $announcements = Announcement::whereNull('ref_id')->get();
+            $nextRef = Announcement::max('ref_id') ?? 99;
+
+            foreach ($announcements as $announcement) {
+                $announcement->ref_id = ++$nextRef;
+                $announcement->save();
+            }
+
+            return response()->json(['message' => 'Ref IDs assigned successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to assign Ref IDs', 'error' => $e->getMessage()], 500);
+        }
     }
 }

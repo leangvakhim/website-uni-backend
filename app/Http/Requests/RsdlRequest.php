@@ -28,6 +28,7 @@ class RsdlRequest extends FormRequest
             'lang' => 'nullable|integer',
             'rsdl_order' => 'nullable|integer',
             'display' => 'required|boolean',
+            'ref_id' => 'nullable|integer',
             'active' => 'required|boolean',
             'rsdl_img' => 'nullable|integer|exists:tbimage,image_id',
         ];

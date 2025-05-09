@@ -27,6 +27,25 @@ class ContactController extends Controller
         }
     }
 
+    public function getByLang($lang)
+    {
+        try {
+            $item = Contact::with(['image:image_id,img'])
+                ->with([
+                    'subcontact1.image:image_id,img',
+                    'subcontact2.image:image_id,img',
+                    'subcontact3.image:image_id,img'
+                ])
+                ->where('lang', $lang)->first();
+            if (!$item) {
+                return $this->sendError('Contact with this language not found', 404);
+            }
+            return $this->sendResponse($item);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to fetch setting by language', 500, ['error' => $e->getMessage()]);
+        }
+    }
+
     public function show(string $id)
     {
         try {
@@ -41,24 +60,20 @@ class ContactController extends Controller
     {
         try {
             $validated = $request->validated();
-            $createdContact = [];
 
-            if (isset($validated['contact']) && is_array($validated['contact'])) {
-                foreach ($validated['contact'] as $item) {
+            $contactData = [
+                'con_title' => $validated['con_title'] ?? null,
+                'con_subtitle' => $validated['con_subtitle'] ?? null,
+                'con_img' => $validated['con_img'] ?? null,
+                'con_addon' => $validated['con_addon'] ?? null,
+                'con_addon2' => $validated['con_addon2'] ?? null,
+                'con_addon3' => $validated['con_addon3'] ?? null,
+                'lang' => $validated['lang'] ?? null,
+            ];
 
-                    $item['con_title'] = $item['con_title'] ?? null;
-                    $item['con_subtitle'] = $item['con_subtitle'] ?? null;
-                    $item['con_img'] = $item['con_img'] ?? null;
-                    $item['con_addon'] = $item['con_addon'] ?? null;
-                    $item['con_addon2'] = $item['con_addon2'] ?? null;
-                    $item['con_addon3'] = $item['con_addon3'] ?? null;
-                    $item['lang'] = $item['lang'] ?? null;
+            $createdContact = Contact::create($contactData);
 
-                    $createdContact[] = Contact::create($item);
-                }
-            }
-
-            return $this->sendResponse($createdContact, 201, 'Contact records created successfully');
+            return $this->sendResponse($createdContact, 201, 'Contact record created successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to create contact', 500, ['error' => $e->getMessage()]);
         }
@@ -72,19 +87,19 @@ class ContactController extends Controller
                 return $this->sendError('Contact not found', 404);
             }
 
-            $request->merge($request->input('contact'));
+            $validated = $request->validated();
 
-            $validated = $request->validate([
-                'con_title' => 'nullable|string|max:255',
-                'con_subtitle' => 'nullable|string',
-                'con_img' => 'nullable|integer|exists:tbimage,image_id',
-                'con_addon' => 'nullable|integer|exists:tbsubcontact,scon_id',
-                'con_addon2' => 'nullable|integer|exists:tbsubcontact,scon_id',
-                'con_addon3' => 'nullable|integer|exists:tbsubcontact,scon_id',
-                'lang' => 'nullable|integer',
-            ]);
+            $contactData = [
+                'con_title' => $validated['con_title'] ?? null,
+                'con_subtitle' => $validated['con_subtitle'] ?? null,
+                'con_img' => $validated['con_img'] ?? null,
+                'con_addon' => $validated['con_addon'] ?? null,
+                'con_addon2' => $validated['con_addon2'] ?? null,
+                'con_addon3' => $validated['con_addon3'] ?? null,
+                'lang' => $validated['lang'] ?? null,
+            ];
 
-            $contact->update($validated);
+            $contact->update($contactData);
 
             return $this->sendResponse($contact, 200, 'Contact updated successfully');
         } catch (Exception $e) {

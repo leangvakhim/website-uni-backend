@@ -31,8 +31,8 @@ class IntroRequest extends FormRequest
             'introduction.*.in_title' => 'nullable|string|max:255',
             'introduction.*.in_detail' => 'nullable|string',
             'introduction.*.in_img' => 'nullable|integer|exists:tbimage,image_id',
-            'introduction.*.inadd_title' => 'nullable|string|max:50',
-            'introduction.*.in_addsubtitle' => 'nullable|string|max:50',
+            'introduction.*.inadd_title' => 'nullable|string',
+            'introduction.*.in_addsubtitle' => 'nullable|string',
         ];
     }
 }

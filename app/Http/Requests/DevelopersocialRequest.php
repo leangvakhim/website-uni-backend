@@ -34,13 +34,13 @@ class DevelopersocialRequest extends FormRequest
             'd_order'     => 'nullable|integer',
 
             'developer_social' => 'nullable|array',
-            'developer_social.*.ds_title' => 'nullable|string|max:255',	
+            'developer_social.*.ds_title' => 'nullable|string|max:255',
             'developer_social.*.ds_img' => 'nullable|integer|exists:tbimage,image_id',
             'developer_social.*.ds_developer' => 'nullable|integer|exists:tbdeveloper,d_id',
             'developer_social.*.ds_link' => 'nullable|string|max:255',
             'developer_social.*.ds_order' => 'nullable|integer',
-            'developer_social.*.display' => 'required|integer',
-            'developer_social.*.active' => 'required|integer',
+            'developer_social.*.display' => 'nullable|integer',
+            'developer_social.*.active' => 'nullable|integer',
 
 
         ];

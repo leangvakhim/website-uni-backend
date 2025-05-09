@@ -45,6 +45,8 @@ class ScholarshipController extends Controller
         try {
             $data = $request->validated();
 
+            $data['ref_id'] = $data['ref_id'] ?? (Scholarship::max('ref_id') ? Scholarship::max('ref_id') + 1 : 100);
+
             if (!isset($data['sc_orders'])) {
                 $data['sc_orders'] = Scholarship::max('sc_orders') + 1;
             }
@@ -62,6 +64,11 @@ class ScholarshipController extends Controller
             $scholarship = Scholarship::find($id);
             if (!$scholarship) {
                 return $this->sendError('Scholarship not found', 404);
+            }
+
+            if (!$scholarship->ref_id && $request->has('ref_id')) {
+                $scholarship->ref_id = $request->input('ref_id');
+                $scholarship->save();
             }
 
             $scholarship->update($request->validated());
@@ -89,44 +96,60 @@ class ScholarshipController extends Controller
     }
 
     public function duplicate($id)
-{
-    try {
-        $scholarship = Scholarship::find($id);
+    {
+        try {
+            $scholarship = Scholarship::find($id);
 
-        if (!$scholarship) {
-            return $this->sendError('Scholarship not found', 404);
+            if (!$scholarship) {
+                return $this->sendError('Scholarship not found', 404);
+            }
+
+            $newScholarship = $scholarship->replicate();
+            $newScholarship->sc_title = $scholarship->sc_title . ' (Copy)';
+            $newScholarship->sc_orders = Scholarship::max('sc_orders') + 1;
+            $newScholarship->save();
+
+            return $this->sendResponse($newScholarship, 200, 'Scholarship duplicated');
+        } catch (Exception $e) {
+            return $this->sendError('Failed to duplicate scholarship', 500, ['error' => $e->getMessage()]);
         }
-
-        $newScholarship = $scholarship->replicate();
-        $newScholarship->sc_title = $scholarship->sc_title . ' (Copy)';
-        $newScholarship->sc_orders = Scholarship::max('sc_orders') + 1;
-        $newScholarship->save();
-
-        return $this->sendResponse($newScholarship, 200, 'Scholarship duplicated');
-    } catch (Exception $e) {
-        return $this->sendError('Failed to duplicate scholarship', 500, ['error' => $e->getMessage()]);
     }
-}
 
-public function reorder(Request $request)
-{
-    try {
-        $data = $request->validate([
-            '*.sc_id' => 'required|integer|exists:scholarships,sc_id',
-            '*.sc_orders' => 'required|integer'
-        ]);
+    public function reorder(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                '*.sc_id' => 'required|integer|exists:scholarships,sc_id',
+                '*.sc_orders' => 'required|integer'
+            ]);
 
-        foreach ($data as $item) {
-            Scholarship::where('sc_id', $item['sc_id'])->update(['sc_orders' => $item['sc_orders']]);
+            foreach ($data as $item) {
+                Scholarship::where('sc_id', $item['sc_id'])->update(['sc_orders' => $item['sc_orders']]);
+            }
+
+            return response()->json([
+                'message' => 'Scholarship order updated successfully',
+            ], 200);
+        } catch (Exception $e) {
+            return $this->sendError('Failed to update scholarship order', 500, ['error' => $e->getMessage()]);
         }
-
-        return response()->json([
-            'message' => 'Scholarship order updated successfully',
-        ], 200);
-    } catch (Exception $e) {
-        return $this->sendError('Failed to update scholarship order', 500, ['error' => $e->getMessage()]);
     }
-}
 
+    public function assignRefIds()
+    {
+        try {
+            $scholarships = Scholarship::whereNull('ref_id')->get();
+            $nextRef = Scholarship::max('ref_id') ?? 99;
+
+            foreach ($scholarships as $scholarship) {
+                $scholarship->ref_id = ++$nextRef;
+                $scholarship->save();
+            }
+
+            return response()->json(['message' => 'Ref IDs assigned successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to assign Ref IDs', 'error' => $e->getMessage()], 500);
+        }
+    }
 
 }

@@ -47,7 +47,6 @@ class RsdMeetController extends Controller
 
             if (isset($validated['research_meet']) && is_array($validated['research_meet'])) {
                 foreach ($validated['research_meet'] as $item) {
-
                     $item['rsdm_rsdtitle'] = $item['rsdm_rsdtitle'] ?? null;
                     $item['rsdm_detail'] = $item['rsdm_detail'] ?? null;
                     $item['rsdm_title'] = $item['rsdm_title'] ?? null;

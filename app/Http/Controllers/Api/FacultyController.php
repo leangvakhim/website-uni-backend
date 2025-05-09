@@ -57,6 +57,12 @@ class FacultyController extends Controller
         try {
             $data = $request->validated();
 
+            // if (!isset($data['ref_id'])) {
+            //     $data['ref_id'] = Faculty::max('ref_id') ? Faculty::max('ref_id') + 1 : 100;
+            // }
+
+            $data['ref_id'] = $data['ref_id'] ?? (Faculty::max('ref_id') ? Faculty::max('ref_id') + 1 : 100);
+
             if (!isset($data['f_order'])) {
                 $data['f_order'] = Faculty::max('f_order') + 1;
             }
@@ -78,6 +84,12 @@ class FacultyController extends Controller
             }
 
             $updated = $this->facultyService->updateFaculty($faculty, $request->all());
+
+            if (!$faculty->ref_id && $request->has('ref_id')) {
+                $faculty->ref_id = $request->input('ref_id');
+                $faculty->save();
+            }
+
             return $this->sendResponse($updated, 200, 'Faculty updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update faculty', 500, ['error' => $e->getMessage()]);
@@ -109,6 +121,7 @@ class FacultyController extends Controller
         }
 
         $newFaculty = $faculty->replicate();
+        $newFaculty->ref_id = $faculty->ref_id;
         $newFaculty->f_name = $faculty->f_name . ' (Copy)';
         $newFaculty->f_order = Faculty::max('f_order') + 1;
         $newFaculty->save();
@@ -130,5 +143,22 @@ class FacultyController extends Controller
         return response()->json([
             'message' => 'Faculty order updated successfully',
         ], 200);
+    }
+
+    public function assignRefIds()
+    {
+        try {
+            $facultys = Faculty::whereNull('ref_id')->get();
+            $nextRef = Faculty::max('ref_id') ?? 99;
+
+            foreach ($facultys as $faculty) {
+                $faculty->ref_id = ++$nextRef;
+                $faculty->save();
+            }
+
+            return response()->json(['message' => 'Ref IDs assigned successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to assign Ref IDs', 'error' => $e->getMessage()], 500);
+        }
     }
 }

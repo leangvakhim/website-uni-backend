@@ -16,10 +16,11 @@ class RsdDesc extends Model
         'rsdd_rsdtile',
         'rsdd_details',
         'active',
+        'rsdd_title'
     ];
 
     public function title()
     {
-        return $this->belongsTo(RsdTitle::class, 'rsdd_rsdtile', 'rsdt_id')->select(['rsdt_id', 'rsdt_title']);
+        return $this->belongsTo(RsdTitle::class, 'rsdd_rsdtile', 'rsdt_id')->select(['rsdt_id', 'rsdt_text']);
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Controller;
 use App\Models\Subcontact;
 use App\Http\Requests\SubcontactRequest;
 use Exception;
+use Illuminate\Http\Request;
 
 class SubcontactController extends Controller
 {

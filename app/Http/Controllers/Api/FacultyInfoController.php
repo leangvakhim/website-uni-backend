@@ -45,7 +45,7 @@ class FacultyInfoController extends Controller
         try {
             $data = $request->validated();
             $createInfo = [];
-            
+
             if(!isset($data['f_id'])){
                 return $this->sendError('Faculty ID is required', 422);
             }
@@ -54,20 +54,20 @@ class FacultyInfoController extends Controller
             if(!$faculty){
                 return $this->sendError('Faculty not found', 404);
             }
-            
-            
+
+
             if (isset($data['finfo_f']) && is_array($data['finfo_f'])) {
                 foreach ($data['finfo_f'] as $item) {
                     $item['finfo_f'] = $faculty->f_id;
-                    
+
                     if (!isset($item['finfo_order'])) {
                         $item['finfo_order'] = (FacultyInfo::where('finfo_f', $faculty->f_id)->max('finfo_order') ?? 0) +1;
                     }
-                    
-                    
+
+
                     $item['active'] = $item['active'] ?? 1;
                     $item['display'] = $item['display'] ?? 1;
-                    
+
                     $createInfo [] = FacultyInfo::create($item);
                 }
             }
@@ -82,17 +82,17 @@ class FacultyInfoController extends Controller
         try {
             $info = FacultyInfo::find($id);
             if (!$info) return $this->sendError('Faculty info not found', 404);
-    
+
             $updated = $this->facultyInfoService->update($info, $request->all());
 
             $updated->load('faculty');
-    
+
             return $this->sendResponse($updated, 200, 'Faculty info updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update faculty info', 500, ['error' => $e->getMessage()]);
         }
     }
-    
+
 
     public function visibility($id)
     {

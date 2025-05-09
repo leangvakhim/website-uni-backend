@@ -29,6 +29,7 @@ class CareerRequest extends FormRequest
             'c_detail' => 'nullable|string',
             'c_fav' => 'required|boolean',
             'lang' => 'nullable|integer',
+            'ref_id' => 'nullable|integer',
             'c_order' => 'nullable|integer',
             'display' => 'required|boolean',
             'active' => 'required|boolean'

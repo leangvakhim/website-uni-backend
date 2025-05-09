@@ -12,6 +12,7 @@ class RsdMeet extends Model
     protected $primaryKey = 'rsdm_id';
     protected $fillable = [
         'rsdm_detail',
+        'rsdm_title',
         'rsdm_img',
         'rsdm_rsdtitle',
         'rsdm_faculty',
@@ -30,6 +31,6 @@ class RsdMeet extends Model
 
     public function title()
     {
-        return $this->belongsTo(RsdTitle::class, 'rsdm_rsdtitle', 'rsdt_id')->select(['rsdt_id', 'rsdt_name']);
+        return $this->belongsTo(RsdTitle::class, 'rsdm_rsdtitle', 'rsdt_id')->select(['rsdt_id', 'rsdt_text']);
     }
 }

@@ -29,6 +29,7 @@ class RsdRequest extends FormRequest
             'rsd_fav' => 'nullable|boolean',
             'lang' => 'nullable|integer|in:1,2',
             'rsd_order' => 'nullable|integer',
+            'ref_id' => 'nullable|integer',
             'display' => 'nullable|integer',
         ];
     }

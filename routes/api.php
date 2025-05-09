@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnnouncementImportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TextController;
@@ -72,6 +73,8 @@ use App\Http\Controllers\Api\SettingsocialController;
 use App\Http\Controllers\Api\DeveloperController;
 use App\Http\Controllers\Api\DevelopersocialController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\EmailController;
+use App\Imports\AnnouncementImport;
 use Illuminate\Support\Facades\Log;
 
 
@@ -156,6 +159,7 @@ Route::prefix('faculty')->group(function () {
     Route::post('/duplicate/{id}', [FacultyController::class, 'duplicate']);
     Route::put('/reorder', [FacultyController::class, 'reorder']);
 });
+Route::get('/faculty-assign-ref-ids', [App\Http\Controllers\Api\FacultyController::class, 'assignRefIds']);
 
 Route::prefix('subtse')->group(function () {
     Route::get('/', [SubtseController::class, 'index']);
@@ -209,6 +213,7 @@ Route::prefix('event')->group(function () {
     Route::post('/duplicate/{id}', [EventController::class, 'duplicate']);
     Route::put('/reorder', [EventController::class, 'reorder']);
 });
+Route::get('/event-assign-ref-ids', [App\Http\Controllers\Api\EventController::class, 'assignRefIds']);
 
 Route::prefix('news')->group(function () {
     Route::get('/', [NewsController::class, 'index']);
@@ -219,6 +224,7 @@ Route::prefix('news')->group(function () {
     Route::post('/duplicate/{id}', [NewsController::class, 'duplicate']);
     Route::put('/reorder', [NewsController::class, 'reorder']);
 });
+Route::get('/news-assign-ref-ids', [App\Http\Controllers\Api\NewsController::class, 'assignRefIds']);
 
 Route::prefix('career')->group(function () {
     Route::get('/', [CareerController::class, 'index']);
@@ -229,6 +235,7 @@ Route::prefix('career')->group(function () {
     Route::post('/duplicate/{id}', [CareerController::class, 'duplicate']);
     Route::put('/reorder', [CareerController::class, 'reorder']);
 });
+Route::get('/career-assign-ref-ids', [App\Http\Controllers\Api\CareerController::class, 'assignRefIds']);
 
 Route::prefix('rsdl')->group(function () {
     Route::get('/', [RsdlController::class, 'index']);
@@ -239,6 +246,7 @@ Route::prefix('rsdl')->group(function () {
     Route::post('/duplicate/{id}', [RsdlController::class, 'duplicate']);
     Route::put('/reorder', [RsdlController::class, 'reorder']);
 });
+Route::get('/rsdl-assign-ref-ids', [App\Http\Controllers\Api\RsdlController::class, 'assignRefIds']);
 
 Route::prefix('scholarship')->group(function () {
     Route::get('/', [ScholarshipController::class, 'index']);
@@ -249,6 +257,7 @@ Route::prefix('scholarship')->group(function () {
     Route::post('/duplicate/{id}', [ScholarshipController::class, 'duplicate']);
     Route::put('/reorder', [ScholarshipController::class, 'reorder']);
 });
+Route::get('/scholarship-assign-ref-ids', [App\Http\Controllers\Api\ScholarshipController::class, 'assignRefIds']);
 
 Route::prefix('rsd-meet')->controller(RsdMeetController::class)->group(function () {
     Route::get('/', 'index');
@@ -263,9 +272,9 @@ Route::prefix('rsd-title')->group(function () {
     Route::post('/create', [RsdTitleController::class, 'create']);
     Route::post('/update/{id}', [RsdTitleController::class, 'update']);
     Route::put('/visibility/{id}', [RsdTitleController::class, 'visibility']);
-    Route::get('/by_title/{rsd_id}', [RsdTitleController::class, 'getByTitle']);
+    Route::get('/by-rsd/{rsd_id}', [RsdTitleController::class, 'getByRsd']);
     Route::post('/reorder', [RsdTitleController::class, 'reorder']);
-    Route::post('/sync_titles', [RsdTitleController::class, 'syncRsdTitles']);
+    Route::put('/sync-title', [RsdTitleController::class, 'syncRsdTitles']);
 });
 
 Route::prefix('rsd-desc')->group(function () {
@@ -291,6 +300,7 @@ Route::prefix('rsd')->controller(RsdController::class)->group(function () {
     Route::post('/duplicate/{id}', 'duplicate');
     Route::put('/reorder', 'reorder');
 });
+Route::get('/rsd-assign-ref-ids', [App\Http\Controllers\Api\RsdController::class, 'assignRefIds']);
 
 Route::prefix('rsdltag')->group(function () {
     Route::get('/', [RsdltagController::class, 'index']);
@@ -481,6 +491,7 @@ Route::prefix('contact')->group(function () {
     Route::get('/{id}', [ContactController::class, 'show']);
     Route::post('/create', [ContactController::class, 'create']);
     Route::post('/update/{id}', [ContactController::class, 'update']);
+    Route::get('/lang/{lang}', [ContactController::class, 'getByLang']);
 });
 
 Route::prefix('subcontact')->group(function () {
@@ -562,13 +573,6 @@ Route::prefix('subservice')->controller(SubserviceController::class)->group(func
     Route::post('/reorder-ras', 'reorderSubserviceRAS');
 });
 
-Route::prefix('setting')->controller(SettingController::class)->group(function () {
-    Route::get('/', 'index');
-    Route::get('/{id}', 'show');
-    Route::post('/create', 'create');
-    Route::post('/update/{id}', 'update');
-});
-
 Route::prefix('department')->controller(DepartmentController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
@@ -599,6 +603,7 @@ Route::prefix('announcements')->controller(AnnouncementController::class)->group
     Route::post('/duplicate/{id}', 'duplicate');
     Route::post('/reorder', 'reorder');
 });
+Route::get('/announcements-assign-ref-ids', [App\Http\Controllers\Api\AnnouncementController::class, 'assignRefIds']);
 
 Route::prefix('student')->controller(StudentController::class)->group(function () {
     Route::get('/', 'index');
@@ -631,8 +636,8 @@ Route::prefix('setting2')->group(function () {
     Route::post('/update/{id}', [Setting2Controller::class, 'update']);
     Route::post('/visibility/{id}', [Setting2Controller::class, 'visibility']);
     Route::post('/duplicate/{id}', [Setting2Controller::class, 'duplicate']);
+    Route::get('/lang/{lang}', [Setting2Controller::class, 'getByLang']);
 });
-Route::middleware('auth:api')->group(function () {
 Route::prefix('settingsocial')->group(function () {
     Route::get('/', [SettingsocialController::class, 'index']);
     Route::get('/{id}', [SettingsocialController::class, 'show']);
@@ -641,7 +646,6 @@ Route::prefix('settingsocial')->group(function () {
     Route::put('/visibility/{id}', [SettingsocialController::class, 'visibility']);
     Route::post('/duplicate/{id}', [SettingsocialController::class, 'duplicate']);
     Route::post('/reorder', [SettingsocialController::class, 'reorder']);
-});
 });
 Route::prefix('developer')->group(function () {
     Route::get('/', [DeveloperController::class, 'index']);
@@ -662,7 +666,16 @@ Route::prefix('developersocial')->group(function () {
     Route::post('/reorder', [DevelopersocialController::class, 'reorder']);
 });
 
+Route::get('/emails', [EmailController::class, 'index']);
+Route::get('/emails/{id}', [EmailController::class, 'show']);
+Route::post('/emails/create', [EmailController::class, 'create']);
+Route::put('/emails/visibility/{id}', [EmailController::class, 'visibility']);
+// Route::post('/emails/submit', [EmailController::class, 'submitEmail']);
 
+
+Route::post('/announcement/import', [AnnouncementImportController::class, 'import']);
+Route::get('/announcement/student', [AnnouncementImportController::class, 'fetchStudents']);
+Route::post('/announcement/set-visibility', [AnnouncementImportController::class, 'setVisibility']);
 
 
 Route::post('/register', [AuthController::class, 'register']);

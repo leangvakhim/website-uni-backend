@@ -100,6 +100,7 @@ class RsdDescController extends Controller
             $RsdDesc->update($validated);
 
             return $this->sendResponse($RsdDesc, 200, 'RsdDesc updated successfully');
+            return $this->sendResponse([], 200, 'RsdDesc updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update RsdDesc', 500, ['error' => $e->getMessage()]);
         }

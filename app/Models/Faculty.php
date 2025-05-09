@@ -21,21 +21,22 @@ class Faculty extends Model
         'lang',
         'display',
         'active',
+        'ref_id',
     ];
     public function img()
     {
         return $this->belongsTo(Image::class, 'f_img', 'image_id');
     }
-    
+
     public function social()
     {
         return $this->belongsTo(Social::class, 'f_social', 'social_id');
-    }    
+    }
 
     public function contacts()
     {
         return $this->hasMany(FacultyContact::class, 'fc_f', 'f_id');
-    }    
+    }
 
     public function infos()
     {

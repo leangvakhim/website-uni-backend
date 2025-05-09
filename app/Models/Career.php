@@ -20,7 +20,13 @@ class Career extends Model
         'lang',
         'c_order',
         'display',
-        'active'
+        'active',
+        'ref_id'
     ];
+
+    public function img()
+    {
+        return $this->belongsTo(Image::class, 'c_img', 'image_id');
+    }
 
 }

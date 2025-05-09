@@ -22,18 +22,13 @@ class ContactRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'display' => 'nullable|boolean',
-            'sec_page' => 'nullable|integer|exists:tbpage,p_id',
-            'sec_order' => 'nullable|integer',
-
-            'contact' => 'nullable|array',
-            'contact.*.con_title' => 'nullable|string|max:255',
-            'contact.*.con_subtitle' => 'nullable|string',
-            'contact.*.con_img' => 'nullable|integer|exists:tbimage,image_id',
-            'contact.*.con_addon' => 'nullable|integer|exists:tbsubcontact,scon_id',
-            'contact.*.con_addon2' => 'nullable|integer|exists:tbsubcontact,scon_id',
-            'contact.*.con_addon3' => 'nullable|integer|exists:tbsubcontact,scon_id',
-            'contact.*.lang' => 'nullable|integer'
+            'con_title' => 'nullable|string|max:255',
+            'con_subtitle' => 'nullable|string',
+            'con_img' => 'nullable|integer|exists:tbimage,image_id',
+            'con_addon' => 'nullable|integer|exists:tbsubcontact,scon_id',
+            'con_addon2' => 'nullable|integer|exists:tbsubcontact,scon_id',
+            'con_addon3' => 'nullable|integer|exists:tbsubcontact,scon_id',
+            'lang' => 'nullable|integer'
         ];
     }
 }

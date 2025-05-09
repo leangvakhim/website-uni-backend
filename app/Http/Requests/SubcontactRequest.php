@@ -25,9 +25,6 @@ class SubcontactRequest extends FormRequest
             'scon_title' => 'nullable|string|max:50',
             'scon_detail' => 'nullable|string|max:255',
             'scon_img' => 'nullable|integer|exists:tbimage,image_id',
-            'scon_order' => 'nullable|integer',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
         ];
     }
 }

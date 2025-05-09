@@ -14,6 +14,7 @@ class Rsd extends Model
     protected $fillable = [
         'rsd_title', 'rsd_subtitle', 'rsd_lead', 'rsd_img',
         'rsd_fav', 'lang', 'rsd_order', 'display', 'active',
+        'ref_id',
     ];
 
     public function image()

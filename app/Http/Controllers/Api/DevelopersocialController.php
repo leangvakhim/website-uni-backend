@@ -69,16 +69,13 @@ class DevelopersocialController extends Controller
                 return $this->sendError('Developersocial not found', 404);
             }
 
-            $request->merge($request->input('social'));
+            $request->merge($request->input('developer_social'));
 
             $validated = $request->validate([
-                'ds_title'     => 'nullable|string|max:50',
-                'ds_img'       => 'nullable|integer|exists:tbimage,image_id',
-                'ds_developer' => 'nullable|integer|exists:tbdeveloper,d_id',
-                'ds_link'      => 'nullable|url',
-                'ds_order'     => 'nullable|integer',
+                'ds_title'     => 'nullable|string',
+                'ds_img'       => 'nullable|integer',
+                'ds_link'      => 'nullable|string',
                 'display'      => 'required|integer',
-                'active'       => 'required|integer',
             ]);
 
             $record->update($validated);
