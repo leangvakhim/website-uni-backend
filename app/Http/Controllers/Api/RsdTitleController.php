@@ -7,6 +7,7 @@ use App\Models\RsdTitle;
 use App\Http\Requests\RsdTitleRequest;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RsdTitleController extends Controller
 {
@@ -108,7 +109,7 @@ class RsdTitleController extends Controller
     public function reorder(Request $request)
     {
         $data = $request->validate([
-            '*.rsdt_id' => 'required|integer|exists:rsd_titles,rsdt_id',
+            '*.rsdt_id' => 'required|integer|exists:tbrsd_title,rsdt_id',
             '*.rsdt_order' => 'required|integer'
         ]);
 
@@ -144,9 +145,15 @@ class RsdTitleController extends Controller
         }
 
         foreach ($titles as $title) {
-            $existing = RsdTitle::where('rsdt_id', $title['rsdt_id'] ?? 0)
-                ->where('rsdt_text', $rsd_id)
-                ->first();
+            $existing = null;
+
+            if (!empty($title['rsdt_id'])) {
+                $existing = RsdTitle::where('rsdt_id', $title['rsdt_id'])
+                    ->where('rsdt_text', $rsd_id)
+                    ->first();
+            } elseif (!empty($title['rsdt_code'])) {
+                $existing = RsdTitle::where('rsdt_code', $title['rsdt_code'])->first();
+            }
 
             if ($existing) {
                 $existing->update([
@@ -161,7 +168,7 @@ class RsdTitleController extends Controller
                     'rsdt_text' => $rsd_id,
                     'rsdt_order' => $title['rsdt_order'],
                     'rsdt_type' => $title['rsdt_type'] ?? '',
-                    'rsdt_code' => $title['rsdt_type'] . "-" . $title['rsdt_id'],
+                    'rsdt_code' => '', // temporary
                     'active' => $title['active'] ?? 1,
                 ]);
 

@@ -46,29 +46,38 @@ class RsdDescController extends Controller
 
             if (isset($validated['research_desc']) && is_array($validated['research_desc'])) {
                 foreach ($validated['research_desc'] as $item) {
-
                     $item['rsdd_title'] = $item['rsdd_title'] ?? null;
                     $item['rsdd_details'] = $item['rsdd_details'] ?? null;
                     $item['rsdd_rsdtile'] = $item['rsdd_rsdtile'] ?? null;
 
-                    $existing = RsdDesc::where('rsdd_rsdtile', $item['rsdd_rsdtile'])->first();
-
-                    if ($existing) {
-                        $existing->update([
-                            'rsdd_title' => $item['rsdd_title'],
-                            'rsdd_details' => $item['rsdd_details'],
-                        ]);
-                        $createdRsdDesc[] = $existing;
+                    if (!empty($item['rsdd_id'])) {
+                        // Update existing
+                        $existing = RsdDesc::find($item['rsdd_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'rsdd_title' => $item['rsdd_title'],
+                                'rsdd_details' => $item['rsdd_details'],
+                                'rsdd_rsdtile' => $item['rsdd_rsdtile'],
+                            ]);
+                            $createdRsdDesc[] = $existing;
+                        }
                     } else {
-                        $createdRecord = RsdDesc::create($item);
-                        $createdRsdDesc[] = $createdRecord;
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = RsdDesc::where('rsdd_title', $item['rsdd_title'])
+                            ->where('rsdd_rsdtile', $item['rsdd_rsdtile'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = RsdDesc::create($item);
+                            $createdRsdDesc[] = $createdRecord;
+                        }
                     }
                 }
             }
 
-            return $this->sendResponse($createdRsdDesc, 201, 'RsdDesc records created successfully');
+            return $this->sendResponse($createdRsdDesc, 201, 'RsdDesc records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create RsdDesc', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update RsdDesc', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -80,14 +89,13 @@ class RsdDescController extends Controller
                 return $this->sendError('RsdDesc not found', 404);
             }
 
-            $request->merge($request->input('research_desc'));
+            $data = $request->input('research_desc');
 
-            $validated = $request->validate([
+            $validated = validator($data, [
                 'rsdd_title' => 'nullable|string|max:255',
                 'rsdd_details' => 'nullable|string',
                 'rsdd_rsdtile' => 'nullable|integer',
-
-            ]);
+            ])->validate();
 
             $RsdDesc->update($validated);
 

@@ -43,7 +43,7 @@ class RsdMeetController extends Controller
     {
         try {
             $validated = $request->validated();
-            $createdRsdMeet = [];
+            $createdRsdMeeting = [];
 
             if (isset($validated['research_meet']) && is_array($validated['research_meet'])) {
                 foreach ($validated['research_meet'] as $item) {
@@ -52,37 +52,60 @@ class RsdMeetController extends Controller
                     $item['rsdm_title'] = $item['rsdm_title'] ?? null;
                     $item['rsdm_img'] = $item['rsdm_img'] ?? null;
 
-                    $createdRsdMeet[] = RsdMeet::create($item);
+                    if (!empty($item['rsdm_id'])) {
+                        // Update existing
+                        $existing = RsdMeet::find($item['rsdm_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'rsdm_title' => $item['rsdm_title'],
+                                'rsdm_detail' => $item['rsdm_detail'],
+                                'rsdm_rsdtitle' => $item['rsdm_rsdtitle'],
+                                'rsdm_img' => $item['rsdm_img'],
+                            ]);
+                            $createdRsdMeeting[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = RsdMeet::where('rsdm_title', $item['rsdm_title'])
+                            ->where('rsdm_title', $item['rsdm_title'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = RsdMeet::create($item);
+                            $createdRsdMeeting[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdRsdMeet, 201, 'RsdMeet records created successfully');
+            return $this->sendResponse($createdRsdMeeting, 201, 'RsdMeeting records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create RsdMeet', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update RsdMeeting', 500, ['error' => $e->getMessage()]);
         }
     }
+
     public function update(RsdMeetRequest $request, $id)
     {
         try {
-            $RsdMeet = RsdMeet::find($id);
-            if (!$RsdMeet) {
-                return $this->sendError('RsdMeet not found', 404);
+            $RsdMeeting = RsdMeet::find($id);
+            if (!$RsdMeeting) {
+                return $this->sendError('RsdMeeting not found', 404);
             }
 
-            $request->merge($request->input('research_meet'));
+            $data = $request->input('research_meet');
 
-            $validated = $request->validate([
-                'rsdm_rsdtitle' => 'nullable|integer|exists:tbrsd_title,rsdt_id',
+            $validated = validator($data, [
+                'rsdm_rsdtitle' => 'nullable|integer',
                 'rsdm_detail' => 'nullable|string',
                 'rsdm_title' => 'nullable|string',
                 'rsdm_img' => 'nullable|integer|exists:tbimage,image_id',
-            ]);
+            ])->validate();
 
-            $RsdMeet->update($validated);
+            $RsdMeeting->update($validated);
 
-            return $this->sendResponse($RsdMeet, 200, 'RsdMeet updated successfully');
+            return $this->sendResponse($RsdMeeting, 200, 'RsdMeeting updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update RsdMeet', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update RsdMeeting', 500, ['error' => $e->getMessage()]);
         }
     }
 

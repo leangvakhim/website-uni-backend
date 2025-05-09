@@ -33,47 +33,67 @@ class RsdProjectController extends Controller
     {
         try {
             $validated = $request->validated();
-            $createdRsdProject = [];
+            $createdRsdDesc = [];
 
             if (isset($validated['research_project']) && is_array($validated['research_project'])) {
                 foreach ($validated['research_project'] as $item) {
-
                     $item['rsdp_rsdtile'] = $item['rsdp_rsdtile'] ?? null;
                     $item['rsdp_detail'] = $item['rsdp_detail'] ?? null;
                     $item['rsdp_title'] = $item['rsdp_title'] ?? null;
 
-                    $createdRsdProject[] = RsdProject::create($item);
+                    if (!empty($item['rsdp_id'])) {
+                        // Update existing
+                        $existing = RsdProject::find($item['rsdp_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'rsdp_title' => $item['rsdp_title'],
+                                'rsdp_detail' => $item['rsdp_detail'],
+                                'rsdp_rsdtile' => $item['rsdp_rsdtile'],
+                            ]);
+                            $createdRsdProject[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = RsdProject::where('rsdp_title', $item['rsdp_title'])
+                            ->where('rsdp_title', $item['rsdp_title'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = RsdProject::create($item);
+                            $createdRsdProject[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdRsdProject, 201, 'RsdProject records created successfully');
+            return $this->sendResponse($createdRsdProject, 201, 'RsdProject records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create RsdProject', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update RsdProject', 500, ['error' => $e->getMessage()]);
         }
     }
+
     public function update(RsdProjectRequest $request, $id)
     {
         try {
-            $rsdproject = RsdProject::find($id);
-            if (!$rsdproject) {
-                return $this->sendError('rsdproject not found', 404);
+            $RsdProject = RsdProject::find($id);
+            if (!$RsdProject) {
+                return $this->sendError('RsdProject not found', 404);
             }
 
-            $request->merge($request->input('research_project'));
+            $data = $request->input('research_project');
 
-            $validated = $request->validate([
-                'rsdp_rsdtile' => 'nullable|integer|exists:tbrsd_title,rsdt_id',
+            $validated = validator($data, [
+                'rsdp_title' => 'nullable|string|max:255',
                 'rsdp_detail' => 'nullable|string',
-                'rsdp_title' => 'nullable|string',
-            ]);
+                'rsdp_rsdtile' => 'nullable|integer',
+            ])->validate();
 
-            $rsdproject->update($validated);
+            $RsdProject->update($validated);
 
-            return $this->sendResponse($rsdproject, 200, 'rsdproject updated successfully');
+            return $this->sendResponse($RsdProject, 200, 'RsdProject updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update rsdproject', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update RsdProject', 500, ['error' => $e->getMessage()]);
         }
     }
-
 }
 
