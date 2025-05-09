@@ -39,40 +39,22 @@ class EmailController extends Controller
         }
     }
 
-    // public function create(EmailRequest $request)
-    // {
-    //     try {
-    //         $validatedData = $request->validated();
-    //         $email = Email::create($validatedData);
-    //         return $this->sendResponse($email, 201, 'Email created successfully');
-    //     } catch (Exception $e) {
-    //         return $this->sendError('Failed to create email', 500, ['error' => $e->getMessage()]);
-    //     }
-    // }
-
     public function create(EmailRequest $request)
     {
         try {
             $validatedData = $request->validated();
-            Log::info('✅ Validated data:', $validatedData);
 
             $email = Email::create($validatedData);
-            Log::info('✅ Email record created.');
 
             // 🔄 Get Telegram credentials from the settings table
             $setting = Setting2::first(); // adjust if you use whereLang or something else
 
             if ($setting && $setting->set_telegramtoken && $setting->set_chatid) {
-                Log::info('🔔 About to send Telegram message...');
                 $this->sendTelegramMessage($validatedData, $setting->set_telegramtoken, $setting->set_chatid);
-                Log::info('✅ Telegram message sent.');
-            } else {
-                Log::warning('⚠️ Telegram token or chat ID not found in settings.');
             }
 
             return $this->sendResponse($email, 201, 'Email created and Telegram notified');
         } catch (Exception $e) {
-            Log::error('❌ Failed to create email or send Telegram message', ['error' => $e->getMessage()]);
             return $this->sendError('Failed to create email', 500, ['error' => $e->getMessage()]);
         }
     }
@@ -91,16 +73,27 @@ class EmailController extends Controller
         }
     }
 
-    public function visibility($id)
+    public function visibility(Request $request)
     {
         try {
-            $email = Email::find($id);
-            if (!$email) return $this->sendError('Email not found', 404);
+            $ids = $request->input('m_id');
 
-            $email->m_active = $email->m_active ? 0 : 1;
-            $email->save();
+            if (!is_array($ids)) {
+                return $this->sendError('Invalid input. Array of IDs required.', 422);
+            }
 
-            return $this->sendResponse([], 200, 'Visibility toggled');
+            $emails = Email::whereIn('m_id', $ids)->get();
+
+            if ($emails->isEmpty()) {
+                return $this->sendError('No matching emails found', 404);
+            }
+
+            foreach ($emails as $email) {
+                $email->m_active = $email->m_active ? 0 : 1;
+                $email->save();
+            }
+
+            return $this->sendResponse([], 200, 'Visibility toggled for selected emails');
         } catch (Exception $e) {
             return $this->sendError('Failed to update visibility', 500, ['error' => $e->getMessage()]);
         }
