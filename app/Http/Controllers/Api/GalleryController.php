@@ -37,6 +37,62 @@ class GalleryController extends Controller
             return $this->sendError('Failed to load gallery', 500, ['error' => $e->getMessage()]);
         }
     }
+    // public function create(GalleryRequest $request)
+    // {
+    //     try {
+    //         $validated = $request->validated();
+    //         $createdGallery = [];
+
+    //         if (isset($validated['gallery']) && is_array($validated['gallery'])) {
+    //             foreach ($validated['gallery'] as $item) {
+    //                 Log::info('🛠 Gallery Item Before Create: ', ['item' => $item]);
+
+    //                 $item['gal_text'] = $item['gal_text'] ?? null;
+    //                 $item['gal_sec'] = $item['gal_sec'] ?? null;
+    //                 $item['gal_img1'] = $item['gal_img1'] ?? null;
+    //                 $item['gal_img2'] = $item['gal_img2'] ?? null;
+    //                 $item['gal_img3'] = $item['gal_img3'] ?? null;
+    //                 $item['gal_img4'] = $item['gal_img4'] ?? null;
+    //                 $item['gal_img5'] = $item['gal_img5'] ?? null;
+
+    //                 $createdGallery[] = Gallery::create($item);
+    //             }
+    //         }
+
+    //         return $this->sendResponse($createdGallery, 201, 'Gallery records created successfully');
+    //     } catch (Exception $e) {
+    //         return $this->sendError('Failed to create gallery', 500, ['error' => $e->getMessage()]);
+    //     }
+    // }
+
+    // public function update(GalleryRequest $request, $id)
+    // {
+    //     try {
+    //         $gallery = Gallery::find($id);
+    //         if (!$gallery) {
+    //             return $this->sendError('Gallery not found', 404);
+    //         }
+
+    //         $request->merge($request->input('gallery'));
+
+    //         $validated = $request->validate([
+    //             'gal_text' => 'nullable|integer',
+    //             'gal_img1' => 'nullable|integer',
+    //             'gal_img2' => 'nullable|integer',
+    //             'gal_img3' => 'nullable|integer',
+    //             'gal_img4' => 'nullable|integer',
+    //             'gal_img5' => 'nullable|integer',
+    //             'gal_sec' => 'nullable|integer',
+    //         ]);
+
+    //         $gallery->update($validated);
+
+    //         return $this->sendResponse($gallery, 200, 'Gallery updated successfully');
+    //     } catch (Exception $e) {
+    //         return $this->sendError('Failed to update Gallery', 500, ['error' => $e->getMessage()]);
+    //     }
+    // }
+
     public function create(GalleryRequest $request)
     {
         try {
@@ -45,7 +101,6 @@ class GalleryController extends Controller
 
             if (isset($validated['gallery']) && is_array($validated['gallery'])) {
                 foreach ($validated['gallery'] as $item) {
-                    Log::info('🛠 Gallery Item Before Create: ', ['item' => $item]);
 
                     $item['gal_text'] = $item['gal_text'] ?? null;
                     $item['gal_sec'] = $item['gal_sec'] ?? null;
@@ -55,27 +110,51 @@ class GalleryController extends Controller
                     $item['gal_img4'] = $item['gal_img4'] ?? null;
                     $item['gal_img5'] = $item['gal_img5'] ?? null;
 
-                    $createdGallery[] = Gallery::create($item);
+                    if (!empty($item['gal_id'])) {
+                        // Update existing
+                        $existing = Gallery::find($item['gal_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'gal_text' => $item['gal_text'],
+                                'gal_sec' => $item['gal_sec'],
+                                'gal_img1' => $item['gal_img1'],
+                                'gal_img2' => $item['gal_img2'],
+                                'gal_img3' => $item['gal_img3'],
+                                'gal_img4' => $item['gal_img4'],
+                                'gal_img5' => $item['gal_img5'],
+                            ]);
+                            $createdAcadFacility[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Gallery::where('gal_sec', $item['gal_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = Gallery::create($item);
+                            $createdGallery[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdGallery, 201, 'Gallery records created successfully');
+            return $this->sendResponse($createdGallery, 201, 'Gallery records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create gallery', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update Gallery', 500, ['error' => $e->getMessage()]);
         }
     }
 
     public function update(GalleryRequest $request, $id)
     {
         try {
-            $gallery = Gallery::find($id);
-            if (!$gallery) {
+            $Gallery = Gallery::find($id);
+            if (!$Gallery) {
                 return $this->sendError('Gallery not found', 404);
             }
 
-            $request->merge($request->input('gallery'));
+            $data = $request->input('gallery');
 
-            $validated = $request->validate([
+            $validated = validator($data, [
                 'gal_text' => 'nullable|integer',
                 'gal_img1' => 'nullable|integer',
                 'gal_img2' => 'nullable|integer',
@@ -83,11 +162,12 @@ class GalleryController extends Controller
                 'gal_img4' => 'nullable|integer',
                 'gal_img5' => 'nullable|integer',
                 'gal_sec' => 'nullable|integer',
-            ]);
+            ])->validate();
 
-            $gallery->update($validated);
+            $Gallery->update($validated);
 
-            return $this->sendResponse($gallery, 200, 'Gallery updated successfully');
+            return $this->sendResponse($Gallery, 200, 'Gallery updated successfully');
+            return $this->sendResponse([], 200, 'Gallery updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update Gallery', 500, ['error' => $e->getMessage()]);
         }

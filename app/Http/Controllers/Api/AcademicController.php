@@ -37,11 +37,11 @@ class AcademicController extends Controller
         }
     }
 
-    public function create(AcademicRequest $request)
+    public function store(AcademicRequest $request)
     {
         try {
             $validated = $request->validated();
-            $createdAcademics = [];
+            $createdAcademic = [];
 
             if (isset($validated['academics']) && is_array($validated['academics'])) {
                 foreach ($validated['academics'] as $item) {
@@ -54,28 +54,52 @@ class AcademicController extends Controller
                     $item['acad_routepage'] = $item['acad_routepage'] ?? null;
                     $item['acad_routetext'] = $item['acad_routetext'] ?? null;
 
-                    $createdAcademics[] = Academic::create($item);
+                    if (!empty($item['acad_id'])) {
+                        // Update existing
+                        $existing = Academic::find($item['acad_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'acad_title' => $item['acad_title'],
+                                'acad_detail' => $item['acad_detail'],
+                                'acad_img' => $item['acad_img'],
+                                'acad_btntext1' => $item['acad_btntext1'],
+                                'acad_btntext2' => $item['acad_btntext2'],
+                                'acad_routepage' => $item['acad_routepage'],
+                                'acad_routetext' => $item['acad_routetext'],
+                            ]);
+                            $createdAcademic[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Academic::where('acad_sec', $item['acad_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = Academic::create($item);
+                            $createdAcademic[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdAcademics, 201, 'Academic records created successfully');
+            return $this->sendResponse($createdAcademic, 201, 'Academic records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create academic', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update Academic', 500, ['error' => $e->getMessage()]);
         }
     }
 
     public function update(AcademicRequest $request, $id)
     {
         try {
-            $academic = Academic::find($id);
-            if (!$academic) {
+            $Academic = Academic::find($id);
+            if (!$Academic) {
                 return $this->sendError('Academic not found', 404);
             }
 
-            $request->merge($request->input('academics'));
+            $data = $request->input('academics');
 
-            $validated = $request->validate([
-                'acad_title' => 'required|string',
+            $validated = validator($data, [
+                'acad_title' => 'nullable|string',
                 'acad_detail' => 'nullable|string',
                 'acad_img' => 'nullable|integer',
                 'acad_sec' => 'nullable|integer',
@@ -83,13 +107,14 @@ class AcademicController extends Controller
                 'acad_btntext2' => 'nullable|string',
                 'acad_routepage' => 'nullable|string',
                 'acad_routetext' => 'nullable|string',
-            ]);
+            ])->validate();
 
-            $academic->update($validated);
+            $Academic->update($validated);
 
-            return $this->sendResponse($academic, 200, 'academic updated successfully');
+            return $this->sendResponse($Academic, 200, 'Academic updated successfully');
+            return $this->sendResponse([], 200, 'Academic updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update academic', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update Academic', 500, ['error' => $e->getMessage()]);
         }
     }
 }

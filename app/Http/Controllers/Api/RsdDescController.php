@@ -63,8 +63,7 @@ class RsdDescController extends Controller
                         }
                     } else {
                         // Prevent duplicate entries by checking for existing combination
-                        $existing = RsdDesc::where('rsdd_title', $item['rsdd_title'])
-                            ->where('rsdd_rsdtile', $item['rsdd_rsdtile'])
+                        $existing = RsdDesc::where('rsdd_rsdtile', $item['rsdd_rsdtile'])
                             ->first();
 
                         if (!$existing) {

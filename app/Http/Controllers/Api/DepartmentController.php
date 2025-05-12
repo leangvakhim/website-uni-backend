@@ -41,7 +41,7 @@ class DepartmentController extends Controller
     {
         try {
             $validated = $request->validated();
-            $createdDepartments = [];
+            $createdDepartment = [];
 
             if (isset($validated['programs']) && is_array($validated['programs'])) {
                 foreach ($validated['programs'] as $item) {
@@ -50,39 +50,63 @@ class DepartmentController extends Controller
                     $item['dep_detail'] = $item['dep_detail'] ?? null;
                     $item['dep_img1'] = $item['dep_img1'] ?? null;
                     $item['dep_img2'] = $item['dep_img2'] ?? null;
+                    $item['dep_sec'] = $item['dep_sec'] ?? null;
 
-                    $createdDepartments[] = Department::create($item);
+                    if (!empty($item['dep_id'])) {
+                        // Update existing
+                        $existing = Department::find($item['dep_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'dep_title' => $item['dep_title'],
+                                'dep_detail' => $item['dep_detail'],
+                                'dep_img1' => $item['dep_img1'],
+                                'dep_img2' => $item['dep_img2'],
+                            ]);
+                            $createdDepartment[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Department::where('dep_sec', $item['dep_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = Department::create($item);
+                            $createdDepartment[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdDepartments, 201, 'Department records created successfully');
+            return $this->sendResponse($createdDepartment, 201, 'Department records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create department', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update Department', 500, ['error' => $e->getMessage()]);
         }
     }
+
     public function update(DepartmentRequest $request, $id)
     {
         try {
-            $department = Department::find($id);
-            if (!$department) {
+            $Department = Department::find($id);
+            if (!$Department) {
                 return $this->sendError('Department not found', 404);
             }
 
-            $request->merge($request->input('programs'));
+            $data = $request->input('programs');
 
-            $validated = $request->validate([
-                'dep_title' => 'required|string',
+            $validated = validator($data, [
+                'dep_title' => 'nullable|string|max:255',
                 'dep_detail' => 'nullable|string',
                 'dep_img1' => 'nullable|integer',
                 'dep_img2' => 'nullable|integer',
                 'dep_sec' => 'nullable|integer',
-            ]);
+            ])->validate();
 
-            $department->update($validated);
+            $Department->update($validated);
 
-            return $this->sendResponse($department, 200, 'department updated successfully');
+            return $this->sendResponse($Department, 200, 'Department updated successfully');
+            return $this->sendResponse([], 200, 'Department updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update department', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update Department', 500, ['error' => $e->getMessage()]);
         }
     }
 }

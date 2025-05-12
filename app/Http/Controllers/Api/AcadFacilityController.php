@@ -44,7 +44,7 @@ class AcadFacilityController extends Controller
     {
         try {
             $validated = $request->validated();
-            $createdFacilities = [];
+            $createdAcadFacility = [];
 
             if (isset($validated['facilities']) && is_array($validated['facilities'])) {
                 foreach ($validated['facilities'] as $item) {
@@ -53,35 +53,57 @@ class AcadFacilityController extends Controller
                     $item['af_sec'] = $item['af_sec'] ?? null;
                     $item['af_img'] = $item['af_img'] ?? null;
 
-                    $createdFacilities[] = AcadFacility::create($item);
+
+                    if (!empty($item['af_id'])) {
+                        // Update existing
+                        $existing = AcadFacility::find($item['af_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'af_text' => $item['af_text'],
+                                'af_sec' => $item['af_sec'],
+                                'af_img' => $item['af_img'],
+                            ]);
+                            $createdAcadFacility[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = AcadFacility::where('af_sec', $item['af_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = AcadFacility::create($item);
+                            $createdAcadFacility[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdFacilities, 201, 'Facilities records created successfully');
+            return $this->sendResponse($createdAcadFacility, 201, 'AcadFacility records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create facilities', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update AcadFacility', 500, ['error' => $e->getMessage()]);
         }
     }
 
     public function update(AcadFacilityRequest $request, $id)
     {
         try {
-            $acadFacility = AcadFacility::find($id);
-            if (!$acadFacility) {
+            $AcadFacility = AcadFacility::find($id);
+            if (!$AcadFacility) {
                 return $this->sendError('AcadFacility not found', 404);
             }
 
-            $request->merge($request->input('facilities'));
+            $data = $request->input('facilities');
 
-            $validated = $request->validate([
+            $validated = validator($data, [
                 'af_text' => 'nullable|integer',
                 'af_img' => 'nullable|integer',
                 'af_sec' => 'nullable|integer',
-            ]);
+            ])->validate();
 
-            $acadFacility->update($validated);
+            $AcadFacility->update($validated);
 
-            return $this->sendResponse($acadFacility, 200, 'AcadFacility updated successfully');
+            return $this->sendResponse($AcadFacility, 200, 'AcadFacility updated successfully');
+            return $this->sendResponse([], 200, 'AcadFacility updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update AcadFacility', 500, ['error' => $e->getMessage()]);
         }

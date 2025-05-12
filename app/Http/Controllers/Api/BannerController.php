@@ -45,46 +45,68 @@ class BannerController extends Controller
     {
         try {
             $validated = $request->validated();
-            $createdBanners = [];
+            $createdBanner = [];
 
             if (isset($validated['banners']) && is_array($validated['banners'])) {
                 foreach ($validated['banners'] as $item) {
 
-                    $item['title'] = $item['title'] ?? null;
-                    $item['subtitle'] = $item['subtitle'] ?? null;
+                    $item['ban_title'] = $item['ban_title'] ?? null;
+                    $item['ban_subtitle'] = $item['ban_subtitle'] ?? null;
+                    $item['ban_img'] = $item['ban_img'] ?? null;
 
-                    $createdBanners[] = Banner::create($item);
+                    if (!empty($item['ban_id'])) {
+                        // Update existing
+                        $existing = Banner::find($item['ban_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'ban_title' => $item['ban_title'],
+                                'ban_subtitle' => $item['ban_subtitle'],
+                                'ban_img' => $item['ban_img'],
+                            ]);
+                            $createdBanner[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Banner::where('ban_sec', $item['ban_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = Banner::create($item);
+                            $createdBanner[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdBanners, 201, 'Banner records created successfully');
+            return $this->sendResponse($createdBanner, 201, 'Banner records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create banner', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update Banner', 500, ['error' => $e->getMessage()]);
         }
     }
 
     public function update(BannerRequest $request, $id)
     {
         try {
-            $banner = Banner::find($id);
-            if (!$banner) {
+            $Banner = Banner::find($id);
+            if (!$Banner) {
                 return $this->sendError('Banner not found', 404);
             }
 
-            $request->merge($request->input('banners'));
+            $data = $request->input('banners');
 
-            $validated = $request->validate([
-                'ban_title' => 'required|string',
+            $validated = validator($data, [
+                'ban_title' => 'nullable|string',
                 'ban_subtitle' => 'nullable|string',
                 'ban_img' => 'nullable|integer',
                 'ban_sec' => 'nullable|integer',
-            ]);
+            ])->validate();
 
-            $banner->update($validated);
+            $Banner->update($validated);
 
-            return $this->sendResponse($banner, 200, 'banner updated successfully');
+            return $this->sendResponse($Banner, 200, 'Banner updated successfully');
+            return $this->sendResponse([], 200, 'Banner updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update banner', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update Banner', 500, ['error' => $e->getMessage()]);
         }
     }
 }

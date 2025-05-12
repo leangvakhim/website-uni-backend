@@ -8,6 +8,7 @@ use App\Http\Requests\SectionRequest;
 use App\Services\SectionService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SectionController extends Controller
 {
@@ -130,6 +131,63 @@ class SectionController extends Controller
         ], 200);
     }
 
+    // public function syncSection(Request $request)
+    // {
+    //     $page_id = $request->input('sec_page');
+
+    //     if (!$page_id) {
+    //         return response()->json(['message' => 'Missing page_id'], 400);
+    //     }
+
+    //     $sections = $request->input('sections', []);
+
+    //     $existingSectionIds = collect($sections)
+    //         ->pluck('sec_id')
+    //         ->filter(fn($id) => !is_null($id))
+    //         ->unique()
+    //         ->values()
+    //         ->toArray();
+
+    //     // Delete sections in this page that are not included in the request,
+    //     // but do not delete sections where active = 0 (inactive)
+    //     if (!empty($existingSectionIds)) {
+    //         Section::where('sec_page', $page_id)
+    //             ->whereNotIn('sec_id', $existingSectionIds)
+    //             ->where('active', '!=', 0)
+    //             ->delete();
+    //     }
+
+    //     foreach ($sections as $section) {
+    //         $existingSection = Section::where('sec_id', $section['sec_id'] ?? 0)
+    //             ->where('sec_page', $page_id)
+    //             ->first();
+
+    //         if ($existingSection) {
+    //             // Update existing section
+    //             $existingSection->update([
+    //                 'sec_order' => $section['sec_order'],
+    //                 'sec_type' => $section['sec_type'],
+    //                 'lang' => $section['lang'],
+    //                 'active' => $section['active'] ?? 1,
+    //             ]);
+    //         } else {
+    //             // Create new section
+    //             Section::create([
+    //                 'sec_page' => $page_id,
+    //                 'sec_order' => $section['sec_order'],
+    //                 'sec_type' => $section['sec_type'],
+    //                 'lang' => $section['lang'],
+    //                 'active' => $section['active'] ?? 1,
+    //             ]);
+    //         }
+    //     }
+
+    //     return response()->json([
+    //         'message' => 'Section Synced Successfully',
+    //         'data' => $sections,
+    //     ], 200);
+    // }
+
     public function syncSection(Request $request)
     {
         $page_id = $request->input('sec_page');
@@ -140,50 +198,70 @@ class SectionController extends Controller
 
         $sections = $request->input('sections', []);
 
-        $existingSectionIds = collect($sections)
+        $existingIds = collect($sections)
             ->pluck('sec_id')
             ->filter(fn($id) => !is_null($id))
             ->unique()
             ->values()
             ->toArray();
 
-        // Delete sections in this page that are not included in the request,
-        // but do not delete sections where active = 0 (inactive)
-        if (!empty($existingSectionIds)) {
+        if (!empty($existingIds)) {
             Section::where('sec_page', $page_id)
-                ->whereNotIn('sec_id', $existingSectionIds)
+                ->whereNotIn('sec_id', $existingIds)
                 ->where('active', '!=', 0)
                 ->delete();
         }
 
         foreach ($sections as $section) {
-            $existingSection = Section::where('sec_id', $section['sec_id'] ?? 0)
-                ->where('sec_page', $page_id)
-                ->first();
+            $existing = null;
 
-            if ($existingSection) {
-                // Update existing section
-                $existingSection->update([
+            if (!empty($section['sec_id'])) {
+                $existing = Section::where('sec_id', $section['sec_id'])
+                    ->where('sec_page', $page_id)
+                    ->first();
+            } elseif (!empty($section['sec_code'])) {
+                $existing = Section::where('sec_code', $section['sec_code'])->first();
+            }
+
+            if ($existing) {
+                $existing->update([
                     'sec_order' => $section['sec_order'],
-                    'sec_type' => $section['sec_type'],
-                    'lang' => $section['lang'],
+                    'sec_type' => $section['sec_type'] ?? '',
+                    'sec_code' => $section['sec_type'] . "-" . $existing->sec_id,
                     'active' => $section['active'] ?? 1,
                 ]);
+                continue;
             } else {
-                // Create new section
-                Section::create([
+                $created = Section::create([
                     'sec_page' => $page_id,
                     'sec_order' => $section['sec_order'],
-                    'sec_type' => $section['sec_type'],
-                    'lang' => $section['lang'],
+                    'sec_type' => $section['sec_type'] ?? '',
+                    'sec_code' => '', // temporary
                     'active' => $section['active'] ?? 1,
+                ]);
+
+                $created->update([
+                    'sec_code' => $created->sec_type . '-' . $created->sec_id,
                 ]);
             }
         }
 
         return response()->json([
-            'message' => 'Section Synced Successfully',
+            'message' => 'Sections synced successfully',
             'data' => $sections,
         ], 200);
+    }
+
+    public function updateSecCodes()
+    {
+        Section::chunk(100, function ($sections) {
+            foreach ($sections as $section) {
+                $section->update([
+                    'sec_code' => $section->sec_type . '-' . $section->sec_id
+                ]);
+            }
+        });
+
+        return "Update complete.";
     }
 }

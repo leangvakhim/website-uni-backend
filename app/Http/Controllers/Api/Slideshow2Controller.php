@@ -66,40 +66,54 @@ class Slideshow2Controller extends Controller
     {
         try {
             $validated = $request->validated();
-            $slideshows = $validated['Slideshow'] ?? [];
-
-            if (empty($slideshows)) {
-                return $this->sendError('No Slideshow Data Provided', 422);
-            }
-
             $createdSlideshows = [];
 
-            foreach ($slideshows as $item) {
-                if (!isset($item['slider_sec'])) {
-                    return $this->sendError('Section ID is required', 422);
+            if (isset($validated['Slideshow']) && is_array($validated['Slideshow'])) {
+                foreach ($validated['Slideshow'] as $item) {
+
+                    $item['slider_order'] = (Slideshow2::where('slider_sec', $item['slider_sec'])->max('slider_order') ?? 0) + 1;
+                    $item['slider_title'] = $item['slider_title'] ?? null;
+                    $item['slider_text'] = $item['slider_text'] ?? null;
+                    $item['display'] = $item['display'] ?? 1;
+                    $item['active'] = $item['active'] ?? 1;
+
+                    if (!empty($item['slider_id'])) {
+                        // Update existing
+                        $existing = Slideshow2::find($item['slider_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'slider_title' => $item['slider_title'],
+                                'slider_text' => $item['slider_text'],
+                                'display' => $item['display'],
+                                'active' => $item['active'],
+                            ]);
+                            $createdSlideshows[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Slideshow2::where('slider_sec', $item['slider_sec'])
+                            ->where('slider_sec', $item['slider_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = Slideshow2::create($item);
+                            $createdSlideshows[] = $createdRecord;
+                        }
+                    }
                 }
-
-                $item['slider_order'] = (Slideshow2::where('slider_sec', $item['slider_sec'])->max('slider_order') ?? 0) + 1;
-
-                $item['slider_title'] = $item['slider_title'] ?? null;
-                $item['slider_text'] = $item['slider_text'] ?? null;
-                $item['display'] = $item['display'] ?? 1;
-                $item['active'] = $item['active'] ?? 1;
-
-                $createdSlideshows[] = Slideshow2::create($item);
             }
 
-            return $this->sendResponse($createdSlideshows, 201, 'Slideshow created successfully');
+            return $this->sendResponse($createdSlideshows, 201, 'Slideshow records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create slideshow', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update Slideshow', 500, ['error' => $e->getMessage()]);
         }
     }
 
     public function update(Slideshow2Request $request, $id)
     {
         try {
-            $slideshow = Slideshow2::find($id);
-            if (!$slideshow) {
+            $Slideshow = Slideshow2::find($id);
+            if (!$Slideshow) {
                 return $this->sendError('Slideshow not found', 404);
             }
 
@@ -119,11 +133,12 @@ class Slideshow2Controller extends Controller
                 'slider_sec' => 'nullable|integer',
             ]);
 
-            $slideshow->update($validated);
+            $Slideshow->update($validated);
 
-            return $this->sendResponse($slideshow, 200, 'Slideshow updated successfully');
+            return $this->sendResponse($Slideshow, 200, 'Slideshow updated successfully');
+            return $this->sendResponse([], 200, 'Slideshow updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update slideshow', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update Slideshow', 500, ['error' => $e->getMessage()]);
         }
     }
 

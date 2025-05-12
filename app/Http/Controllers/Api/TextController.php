@@ -39,7 +39,7 @@ class TextController extends Controller
     {
         try {
             $validated = $request->validated();
-            $createdTexts = [];
+            $createdText = [];
 
             if (isset($validated['texts']) && is_array($validated['texts'])) {
                 foreach ($validated['texts'] as $item) {
@@ -51,53 +51,64 @@ class TextController extends Controller
                     $item['tag'] = null;
                     $item['lang'] = null;
 
+                    if (!empty($item['text_id'])) {
+                        // Update existing
+                        $existing = Text::find($item['text_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'title' => $item['title'],
+                                'desc' => $item['desc'],
+                                'text_type' => $item['text_type'],
+                                'text_sec' => $item['text_sec'],
+                                'tag' => null,
+                                'lang' => null,
+                            ]);
+                            $createdText[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Text::where('text_sec', $item['text_sec'])
+                            ->first();
 
-                    $createdTexts[] = Text::create($item);
+                        if ($existing) {
+                            $createdText[] = $existing;
+                        } else {
+                            $createdRecord = Text::create($item);
+                            $createdText[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-
-            $textRecord = collect($createdTexts)->last();
-
-            if (!$textRecord) {
-                return $this->sendError('Failed to create text record', 500);
-            }
-
-            return response()->json([
-                'status' => 201,
-                'status_code' => 'success',
-                'message' => 'Text record created successfully',
-                'data' => [
-                    'text_id' => $textRecord->text_id
-                ]
-            ], 201);
+            return $this->sendResponse($createdText, 201, 'Text records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create text', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update Text', 500, ['error' => $e->getMessage()]);
         }
     }
 
     public function update(TextRequest $request, $id)
     {
         try {
-            $text = Text::find($id);
-            if (!$text) {
+            $Text = Text::find($id);
+            if (!$Text) {
                 return $this->sendError('Text not found', 404);
             }
 
-            $request->merge($request->input('texts'));
+            $data = $request->input('texts');
 
-            $validated = $request->validate([
-                'title' => 'required|string',
+            $validated = validator($data, [
+                'title' => 'nullable|string',
                 'desc' => 'nullable|string',
                 'text_type' => 'nullable|integer',
                 'text_sec' => 'nullable|integer'
-            ]);
+            ])->validate();
 
-            $text->update($validated);
+            $Text->update($validated);
 
-            return $this->sendResponse($text, 200, 'text updated successfully');
+            return $this->sendResponse($Text, 200, 'Text updated successfully');
+            return $this->sendResponse([], 200, 'Text updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update text', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update Text', 500, ['error' => $e->getMessage()]);
         }
     }
 }

@@ -33,6 +33,7 @@ class SectionRequest extends FormRequest
             'sections.*.sec_page' => 'nullable|integer|exists:tbpage,p_id',
             'sections.*.display' => 'nullable|boolean',
             'sections.*.sec_type' => 'nullable|string|max:255',
+            'sections.*.sec_code' => 'nullable|string|max:255',
             'sections.*.sec_order' => 'nullable|integer'
         ];
     }

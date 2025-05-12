@@ -12,7 +12,7 @@ class Section extends Model
     protected $primaryKey = 'sec_id';
 
     protected $fillable = [
-        'sec_page', 'sec_order', 'lang', 'display', 'active', 'sec_type'
+        'sec_page', 'sec_order', 'lang', 'display', 'active', 'sec_type', 'sec_code',
     ];
 
     public function page()
@@ -88,7 +88,7 @@ class Section extends Model
 
     public function acadfaculties()
     {
-        return $this->hasMany(Acadfacu::class, 'af_sec', 'sec_id');
+        return $this->hasMany(AcadFacility::class, 'af_sec', 'sec_id');
     }
 
     public function tse()

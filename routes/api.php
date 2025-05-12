@@ -350,6 +350,7 @@ Route::prefix('page')->group(function () {
 });
 
 Route::prefix('section')->controller(SectionController::class)->group(function () {
+    Route::get('/update-sec-code', 'updateSecCodes');
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
     Route::post('/create', 'create');
@@ -359,6 +360,7 @@ Route::prefix('section')->controller(SectionController::class)->group(function (
     Route::post('/reorder', 'reorder');
     Route::put('/sync-section', 'syncSection');
 });
+
 
 Route::prefix('feedback')->group(function () {
     Route::get('/', [FeedbackController::class, 'index']);

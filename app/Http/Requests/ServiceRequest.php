@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class ServiceRequest extends FormRequest
 {
@@ -36,5 +37,11 @@ class ServiceRequest extends FormRequest
             'Service.*.display' => 'nullable|boolean',
             'Service.*.active' => 'nullable|boolean',
         ];
+    }
+
+    public function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        Log::error('Validation Failed:', $validator->errors()->toArray());
+        parent::failedValidation($validator);
     }
 }
