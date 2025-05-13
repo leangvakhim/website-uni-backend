@@ -56,13 +56,37 @@ class IntroController extends Controller
                     $item['inadd_title'] = $item['inadd_title'] ?? null;
                     $item['in_addsubtitle'] = $item['in_addsubtitle'] ?? null;
 
-                    $createdIntro[] = Intro::create($item);
+                    if (!empty($item['in_id'])) {
+                        // Update existing
+                        $existing = Intro::find($item['in_id']);
+                        if ($existing) {
+                            $existing->update([
+                               
+                                'in_title' => $item['in_title'],
+                                'in_detail' => $item['in_detail'],
+                                'in_img' => $item['in_img'],
+                                'inadd_title' => $item['inadd_title'],
+                                'in_addsubtitle' => $item['in_addsubtitle'],
+                            
+                            ]);
+                             $createdIntro[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Intro::where('in_sec', $item['in_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = Intro::create($item);
+                            $createdIntro[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdIntro, 201, 'Introduction records created successfully');
+            return $this->sendResponse($createdIntro, 201, 'Introduction records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create Introduction', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update Introduction', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -74,7 +98,7 @@ class IntroController extends Controller
                 return $this->sendError('Intro not found', 404);
             }
 
-            $request->merge($request->input('introduction'));
+            $data = $request->input('introduction');
 
             $validated = $request->validate([
                 'in_sec' => 'nullable|integer|exists:tbsection,sec_id',
@@ -83,11 +107,12 @@ class IntroController extends Controller
                 'in_img' => 'nullable|integer|exists:tbimage,image_id',
                 'inadd_title' => 'nullable|string',
                 'in_addsubtitle' => 'nullable|string',
-            ]);
+            ])->validate();
 
             $intro->update($validated);
 
             return $this->sendResponse($intro, 200, 'Intro updated successfully');
+            return $this->sendResponse([], 200, 'Intro updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update Intro', 500, ['error' => $e->getMessage()]);
         }

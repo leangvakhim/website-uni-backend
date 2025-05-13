@@ -53,13 +53,33 @@ class FaqController extends Controller
                     $item['faq_title'] = $item['faq_title'] ?? null;
                     $item['faq_subtitle'] = $item['faq_subtitle'] ?? null;
 
-                    $createdFaq[] = Faq::create($item);
+                   if (!empty($item['faq_id'])) {
+                        // Update existing
+                        $existing = Faq::find($item['faq_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'faq_title' => $item['faq_title'],
+                                'faq_subtitle' => $item['faq_subtitle'],
+                                
+                            ]);
+                            $createdFaq[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Faq::where('faq_sec', $item['faq_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = Faq::create($item);
+                           $createdFaq[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdFaq, 201, 'Faq records created successfully');
+            return $this->sendResponse($createdFaq, 201, 'Faq records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create faq', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update faq', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -71,18 +91,19 @@ class FaqController extends Controller
                 return $this->sendError('Faq not found', 404);
             }
 
-            $request->merge($request->input('faq'));
+           $data = $request->input('faq');
 
             $validated = $request->validate([
                 'faq_title' => 'nullable|string',
                 'faq_subtitle' => 'nullable|string',
                 'faq_sec' => 'nullable|integer',
     
-            ]);
+            ])->validate();
 
             $faq->update($validated);
 
             return $this->sendResponse($faq, 200, 'Faq updated successfully');
+            return $this->sendResponse([], 200, 'Faq updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update Faq', 500, ['error' => $e->getMessage()]);
         }

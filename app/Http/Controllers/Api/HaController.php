@@ -56,13 +56,36 @@ class HaController extends Controller
                     $item['ha_subtitletag'] = $item['ha_subtitletag'] ?? null;
                     $item['ha_date'] = $item['ha_date'] ?? null;
 
-                    $createdHa[] = Ha::create($item);
+                    if (!empty($item['ha_id'])) {
+                        // Update existing
+                        $existing = Ha::find($item['ha_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'ha_title' => $item['ha_title'],
+                                'ha_img' => $item['ha_img'],
+                                'ha_tagtitle' => $item['ha_tagtitle'],
+                                'ha_subtitletag' => $item['ha_subtitletag'],
+                                'ha_date' => $item['ha_date'],
+                            
+                            ]);
+                            $createdHa[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Ha::where('ha_sec', $item['ha_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = Ha::create($item);
+                            $createdHa[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdHa, 201, 'Ha records created successfully');
+            return $this->sendResponse($createdHa, 201, 'Ha records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create ha', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update ha', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -74,7 +97,7 @@ class HaController extends Controller
                 return $this->sendError('Ha not found', 404);
             }
 
-            $request->merge($request->input('apply'));
+            $data = $request->input('apply');
 
             $validated = $request->validate([
                 'ha_sec' => 'nullable|integer',
@@ -83,11 +106,12 @@ class HaController extends Controller
                 'ha_tagtitle' => 'nullable|string',
                 'ha_subtitletag' => 'nullable|string',
                 'ha_date' => 'nullable|date',
-            ]);
+            ])->validate();
 
             $ha->update($validated);
 
             return $this->sendResponse($ha, 200, 'Ha updated successfully');
+            return $this->sendResponse([], 200, 'Ha updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update ha', 500, ['error' => $e->getMessage()]);
         }
