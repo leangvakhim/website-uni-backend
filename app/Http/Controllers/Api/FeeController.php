@@ -53,13 +53,35 @@ class FeeController extends Controller
                     $item['fe_img'] = $item['fe_img'] ?? null;
                     $item['fe_price'] = $item['fe_price'] ?? null;
 
-                    $createdFee[] = Fee::create($item);
+                    if (!empty($item['fee_id'])) {
+                        // Update existing
+                        $existing = Fee::find($item['fee_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'fe_title' => $item['fe_title'],
+                                'fe_desc' => $item['fe_desc'],
+                                'fe_img' => $item['fe_img'],
+                                'fe_price' => $item['fe_price'],
+                               
+                            ]);
+                           $createdFee[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Fee::where('fe_sec', $item['fe_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = Fee::create($item);
+                            $createdFee[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdFee, 201, 'Department records created successfully');
+            return $this->sendResponse($createdFee, 201, 'Fee records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create department', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update fee', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -71,7 +93,7 @@ class FeeController extends Controller
                 return $this->sendError('Fee not found', 404);
             }
 
-            $request->merge($request->input('fee'));
+            $data = $request->input('fee');
 
             $validated = $request->validate([
                 'fe_title' => 'required|string',
@@ -79,11 +101,12 @@ class FeeController extends Controller
                 'fe_img' => 'nullable|integer',
                 'fe_price' => 'nullable|string',
                 'fe_sec' => 'nullable|integer',
-            ]);
+            ])->validate();
 
             $fee->update($validated);
 
             return $this->sendResponse($fee, 200, 'fee updated successfully');
+             return $this->sendResponse([], 200, 'fee updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update fee', 500, ['error' => $e->getMessage()]);
         }
