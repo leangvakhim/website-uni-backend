@@ -52,13 +52,33 @@ class StudyDegreeController extends Controller
                     $item['std_subtitle'] = $item['std_subtitle'] ?? null;
                     $item['std_type'] = $item['std_type'] ?? null;
 
-                    $createdStudyDegree[] = StudyDegree::create($item);
+                    if (!empty($item['std_id'])) {
+                        // Update existing
+                        $existing = StudyDegree::find($item['std_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'std_title' => $item['std_title'],
+                                'std_subtitle' => $item['std_subtitle'],
+                                'std_type' => $item['std_type'],
+                            ]);
+                            $createdStudyDegree[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = StudyDegree::where('std_sec', $item['std_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord =StudyDegree::create($item);
+                            $createdStudyDegree[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdStudyDegree, 201, 'StudyDegree records created successfully');
+            return $this->sendResponse($createdStudyDegree, 201, 'StudyDegree records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create StudyDegree', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update StudyDegree', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -70,7 +90,7 @@ class StudyDegreeController extends Controller
                 return $this->sendError('StudyDegree not found', 404);
             }
 
-            $request->merge($request->input('study'));
+            $data = $request->input('study');
 
             $validated = $request->validate([
                 'std_title' => 'required|string',
@@ -82,6 +102,7 @@ class StudyDegreeController extends Controller
             $study->update($validated);
 
             return $this->sendResponse($study, 200, 'study updated successfully');
+             return $this->sendResponse([], 200, 'Study updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update study', 500, ['error' => $e->getMessage()]);
         }

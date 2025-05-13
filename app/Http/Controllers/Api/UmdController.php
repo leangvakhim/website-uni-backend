@@ -55,13 +55,36 @@ class UmdController extends Controller
                     $item['umd_btntext'] = $item['umd_btntext'] ?? null;
                     $item['umd_img'] = $item['umd_img'] ?? null;
 
-                    $createdUmd[] = Umd::create($item);
+                    if (!empty($item['umd_id'])) {
+                        // Update existing
+                        $existing = Umd::find($item['umd_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'umd_title' => $item['umd_title'],
+                                'umd_detail' => $item['umd_detail'],
+                                'umd_routepage' => $item['umd_routepage'],
+                                'umd_btntext' => $item['umd_btntext'],
+                                'umd_img' => $item['umd_img'],
+                            ]);
+                        
+                            $createdUmd[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Umd::where('umd_sec', $item['umd_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = Umd::create($item);
+                           $createdUmd[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdUmd, 201, 'Umd records created successfully');
+            return $this->sendResponse($createdUmd, 201, 'Umd records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create umd', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/updated umd', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -74,11 +97,7 @@ class UmdController extends Controller
                 return $this->sendError('unlock not found', 404);
             }
 
-            $unlockData = $request->input('unlock');
-            if (!$unlockData || !is_array($unlockData)) {
-                return $this->sendError('Invalid unlock data provided', 422);
-            }
-            $request->merge($unlockData);
+            $data = $request->input('unlock');
 
             $validated = $request->validate([
                 'umd_sec' => 'nullable|integer',
@@ -87,11 +106,12 @@ class UmdController extends Controller
                 'umd_btntext' => 'nullable|string',
                 'umd_detail' => 'nullable|string',
                 'umd_img' => 'nullable|integer',
-            ]);
+            ])->validate();
 
             $unlock->update($validated);
 
             return $this->sendResponse($unlock, 200, 'Unlock updated successfully');
+            return $this->sendResponse([], 200, 'Unlock updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update Unlock', 500, ['error' => $e->getMessage()]);
         }

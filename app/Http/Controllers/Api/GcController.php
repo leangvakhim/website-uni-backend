@@ -55,14 +55,36 @@ class GcController extends Controller
                     $item['gc_img1'] = $item['gc_img1'] ?? null;
                     $item['gc_img2'] = $item['gc_img2'] ?? null;
 
+                    if (!empty($item['gc_id'])) {
+                        // Update existing
+                        $existing = Gc::find($item['gc_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'gc_title' => $item['gc_title'],
+                                'gc_tag' => $item['gc_tag'],
+                                'gc_type' => $item['gc_type'],
+                                'gc_detail' => $item['gc_detail'],
+                                'gc_img1' => $item['gc_img1'],
+                                'gc_img2' => $item['gc_img2'],
+                            ]);
+                            $createdGc[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Gc::where('gc_sec', $item['gc_sec'])
+                            ->first();
 
-                    $createdGc[] = Gc::create($item);
+                        if (!$existing) {
+                            $createdRecord = Gc::create($item);
+                            $createdGc[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdGc, 201, 'Gc records created successfully');
+            return $this->sendResponse($createdGc, 201, 'Gc records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create gc', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/updated gc', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -74,8 +96,7 @@ class GcController extends Controller
                 return $this->sendError('Gc not found', 404);
             }
 
-            $criteriaInput = $request->input('criteria');
-            $request->merge($criteriaInput);
+            $data = $request->input('criteria');
 
             $validated = $request->validate([
                 'gc_title' => 'nullable|string',
@@ -84,11 +105,12 @@ class GcController extends Controller
                 'gc_detail' => 'nullable|string',
                 'gc_img1' => 'nullable|integer|exists:tbimage,image_id',
                 'gc_img2' => 'nullable|integer|exists:tbimage,image_id',
-            ]);
+            ])->validate();
 
             $gc->update($validated);
 
             return $this->sendResponse($gc, 200, 'Gc updated successfully');
+            return $this->sendResponse([], 200, 'Gc updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update Gc', 500, ['error' => $e->getMessage()]);
         }

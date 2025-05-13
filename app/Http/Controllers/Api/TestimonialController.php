@@ -52,13 +52,32 @@ class TestimonialController extends Controller
                     $item['t_title'] = $item['t_title'] ?? null;
                     $item['t_sec'] = $item['t_sec'] ?? null;
 
-                    $createdTestimonials[] = Testimonial::create($item);
+                     if (!empty($item['t_id'])) {
+                        // Update existing
+                        $existing = Testimonial::find($item['t_id']);
+                        if ($existing) {
+                            $existing->update([
+                                't_title' => $item['t_tile'],
+                                
+                            ]);
+                            $createdTestimonials[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Testimonial::where('t_sec', $item['t_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = Testimonial::create($item);
+                            $createdTestimonials[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdTestimonials, 201, 'Testimonials records created successfully');
+            return $this->sendResponse($createdTestimonials, 201, 'Testimonials records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create testimonials', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to created/updated testimonials', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -70,18 +89,19 @@ class TestimonialController extends Controller
                 return $this->sendError('Testimonial not found', 404);
             }
 
-            $request->merge($request->input('testimonials'));
+            $data = $request->input('testimonials');
 
             $validated = $request->validate([
                 't_title' => 'required|string',
                 't_sec' => 'nullable|integer'
-            ]);
+            ])->validate();
 
             $testimonial->update($validated);
 
-            return $this->sendResponse($testimonial, 200, 'text updated successfully');
+            return $this->sendResponse($testimonial, 200, 'testimonials updated successfully');
+            return $this->sendResponse([], 200, 'testimonials updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to update text', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to update testimonials', 500, ['error' => $e->getMessage()]);
         }
     }
 }

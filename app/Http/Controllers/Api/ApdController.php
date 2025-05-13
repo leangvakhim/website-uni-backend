@@ -51,13 +51,32 @@ class ApdController extends Controller
                     $item['apd_sec'] = $item['apd_sec'] ?? null;
                     $item['apd_title'] = $item['apd_title'] ?? null;
 
-                    $createdApd[] = Apd::create($item);
+                     if (!empty($item['apd_id'])) {
+                        // Update existing
+                        $existing = Apd::find($item['apd_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'apd_title' => $item['apd_title'],
+                               
+                            ]);
+                            $createdApd[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Apd::where('apd_sec', $item['apd_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = Apd::create($item);
+                            $createdApd[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdApd, 201, 'Apd records created successfully');
+            return $this->sendResponse($createdApd, 201, 'Apd records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create apd', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update apd', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -69,16 +88,18 @@ class ApdController extends Controller
                 return $this->sendError('Apd not found', 404);
             }
 
-            $request->merge($request->input('available'));
+             $data = $request->input('available');
+
 
             $validated = $request->validate([
                 'apd_title' => 'required|string',
                 'apd_sec' => 'nullable|integer',
-            ]);
+            ])->validate();
 
             $apd->update($validated);
 
             return $this->sendResponse($apd, 200, 'apd updated successfully');
+            return $this->sendResponse([], 200, 'apd updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update apd', 500, ['error' => $e->getMessage()]);
         }

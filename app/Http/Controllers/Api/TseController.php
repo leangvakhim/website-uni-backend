@@ -53,13 +53,33 @@ class TseController extends Controller
                     $item['tse_type'] = $item['tse_type'] ?? null;
                     $item['tse_text'] = $item['tse_text'] ?? null;
 
-                    $createdTse[] = Tse::create($item);
+                    if (!empty($item['tse_id'])) {
+                        // Update existing
+                        $existing = Tse::find($item['tse_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'tse_text' => $item['tse_text'],
+                                'tse_type' => $item['tse_type'],
+                    
+                            ]);
+                            $createdTse[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Tse::where('tse_sec', $item['tse_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = Tse::create($item);
+                            $createdTse[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdTse, 201, 'Tse records created successfully');
+            return $this->sendResponse($createdTse, 201, 'Tse records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create tse', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/updated tse', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -71,17 +91,18 @@ class TseController extends Controller
                 return $this->sendError('Tse not found', 404);
             }
 
-            $request->merge($request->input('type'));
+            $data = $request->input('type');
 
             $validated = $request->validate([
                 'tse_text' => 'nullable|integer',
                 'tse_type' => 'nullable|integer',
                 'tse_sec' => 'nullable|integer',
-            ]);
+            ])->validate();
 
             $tse->update($validated);
 
             return $this->sendResponse($tse, 200, 'Tse updated successfully');
+            return $this->sendResponse([], 200, 'Tse updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update Tse', 500, ['error' => $e->getMessage()]);
         }
