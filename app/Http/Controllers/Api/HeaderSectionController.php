@@ -55,13 +55,37 @@ class HeaderSectionController extends Controller
                     $item['hsec_routepage'] = $item['hsec_routepage'] ?? null;
                     $item['hsec_amount'] = $item['hsec_amount'] ?? null;
 
-                    $createdHeaderSection[] = HeaderSection::create($item);
+                    if (!empty($item['hsec_id'])) {
+                        // Update existing
+                        $existing = HeaderSection::find($item['hsec_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'hsec_title' => $item['hsec_title'],
+                                'hsec_subtitle' => $item['hsec_subtitle'],
+                                'hsec_btntitle' => $item['hsec_btntitle'],
+                                'hsec_routepage' => $item['hsec_routepage'],
+                                'hsec_sec' => $item['hsec_sec'],
+                                'hsec_amount' => $item['hsec_amount'],
+
+                            ]);
+                            $createdHeaderSection[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing =HeaderSection::where('hsec_sec', $item['hsec_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = HeaderSection::create($item);
+                            $createdHeaderSection[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdHeaderSection, 201, 'HeaderSection records created successfully');
+            return $this->sendResponse($createdHeaderSection, 201, 'HeaderSection records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create HeaderSection', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/updated HeaderSection', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -73,7 +97,7 @@ class HeaderSectionController extends Controller
                 return $this->sendError('HeaderSection not found', 404);
             }
 
-            $request->merge($request->input('headersection'));
+            $data = $request->input('headersection');
 
             $validated = $request->validate([
                 'hsec_title' => 'required|string',
@@ -82,11 +106,12 @@ class HeaderSectionController extends Controller
                 'hsec_routepage' => 'nullable|string',
                 'hsec_sec' => 'nullable|integer',
                 'hsec_amount' => 'nullable|integer',
-            ]);
+            ])->validate();
 
             $headersection->update($validated);
 
             return $this->sendResponse($headersection, 200, 'study updated successfully');
+            return $this->sendResponse([], 200, 'study updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update study', 500, ['error' => $e->getMessage()]);
         }

@@ -52,13 +52,34 @@ class IddController extends Controller
                     $item['idd_title'] = $item['idd_title'] ?? null;
                     $item['idd_subtitle'] = $item['idd_subtitle'] ?? null;
 
-                    $createdIdd[] = Idd::create($item);
+                    if (!empty($item['idd_id'])) {
+                        // Update existing
+                        $existing = Idd::find($item['idd_id']);
+                        if ($existing) {
+                            $existing->update([
+                                'idd_title' => $item['idd_title'],
+                                'idd_subtitle' => $item['idd_subtitle'],
+                                'idd_sec' => $item['idd_sec'],
+                          
+                            ]);
+                            $createdIdd[] = $existing;
+                        }
+                    } else {
+                        // Prevent duplicate entries by checking for existing combination
+                        $existing = Idd::where('idd_sec', $item['idd_sec'])
+                            ->first();
+
+                        if (!$existing) {
+                            $createdRecord = Idd::create($item);
+                            $createdIdd[] = $createdRecord;
+                        }
+                    }
                 }
             }
 
-            return $this->sendResponse($createdIdd, 201, 'Idd records created successfully');
+            return $this->sendResponse($createdIdd, 201, 'Idd records created/updated successfully');
         } catch (Exception $e) {
-            return $this->sendError('Failed to create idd', 500, ['error' => $e->getMessage()]);
+            return $this->sendError('Failed to create/update idd', 500, ['error' => $e->getMessage()]);
         }
     }
 
@@ -70,17 +91,18 @@ class IddController extends Controller
                 return $this->sendError('Idd not found', 404);
             }
 
-            $request->merge($request->input('important'));
+            $data = $request->input('important');
 
             $validated = $request->validate([
                 'idd_title' => 'nullable|string',
                 'idd_subtitle' => 'nullable|string',
                 'idd_sec' => 'nullable|integer',
-            ]);
+            ])->validate();
 
             $idd->update($validated);
 
-            return $this->sendResponse($idd, 200, 'idd updated successfully');
+            return $this->sendResponse($idd, 200, 'Idd updated successfully');
+            return $this->sendResponse([], 200, 'Idd updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update idd', 500, ['error' => $e->getMessage()]);
         }
