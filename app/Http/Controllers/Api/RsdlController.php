@@ -101,7 +101,7 @@ class RsdlController extends Controller
     {
         try {
             $data = $request->validate([
-                '*.rsdl_id' => 'required|integer|exists:trsdl,rsdl_id',
+                '*.rsdl_id' => 'required|integer|exists:tbrsdl,rsdl_id',
                 '*.rsdl_order' => 'required|integer'
             ]);
 

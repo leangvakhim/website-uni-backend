@@ -7,6 +7,7 @@ use App\Models\Feedback;
 use App\Http\Requests\FeedbackRequest;
 use App\Services\FeedbackService;
 use Exception;
+use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
 {
