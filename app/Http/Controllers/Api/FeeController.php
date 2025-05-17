@@ -7,6 +7,7 @@ use App\Models\Fee;
 use App\Http\Requests\FeeRequest;
 use App\Services\FeeService;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class FeeController extends Controller
 {
@@ -62,7 +63,7 @@ class FeeController extends Controller
                                 'fe_desc' => $item['fe_desc'],
                                 'fe_img' => $item['fe_img'],
                                 'fe_price' => $item['fe_price'],
-                               
+
                             ]);
                            $createdFee[] = $existing;
                         }
@@ -95,8 +96,8 @@ class FeeController extends Controller
 
             $data = $request->input('fee');
 
-            $validated = $request->validate([
-                'fe_title' => 'required|string',
+            $validated = validator($data, [
+                'fe_title' => 'nullable|string',
                 'fe_desc' => 'nullable|string',
                 'fe_img' => 'nullable|integer',
                 'fe_price' => 'nullable|string',
@@ -106,7 +107,7 @@ class FeeController extends Controller
             $fee->update($validated);
 
             return $this->sendResponse($fee, 200, 'fee updated successfully');
-             return $this->sendResponse([], 200, 'fee updated successfully');
+            return $this->sendResponse([], 200, 'fee updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update fee', 500, ['error' => $e->getMessage()]);
         }

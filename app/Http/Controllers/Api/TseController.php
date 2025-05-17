@@ -60,7 +60,7 @@ class TseController extends Controller
                             $existing->update([
                                 'tse_text' => $item['tse_text'],
                                 'tse_type' => $item['tse_type'],
-                    
+
                             ]);
                             $createdTse[] = $existing;
                         }
@@ -93,7 +93,7 @@ class TseController extends Controller
 
             $data = $request->input('type');
 
-            $validated = $request->validate([
+            $validated = validator($data,[
                 'tse_text' => 'nullable|integer',
                 'tse_type' => 'nullable|integer',
                 'tse_sec' => 'nullable|integer',

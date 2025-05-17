@@ -61,13 +61,13 @@ class IntroController extends Controller
                         $existing = Intro::find($item['in_id']);
                         if ($existing) {
                             $existing->update([
-                               
+
                                 'in_title' => $item['in_title'],
                                 'in_detail' => $item['in_detail'],
                                 'in_img' => $item['in_img'],
                                 'inadd_title' => $item['inadd_title'],
                                 'in_addsubtitle' => $item['in_addsubtitle'],
-                            
+
                             ]);
                              $createdIntro[] = $existing;
                         }
@@ -100,7 +100,8 @@ class IntroController extends Controller
 
             $data = $request->input('introduction');
 
-            $validated = $request->validate([
+            $validated = validator(
+                $data, [
                 'in_sec' => 'nullable|integer|exists:tbsection,sec_id',
                 'in_title' => 'nullable|string|max:255',
                 'in_detail' => 'nullable|string',

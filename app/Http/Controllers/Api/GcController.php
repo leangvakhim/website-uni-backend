@@ -98,7 +98,7 @@ class GcController extends Controller
 
             $data = $request->input('criteria');
 
-            $validated = $request->validate([
+            $validated = validator($data,[
                 'gc_title' => 'nullable|string',
                 'gc_tag' => 'nullable|string',
                 'gc_type' => 'nullable|integer',
