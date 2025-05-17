@@ -99,8 +99,8 @@ class HeaderSectionController extends Controller
 
             $data = $request->input('headersection');
 
-            $validated = $request->validate([
-                'hsec_title' => 'required|string',
+            $validated = validator($data,[
+                'hsec_title' => 'nullable|string',
                 'hsec_subtitle' => 'nullable|string',
                 'hsec_btntitle' => 'nullable|string',
                 'hsec_routepage' => 'nullable|string',
