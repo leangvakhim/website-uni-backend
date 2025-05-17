@@ -29,9 +29,9 @@ class FeedbackRequest extends FormRequest
             'fb_img' => 'nullable|integer|exists:tbimage,image_id',
             'fb_order' => 'nullable|integer',
             'lang' => 'nullable|integer|in:1,2',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
-    
+            'display' => 'nullable|boolean',
+            'active' => 'nullable|boolean',
+
             'fb_sec' => 'nullable|array',
             'fb_sec.sec_page' => 'nullable|integer|exists:tbpage,p_id',
             'fb_sec.sec_order' => 'nullable|integer',

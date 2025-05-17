@@ -26,16 +26,16 @@ class ScholarshipRequest extends FormRequest
             'sc_title' => 'nullable|string|max:255',
             'sc_shortdesc' => 'nullable|string|max:255',
             'sc_detail' => 'nullable|string',
-            'sc_deadline' => 'required|date',
-            'sc_postdate' => 'required|date',
+            'sc_deadline' => 'nullable|date',
+            'sc_postdate' => 'nullable|date',
             'sc_img' => 'nullable|integer',
             'scletter_img' => 'nullable|integer',
-            'sc_fav' => 'required|boolean',
+            'sc_fav' => 'nullable|boolean',
             'lang' => 'nullable|integer',
             'ref_id' => 'nullable|integer',
             'sc_orders' => 'nullable|integer',
-            'display' => 'required|boolean',
-            'active' => 'required|boolean',
+            'display' => 'nullable|boolean',
+            'active' => 'nullable|boolean',
         ];
     }
 }

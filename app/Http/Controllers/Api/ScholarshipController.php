@@ -7,6 +7,7 @@ use App\Models\Scholarship;
 use App\Http\Requests\ScholarshipRequest;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class ScholarshipController extends Controller
 {
@@ -119,7 +120,7 @@ class ScholarshipController extends Controller
     {
         try {
             $data = $request->validate([
-                '*.sc_id' => 'required|integer|exists:scholarships,sc_id',
+                '*.sc_id' => 'required|integer|exists:tbscholarship,sc_id',
                 '*.sc_orders' => 'required|integer'
             ]);
 

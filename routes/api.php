@@ -255,7 +255,7 @@ Route::prefix('scholarship')->group(function () {
     Route::post('/update/{id}', [ScholarshipController::class, 'update']);
     Route::put('/visibility/{id}', [ScholarshipController::class, 'visibility']);
     Route::post('/duplicate/{id}', [ScholarshipController::class, 'duplicate']);
-    Route::put('/reorder', [ScholarshipController::class, 'reorder']);
+    Route::post('/reorder', [ScholarshipController::class, 'reorder']);
 });
 Route::get('/scholarship-assign-ref-ids', [App\Http\Controllers\Api\ScholarshipController::class, 'assignRefIds']);
 
