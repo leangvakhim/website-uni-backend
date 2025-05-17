@@ -112,7 +112,7 @@ class SubserviceController extends Controller
             $sub = Subservice::find($id);
             if (!$sub) return $this->sendError('Subservice not found', 404);
 
-            $sub->active = !$sub->active;
+            $sub->active = $sub->active == 1 ? 0 : 1;
             $sub->save();
             return $this->sendResponse([], 200, 'Visibility toggled');
         } catch (Exception $e) {
@@ -192,7 +192,7 @@ class SubserviceController extends Controller
             $sub = Subservice::find($id);
             if (!$sub) return $this->sendError('Subservice not found', 404);
 
-            $sub->active = !$sub->active;
+            $sub->active = $sub->active == 1 ? 0 : 1;
             $sub->save();
             return $this->sendResponse([], 200, 'Visibility toggled');
         } catch (Exception $e) {
