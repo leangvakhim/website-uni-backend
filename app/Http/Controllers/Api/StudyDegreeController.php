@@ -7,6 +7,7 @@ use App\Models\StudyDegree;
 use App\Http\Requests\StudyDegreeRequest;
 use App\Services\StudyDegreeService;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class StudyDegreeController extends Controller
 {
@@ -89,20 +90,19 @@ class StudyDegreeController extends Controller
             if (!$study) {
                 return $this->sendError('StudyDegree not found', 404);
             }
-
             $data = $request->input('study');
 
-            $validated = $request->validate([
+            $validated = validator($data,[
                 'std_title' => 'required|string',
                 'std_subtitle' => 'nullable|string',
                 'std_sec' => 'nullable|integer',
                 'std_type' => 'nullable|integer',
-            ]);
+            ])->validate();
 
             $study->update($validated);
 
             return $this->sendResponse($study, 200, 'study updated successfully');
-             return $this->sendResponse([], 200, 'Study updated successfully');
+            return $this->sendResponse([], 200, 'Study updated successfully');
         } catch (Exception $e) {
             return $this->sendError('Failed to update study', 500, ['error' => $e->getMessage()]);
         }
