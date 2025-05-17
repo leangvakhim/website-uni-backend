@@ -27,6 +27,9 @@ return [
 
     'secret' => env('JWT_SECRET'),
 
+    'user' => 'App\Models\User',
+    'identifier' => 'username',
+
     /*
     |--------------------------------------------------------------------------
     | JWT Authentication Keys
@@ -101,7 +104,7 @@ return [
     |
     */
 
-    'ttl' => env('JWT_TTL', 60),
+    'ttl' => (int) env('JWT_TTL', 60),
 
     /*
     |--------------------------------------------------------------------------

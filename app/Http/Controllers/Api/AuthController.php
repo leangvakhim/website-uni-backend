@@ -7,6 +7,8 @@ use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -17,23 +19,23 @@ class AuthController extends Controller
 
             $role = $request->input('role'); // 'editor' or 'viewer'
             $permission = $role === 'editor' ? 'edit & view' : 'view only';
-            
+
             $user = User::create([
                 'username' => $request->username,
                 'password' => Hash::make($request->password),
                 'role' => $role,
                 'permission' => $permission,
             ]);
-    
+
             $user->assignRole($role);
 
-    
+
             return response()->json([
                 'status' => 201,
                 'status_code' => 'success',
                 'message' => 'User registered successfully',
             ], 201);
-    
+
         } catch (\Throwable $e) {
             return response()->json([
                 'status' => 500,
@@ -45,14 +47,17 @@ class AuthController extends Controller
             ], 500);
         }
     }
-    
+
 
     public function login(Request $request)
     {
         try {
+            Auth::shouldUse('api');
+
             $credentials = $request->only('username', 'password');
 
             if (!$token = JWTAuth::attempt($credentials)) {
+                Log::error('JWT attempt failed', ['reason' => 'Invalid credentials or mismatch']);
                 return response()->json([
                     'status' => 401,
                     'status_code' => 'error',
@@ -66,7 +71,7 @@ class AuthController extends Controller
                 'message' => 'Login successful',
                 'data' => [
                     'token' => $token,
-                    'user' => auth()->user()
+                    'user' => JWTAuth::user()
                 ]
             ], 200);
 
@@ -89,7 +94,8 @@ class AuthController extends Controller
                 'status' => 200,
                 'status_code' => 'success',
                 'message' => 'Authenticated user',
-                'data' => auth()->user()
+                // 'data' => auth()->user()
+                'data' => JWTAuth::user()
             ]);
         } catch (\Throwable $e) {
             return response()->json([
@@ -106,7 +112,8 @@ class AuthController extends Controller
     public function logout()
     {
         try {
-            auth()->logout();
+            // auth()->logout();
+            JWTAuth::invalidate(JWTAuth::getToken());
             return response()->json([
                 'status' => 200,
                 'status_code' => 'success',

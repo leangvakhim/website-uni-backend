@@ -7,6 +7,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -52,9 +53,9 @@ class RolePermissionSeeder extends Seeder
 
         // 4. Create admin user WITH role and permission fields
         $adminUser = User::firstOrCreate(
-            ['username' => 'adminuser'],
+            ['username' => 'csd-admin-user'],
             [
-                'password'   => Hash::make('admin123'),
+                'password'   => Hash::make('QAZqazWSXwsx12()'),
                 'role'       => 'admin',
                 'permission' => 'full access',
             ]
@@ -63,5 +64,9 @@ class RolePermissionSeeder extends Seeder
         // 5. Assign actual permissioned role
 
         $adminUser->assignRole('admin');
+
+        // Optionally generate and log JWT token for admin user
+        $token = JWTAuth::fromUser($adminUser);
+        info('Generated JWT Token for admin user: ' . $token);
     }
 }
