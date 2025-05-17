@@ -92,8 +92,8 @@ class UfcsdController extends Controller
 
             $data = $request->input('future');
 
-            $validated = $request->validate([
-                'uf_title' => 'required|string',
+            $validated = validator( $data,[
+                'uf_title' => 'nullable|string',
                 'uf_subtitle' => 'nullable|string',
                 'uf_img' => 'nullable|integer',
                 'uf_sec' => 'nullable|integer',

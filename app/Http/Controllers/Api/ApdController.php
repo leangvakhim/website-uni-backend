@@ -57,7 +57,7 @@ class ApdController extends Controller
                         if ($existing) {
                             $existing->update([
                                 'apd_title' => $item['apd_title'],
-                               
+
                             ]);
                             $createdApd[] = $existing;
                         }
@@ -91,7 +91,7 @@ class ApdController extends Controller
              $data = $request->input('available');
 
 
-            $validated = $request->validate([
+            $validated = validator($data, [
                 'apd_title' => 'required|string',
                 'apd_sec' => 'nullable|integer',
             ])->validate();

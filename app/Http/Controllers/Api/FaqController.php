@@ -60,7 +60,7 @@ class FaqController extends Controller
                             $existing->update([
                                 'faq_title' => $item['faq_title'],
                                 'faq_subtitle' => $item['faq_subtitle'],
-                                
+
                             ]);
                             $createdFaq[] = $existing;
                         }
@@ -93,11 +93,11 @@ class FaqController extends Controller
 
            $data = $request->input('faq');
 
-            $validated = $request->validate([
+            $validated = validator($data, [
                 'faq_title' => 'nullable|string',
                 'faq_subtitle' => 'nullable|string',
                 'faq_sec' => 'nullable|integer',
-    
+
             ])->validate();
 
             $faq->update($validated);

@@ -66,7 +66,7 @@ class UmdController extends Controller
                                 'umd_btntext' => $item['umd_btntext'],
                                 'umd_img' => $item['umd_img'],
                             ]);
-                        
+
                             $createdUmd[] = $existing;
                         }
                     } else {
@@ -99,7 +99,7 @@ class UmdController extends Controller
 
             $data = $request->input('unlock');
 
-            $validated = $request->validate([
+            $validated =validator($data, [
                 'umd_sec' => 'nullable|integer',
                 'umd_title' => 'nullable|string',
                 'umd_routepage' => 'nullable|string',
