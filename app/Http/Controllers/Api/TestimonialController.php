@@ -7,6 +7,7 @@ use App\Models\Testimonial;
 use App\Http\Requests\TestimonialRequest;
 use App\Services\TestimonialService;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class TestimonialController extends Controller
 {
@@ -58,7 +59,7 @@ class TestimonialController extends Controller
                         if ($existing) {
                             $existing->update([
                                 't_title' => $item['t_tile'],
-                                
+
                             ]);
                             $createdTestimonials[] = $existing;
                         }
@@ -91,8 +92,8 @@ class TestimonialController extends Controller
 
             $data = $request->input('testimonials');
 
-            $validated = $request->validate([
-                't_title' => 'required|string',
+            $validated = validator($data, [
+                't_title' => 'nullable|string',
                 't_sec' => 'nullable|integer'
             ])->validate();
 
