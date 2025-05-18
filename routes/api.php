@@ -75,6 +75,7 @@ use App\Http\Controllers\Api\DevelopersocialController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EmailController;
 use App\Imports\AnnouncementImport;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
 Route::middleware('auth:api')->group(function () {
@@ -669,8 +670,10 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/announcement/import', [AnnouncementImportController::class, 'import']);
     Route::get('/announcement/student', [AnnouncementImportController::class, 'fetchStudents']);
     Route::post('/announcement/set-visibility', [AnnouncementImportController::class, 'setVisibility']);
+
 });
 
+Route::post('/guest-token', [AuthController::class, 'guestAccess']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
