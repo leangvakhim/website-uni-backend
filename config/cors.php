@@ -21,6 +21,8 @@ return [
 
     'allowed_origins' => ['https://csd-website.vercel.app', 'http://localhost:5174', 'http://localhost:5173', 'https://csd-website-xi.vercel.app'],
 
+    // 'allowed_origins' => ['*'],
+
     'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],

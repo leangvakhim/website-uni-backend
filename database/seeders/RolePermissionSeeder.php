@@ -19,6 +19,7 @@ class RolePermissionSeeder extends Seeder
 
         $permissions = [
             'view dashboard',
+            'view website',
             'edit content',
             'delete content',
             'manage users',
@@ -36,6 +37,7 @@ class RolePermissionSeeder extends Seeder
         $admin  = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
         $editor = Role::firstOrCreate(['name' => 'editor', 'guard_name' => 'api']);
         $viewer = Role::firstOrCreate(['name' => 'viewer', 'guard_name' => 'api']);
+        $guest = Role::firstOrCreate(['name' => 'guest', 'guard_name' => 'api']);
 
         // 3. Assign permissions to roles
 
@@ -51,6 +53,19 @@ class RolePermissionSeeder extends Seeder
         ]);
 
 
+        $guest->givePermissionTo([
+            'view website',
+        ]);
+
+        $guestUser = User::firstOrCreate(
+            ['username' => 'csd-guest-user'],
+            [
+                'password'   => Hash::make('guestpassword'),
+                'role'       => 'guest',
+                'permission' => 'read-only',
+            ]
+        );
+
         // 4. Create admin user WITH role and permission fields
         $adminUser = User::firstOrCreate(
             ['username' => 'csd-admin-user'],
@@ -64,9 +79,13 @@ class RolePermissionSeeder extends Seeder
         // 5. Assign actual permissioned role
 
         $adminUser->assignRole('admin');
+        $guestUser->assignRole('guest');
 
         // Optionally generate and log JWT token for admin user
         $token = JWTAuth::fromUser($adminUser);
-        info('Generated JWT Token for admin user: ' . $token);
+        // info('Generated JWT Token for admin user: ' . $token);
+
+        $guestToken = JWTAuth::fromUser($guestUser);
+        // info('Generated JWT Token for guest user: ' . $guestToken);
     }
 }

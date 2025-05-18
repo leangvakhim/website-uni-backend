@@ -130,4 +130,23 @@ class AuthController extends Controller
             ]);
         }
     }
+
+    public function guestAccess()
+    {
+        // Log::debug('Guest token route triggered');
+        // Log::info('Guest token requested');
+
+        $guestUser = User::where('username', 'csd-guest-user')->first();
+
+        if (!$guestUser) {
+            // Log::warning('Guest user not found in database');
+            return response()->json(['error' => 'Guest user not found'], 404);
+        }
+
+        // Log::info('Guest user found, generating token for user ID: ' . $guestUser->id);
+        $token = auth('api')->login($guestUser);
+        // Log::info('Token generated successfully for guest user');
+
+        return response()->json(['token' => $token]);
+    }
 }
