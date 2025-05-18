@@ -12,6 +12,7 @@ use App\Models\Setting2;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class EmailController extends Controller
 {
