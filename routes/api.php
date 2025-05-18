@@ -663,8 +663,9 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/emails', [EmailController::class, 'index']);
     Route::get('/emails/{id}', [EmailController::class, 'show']);
-    Route::post('/emails/create', [EmailController::class, 'create']);
+    // Route::post('/emails/create', [EmailController::class, 'create']);
     Route::post('/emails/visibility', [EmailController::class, 'visibility']);
+    Route::post('/emails/create', [EmailController::class, 'create'])->middleware('throttle:10,1');
     // Route::post('/emails/submit', [EmailController::class, 'submitEmail']);
 
     Route::post('/announcement/import', [AnnouncementImportController::class, 'import']);
