@@ -10,6 +10,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
@@ -49,6 +50,44 @@ class AuthController extends Controller
     }
 
 
+    // public function login(Request $request)
+    // {
+    //     try {
+    //         Auth::shouldUse('api');
+
+    //         $credentials = $request->only('username', 'password');
+
+    //         if (!$token = JWTAuth::attempt($credentials)) {
+    //             Log::error('JWT attempt failed', ['reason' => 'Invalid credentials or mismatch']);
+    //             return response()->json([
+    //                 'status' => 401,
+    //                 'status_code' => 'error',
+    //                 'message' => 'Invalid credentials'
+    //             ], 401);
+    //         }
+
+    //         return response()->json([
+    //             'status' => 200,
+    //             'status_code' => 'success',
+    //             'message' => 'Login successful',
+    //             'data' => [
+    //                 'token' => $token,
+    //                 'user' => JWTAuth::user()
+    //             ]
+    //         ], 200);
+
+    //     } catch (\Throwable $e) {
+    //         return response()->json([
+    //             'status' => 500,
+    //             'status_code' => 'error',
+    //             'message' => 'Login failed',
+    //             'data' => [
+    //                 'error' => $e->getMessage()
+    //             ]
+    //         ], 500);
+    //     }
+    // }
+
     public function login(Request $request)
     {
         try {
@@ -70,11 +109,11 @@ class AuthController extends Controller
                 'status_code' => 'success',
                 'message' => 'Login successful',
                 'data' => [
-                    'token' => $token,
+                    // 'token' => $token,
                     'user' => JWTAuth::user()
                 ]
-            ], 200);
-
+                // ], 200);
+            ])->cookie('token', $token, 60, '/', null, true, true, false, 'None');
         } catch (\Throwable $e) {
             return response()->json([
                 'status' => 500,
