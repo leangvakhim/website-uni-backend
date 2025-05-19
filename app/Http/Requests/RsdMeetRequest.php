@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Mews\Purifier\Facades\Purifier;
 
 class RsdMeetRequest extends FormRequest
 {
@@ -28,5 +29,18 @@ class RsdMeetRequest extends FormRequest
             'research_meet.*.rsdm_title' => 'nullable|string',
             'research_meet.*.rsdm_img' => 'nullable|integer|exists:tbimage,image_id',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('research_meet')) {
+            $researchMeet = $this->input('research_meet');
+            foreach ($researchMeet as $index => $item) {
+                if (isset($item['rsdm_detail'])) {
+                    $researchMeet[$index]['rsdm_detail'] = Purifier::clean($item['rsdm_detail']);
+                }
+            }
+            $this->merge(['research_meet' => $researchMeet]);
+        }
     }
 }

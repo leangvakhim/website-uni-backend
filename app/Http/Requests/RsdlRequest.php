@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Mews\Purifier\Facades\Purifier;
 
 class RsdlRequest extends FormRequest
 {
@@ -32,5 +33,14 @@ class RsdlRequest extends FormRequest
             'active' => 'required|boolean',
             'rsdl_img' => 'nullable|integer|exists:tbimage,image_id',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('rsdl_detail')) {
+            $this->merge([
+                'rsdl_detail' => Purifier::clean($this->input('rsdl_detail')),
+            ]);
+        }
     }
 }

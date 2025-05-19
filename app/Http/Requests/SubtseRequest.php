@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Mews\Purifier\Facades\Purifier;
 
 class SubtseRequest extends FormRequest
 {
@@ -38,5 +39,18 @@ class SubtseRequest extends FormRequest
             'subtse.*.display' => 'nullable|integer',
             'subtse.*.active' => 'nullable|integer',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('subtse')) {
+            $subtse = $this->input('subtse');
+            foreach ($subtse as $index => $item) {
+                if (isset($item['stse_detail'])) {
+                    $subtse[$index]['stse_detail'] = Purifier::clean($item['stse_detail']);
+                }
+            }
+            $this->merge(['subtse' => $subtse]);
+        }
     }
 }

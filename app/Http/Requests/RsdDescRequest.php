@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Mews\Purifier\Facades\Purifier;
 
 class RsdDescRequest extends FormRequest
 {
@@ -28,5 +29,18 @@ class RsdDescRequest extends FormRequest
             'research_desc.*.rsdd_rsdtile' => 'nullable|integer',
 
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('research_desc')) {
+            $researchDesc = $this->input('research_desc');
+            foreach ($researchDesc as $index => $item) {
+                if (isset($item['rsdd_details'])) {
+                    $researchDesc[$index]['rsdd_details'] = Purifier::clean($item['rsdd_details']);
+                }
+            }
+            $this->merge(['research_desc' => $researchDesc]);
+        }
     }
 }

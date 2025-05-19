@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Mews\Purifier\Facades\Purifier;
 
 class RsdProjectRequest extends FormRequest
 {
@@ -27,5 +28,18 @@ class RsdProjectRequest extends FormRequest
             'research_project.*.rsdp_detail' => 'nullable|string',
             'research_project.*.rsdp_title' => 'nullable|string',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('research_project')) {
+            $researchProject = $this->input('research_project');
+            foreach ($researchProject as $index => $item) {
+                if (isset($item['rsdp_detail'])) {
+                    $researchProject[$index]['rsdp_detail'] = Purifier::clean($item['rsdp_detail']);
+                }
+            }
+            $this->merge(['research_project' => $researchProject]);
+        }
     }
 }

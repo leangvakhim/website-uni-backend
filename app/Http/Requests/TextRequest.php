@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Mews\Purifier\Facades\Purifier;
 
 class TextRequest extends FormRequest
 {
@@ -33,5 +34,18 @@ class TextRequest extends FormRequest
             'texts.*.text_type' => 'nullable|integer',
             'texts.*.tag' => 'nullable|string|max:255',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('texts')) {
+            $texts = $this->input('texts');
+            foreach ($texts as $index => $item) {
+                if (isset($item['desc'])) {
+                    $texts[$index]['desc'] = Purifier::clean($item['desc']);
+                }
+            }
+            $this->merge(['texts' => $texts]);
+        }
     }
 }

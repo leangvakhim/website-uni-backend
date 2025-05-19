@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Mews\Purifier\Facades\Purifier;
 
 class ScholarshipRequest extends FormRequest
 {
@@ -37,5 +38,14 @@ class ScholarshipRequest extends FormRequest
             'display' => 'nullable|boolean',
             'active' => 'nullable|boolean',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('c_detail')) {
+            $this->merge([
+                'c_detail' => Purifier::clean($this->input('c_detail')),
+            ]);
+        }
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Mews\Purifier\Facades\Purifier;
 
 class YearRequest extends FormRequest
 {
@@ -41,5 +42,18 @@ class YearRequest extends FormRequest
             'year.*.y_order' => 'nullable|integer',
 
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('year')) {
+            $year = $this->input('year');
+            foreach ($year as $index => $item) {
+                if (isset($item['y_detail'])) {
+                    $year[$index]['y_detail'] = Purifier::clean($item['y_detail']);
+                }
+            }
+            $this->merge(['year' => $year]);
+        }
     }
 }
