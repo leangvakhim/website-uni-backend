@@ -78,7 +78,7 @@ use App\Imports\AnnouncementImport;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
-Route::middleware(['auth:api', 'throttle:60,1'])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
 
     Route::prefix('text')->group(function () {
         Route::get('/', [TextController::class, 'index']);
