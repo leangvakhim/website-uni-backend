@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Mews\Purifier\Facades\Purifier;
 
 class CareerRequest extends FormRequest
 {
@@ -34,5 +35,14 @@ class CareerRequest extends FormRequest
             'display' => 'required|boolean',
             'active' => 'required|boolean'
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('c_detail')) {
+            $this->merge([
+                'c_detail' => Purifier::clean($this->input('c_detail')),
+            ]);
+        }
     }
 }

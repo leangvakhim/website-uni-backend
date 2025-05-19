@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Mews\Purifier\Facades\Purifier;
 
 class RasRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class RasRequest extends FormRequest
             'display' => 'nullable|boolean',
             'sec_page' => 'nullable|integer|exists:tbpage,p_id',
             'sec_order' => 'nullable|integer',
-            
+
             'specialization' => 'nullable|array',
             'specialization.*.ras_sec' => 'nullable|integer|exists:tbsection,sec_id',
             'specialization.*.ras_img1' => 'nullable|integer|exists:tbimage,image_id',

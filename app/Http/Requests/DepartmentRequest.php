@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Mews\Purifier\Facades\Purifier;
 
 class DepartmentRequest extends FormRequest
 {
@@ -34,5 +35,18 @@ class DepartmentRequest extends FormRequest
             'programs.*.dep_detail' => 'nullable|string',
             'programs.*.dep_title' => 'nullable|string|max:255'
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('programs')) {
+            $programs = $this->input('programs');
+            foreach ($programs as $index => $item) {
+                if (isset($item['dep_detail'])) {
+                    $programs[$index]['dep_detail'] = Purifier::clean($item['dep_detail']);
+                }
+            }
+            $this->merge(['programs' => $programs]);
+        }
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Mews\Purifier\Facades\Purifier;
 
 class GcRequest extends FormRequest
 {
@@ -36,5 +37,18 @@ class GcRequest extends FormRequest
             'criteria.*.gc_img1' => 'nullable|integer|exists:tbimage,image_id',
             'criteria.*.gc_img2' => 'nullable|integer|exists:tbimage,image_id',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('criteria')) {
+            $criteria = $this->input('criteria');
+            foreach ($criteria as $index => $item) {
+                if (isset($item['gc_detail'])) {
+                    $criteria[$index]['gc_detail'] = Purifier::clean($item['gc_detail']);
+                }
+            }
+            $this->merge(['criteria' => $criteria]);
+        }
     }
 }

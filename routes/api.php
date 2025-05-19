@@ -78,7 +78,7 @@ use App\Imports\AnnouncementImport;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['auth:api', 'throttle:60,1'])->group(function () {
 
     Route::prefix('text')->group(function () {
         Route::get('/', [TextController::class, 'index']);
@@ -674,9 +674,9 @@ Route::middleware('auth:api')->group(function () {
 
 });
 
-Route::post('/guest-token', [AuthController::class, 'guestAccess']);
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/guest-token', [AuthController::class, 'guestAccess'])->middleware('throttle:10,1');
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);

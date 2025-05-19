@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Mews\Purifier\Facades\Purifier;
 
 class FacultyInfoRequest extends FormRequest
 {
@@ -36,4 +37,23 @@ class FacultyInfoRequest extends FormRequest
             'finfo_f.*.finfo_order' => 'nullable|integer',
         ];
     }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation()
+    {
+        if ($this->has('finfo_f')) {
+            $finfo = $this->input('finfo_f');
+            foreach ($finfo as $index => $item) {
+                if (isset($item['finfo_detail'])) {
+                    $finfo[$index]['finfo_detail'] = Purifier::clean($item['finfo_detail']);
+                }
+            }
+            $this->merge(['finfo_f' => $finfo]);
+        }
+    }
 }
+    /**
+     * Prepare the data for validation.
+     */
