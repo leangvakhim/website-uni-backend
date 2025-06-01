@@ -17,6 +17,7 @@ class Announcement extends Model
         'am_postdate',
         'am_img',
         'am_fav',
+        'am_tag',
         'lang',
         'am_orders',
         'display',
