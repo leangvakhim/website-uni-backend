@@ -23,6 +23,7 @@ class StudentRequest extends FormRequest
     {
         return [
             'result' => 'required|string|max:255',
+            'student_am' => 'nullable|string|max:255',
             'display' => 'boolean',
             'active' => 'boolean'
         ];
