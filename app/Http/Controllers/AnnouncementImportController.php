@@ -19,7 +19,9 @@ class AnnouncementImportController extends Controller
         ]);
 
         // Import using AnnouncementImport
-        Excel::import(new AnnouncementImport, $request->file('file'));
+        // Excel::import(new AnnouncementImport, $request->file('file'));
+        $amID = $request->input('amID');
+        Excel::import(new AnnouncementImport($amID), $request->file('file'));
 
         return response()->json(['message' => 'File Imported Successfully!']);
     }
@@ -86,6 +88,7 @@ class AnnouncementImportController extends Controller
             ->join('tbsubjects as sub', 'sc.subject_id', '=', 'sub.subject_id')
             ->select(
                 's.student_id',
+                's.student_am',
                 's.student_identity',
                 'sub.subject_name',
                 'sc.score',
@@ -104,6 +107,7 @@ class AnnouncementImportController extends Controller
                     'student_id' => $row->student_id,
                     'student_identity' => $row->student_identity,
                     'result' => $row->result,
+                    'student_am' => $row->student_am,
                 ];
             }
 
