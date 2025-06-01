@@ -19,12 +19,23 @@ class AnnouncementImport implements ToCollection, WithHeadingRow
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
+
+    protected $amID;
+
+    public function __construct($amID)
+    {
+        $this->amID = $amID;
+    }
+
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
             // 1. Insert or update Student
             $student = Student::updateOrCreate(
-                ['student_identity' => $row->get('student_identity')],
+                [
+                    'student_identity' => $row->get('student_identity'),
+                    'student_am' => $this->amID,
+                ],
                 [
                     'result' => $row->get('result'),
                     'display' => 1,
