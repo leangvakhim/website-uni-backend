@@ -173,7 +173,7 @@ class AuthController extends Controller
     public function guestAccess()
     {
         // Log::debug('Guest token route triggered');
-        // Log::info('Guest token requested');
+        Log::info('Guest token requested');
 
         $guestUser = User::where('username', 'csd-guest-user')->first();
 
