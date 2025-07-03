@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://csd-dashboard.vercel.app', 'http://localhost:5174', 'http://localhost:5173', 'https://csd-website-xi.vercel.app', 'https://cs.fs.rupp.edu.kh/'],
+    'allowed_origins' => ['https://csd-dashboard.vercel.app', 'http://localhost:5174', 'http://localhost:5173', 'https://csd-website-xi.vercel.app', 'https://cs.fs.rupp.edu.kh'],
 
     // 'allowed_origins' => ['*'],
 
