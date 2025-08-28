@@ -88,6 +88,36 @@ class GcController extends Controller
         }
     }
 
+    // public function update(GcRequest $request, $id)
+    // {
+    //     try {
+    //         $gc = Gc::find($id);
+    //         if (!$gc) {
+    //             return $this->sendError('Gc not found', 404);
+    //         }
+
+    //         $data = $request->input('criteria');
+
+    //         $validated = validator($data,[
+    //             'gc_title' => 'nullable|string',
+    //             'gc_tag' => 'nullable|string',
+    //             'gc_type' => 'nullable|integer',
+    //             'gc_detail' => 'nullable|string',
+    //             'gc_img1' => 'nullable|integer|exists:tbimage,image_id',
+    //             'gc_img2' => 'nullable|integer|exists:tbimage,image_id',
+    //         ])->validate();
+
+    //         $gc->update($validated);
+
+    //         return $this->sendResponse($gc, 200, 'Gc updated successfully');
+    //         return $this->sendResponse([], 200, 'Gc updated successfully');
+    //     } catch (Exception $e) {
+    //         return $this->sendError('Failed to update Gc', 500, ['error' => $e->getMessage()]);
+    //     }
+    // }
+
+    // In app/Http/Controllers/Api/GcController.php
+
     public function update(GcRequest $request, $id)
     {
         try {
@@ -98,7 +128,7 @@ class GcController extends Controller
 
             $data = $request->input('criteria');
 
-            $validated = validator($data,[
+            $validated = validator($data, [
                 'gc_title' => 'nullable|string',
                 'gc_tag' => 'nullable|string',
                 'gc_type' => 'nullable|integer',
@@ -107,10 +137,16 @@ class GcController extends Controller
                 'gc_img2' => 'nullable|integer|exists:tbimage,image_id',
             ])->validate();
 
+            // *** ADD THIS LINE TO DECODE THE DATA ***
+            if (isset($validated['gc_detail'])) {
+                $validated['gc_detail'] = base64_decode($validated['gc_detail']);
+            }
+
             $gc->update($validated);
 
             return $this->sendResponse($gc, 200, 'Gc updated successfully');
-            return $this->sendResponse([], 200, 'Gc updated successfully');
+            // Note: The second return statement here was unreachable and can be removed.
+
         } catch (Exception $e) {
             return $this->sendError('Failed to update Gc', 500, ['error' => $e->getMessage()]);
         }
