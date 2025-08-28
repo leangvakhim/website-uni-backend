@@ -21,14 +21,14 @@ class ImageRequest extends FormRequest
      */
     public function rules(): array
     {
-        if ($this->route('id')) { 
+        if ($this->route('id')) {
             return [
-                'img' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10240' 
+                'img' => 'required|mimes:jpeg,png,jpg,gif,pdf,svg|max:10240'
             ];
         }
         return [
             'img' => 'required|array',
-            'img.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:10240' 
+            'img.*' => 'mimes:jpeg,png,jpg,gif,pdf,svg|max:10240'
         ];
     }
 }
